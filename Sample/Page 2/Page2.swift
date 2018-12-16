@@ -40,7 +40,7 @@ class Page2: PageObject {
             let rl = token as? ResourceLocator,
             rl.identifier == page2Identifier,
             let pageData = rl.pageData,
-            let navigationContext = context as? ForwardBackNavigationContext else {
+            let navigationContext = context as? (ModalContext & ForwardBackNavigationContext) else {
                 return nil
         }
 

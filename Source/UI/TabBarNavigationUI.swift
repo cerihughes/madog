@@ -8,7 +8,7 @@
 
 import UIKit
 
-internal protocol TabBarNavigationContext: Context, ForwardBackNavigationContext {}
+internal protocol TabBarNavigationContext: Context, ModalContext, ForwardBackNavigationContext {}
 
 /// A class that presents view controllers in a tab bar, and manages the navigation between them.
 ///
@@ -27,6 +27,27 @@ internal class TabBarNavigationUI<Token>: MadogMultiPageUIContext<Token>, TabBar
             .map { UINavigationController(rootViewController: $0) }
 
         tabBarController.viewControllers = viewControllers
+        return true
+    }
+
+    // MARK: - ModalContext
+
+    func presentModal(with token: Any, presentationStyle: UIModalPresentationStyle, animated: Bool) -> NavigationToken? {
+        guard let viewController = registry.createViewController(from: token, context: self) else {
+            return nil
+        }
+
+        tabBarController.modalPresentationStyle = presentationStyle
+        tabBarController.present(viewController, animated: animated, completion: nil)
+        return createNavigationToken(for: viewController)
+    }
+
+    func dismissModal(animated: Bool) -> Bool? {
+        if tabBarController.presentedViewController == nil {
+            return false
+        }
+
+        tabBarController.dismiss(animated: animated, completion: nil)
         return true
     }
 

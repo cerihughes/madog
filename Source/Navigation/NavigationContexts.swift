@@ -14,7 +14,8 @@ public protocol Context: class {
 }
 
 public protocol ModalContext: class {
-    func openModal(with token: Any, from fromViewController: UIViewController, animated: Bool) -> NavigationToken?
+    func presentModal(with token: Any, presentationStyle: UIModalPresentationStyle, animated: Bool) -> NavigationToken?
+    func dismissModal(animated: Bool) -> Bool?
 }
 
 public protocol ForwardBackNavigationContext: class {
