@@ -74,8 +74,10 @@ open class MadogModalUIContainer<Token>: MadogUIContainer, ModalContext {
             closeContext(presentedViewController: presentedPresentedViewController, animated: animated)
         }
 
-        presentedViewController.dismiss(animated: animated, completion: completion)
-        delegate?.releaseContext(for: presentedViewController)
+		if presentedViewController.parent == nil {
+			presentedViewController.dismiss(animated: animated, completion: completion)
+		}
+		delegate?.releaseContext(for: presentedViewController)
     }
 
     public final func createModalToken(viewController: UIViewController, context: Context?) -> ModalToken {
