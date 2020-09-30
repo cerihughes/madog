@@ -9,7 +9,6 @@
 import UIKit
 
 public protocol ModalContext: AnyObject {
-    // swiftlint:disable function_parameter_count
     @discardableResult
     func openModal<VC, TD>(identifier: MadogUIIdentifier<VC, TD>,
                            tokenData: TD,
@@ -20,7 +19,6 @@ public protocol ModalContext: AnyObject {
                            animated: Bool,
                            customisation: CustomisationBlock<VC>?,
                            completion: CompletionBlock?) -> ModalToken? where VC: UIViewController, TD: TokenData
-    // swiftlint:enable function_parameter_count
 
     @discardableResult
     func closeModal(token: ModalToken,
