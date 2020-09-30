@@ -8,7 +8,6 @@
 
 import UIKit
 
-// swiftlint:disable function_parameter_count
 public protocol ModalPresentation {
     func presentModally(presenting: UIViewController,
                         modal: UIViewController,
