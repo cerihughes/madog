@@ -15,14 +15,14 @@ schemes:
 options:
   bundleIdPrefix: uk.co.cerihughes
   deploymentTarget:
-    iOS: "13.0"
+    iOS: "16.0"
 packages:
   KIF:
     url: https://github.com/kif-framework/KIF
     exactVersion: 3.8.6
   Provident:
     url: https://github.com/cerihughes/provident
-    exactVersion: 4.0.0
+    branch: swift-5-7-protocols
 targets:
   Madog:
     type: framework

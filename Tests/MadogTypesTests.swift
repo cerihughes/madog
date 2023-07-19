@@ -11,13 +11,13 @@ import XCTest
 @testable import Madog
 
 class MadogTypesTests: XCTestCase {
-    private var registry: Registry<Int>!
+    private var registry: RegistryImplementation<Int>!
     private var registrar: Registrar<Int>!
 
     override func setUp() {
         super.setUp()
 
-        registry = Registry()
+        registry = RegistryImplementation()
         registrar = Registrar(registry: registry)
     }
 
@@ -35,34 +35,34 @@ class MadogTypesTests: XCTestCase {
         XCTAssertEqual(resolver.serviceProviderFunctions().count, 1)
         XCTAssertEqual(resolver.viewControllerProviderFunctions().count, 1)
 
-        let context = TestContext()
-
-        XCTAssertNil(registry.createViewController(from: 1, context: context))
+        XCTAssertNil(registry.createViewController(from: 1))
         registrar.resolve(resolver: resolver)
-        XCTAssertNotNil(registry.createViewController(from: 0, context: context))
+        XCTAssertNotNil(registry.createViewController(from: 0))
     }
 }
 
-private class TestViewControllerProvider: SingleViewControllerProvider<Int> {
-    override func createViewController(token: Int, context: Context) -> UIViewController? {
+private class TestViewControllerProvider: ViewControllerProvider {
+    typealias T = Int
+
+    func createViewController(token: Int) -> UIViewController? {
         UIViewController()
     }
 }
 
-private class TestServiceProvider: ServiceProvider {}
+private class TestServiceProvider: ServiceProvider {
+    var name = "TestServiceProvider"
 
-private class TestResolver: Resolver<Int> {
-    override func viewControllerProviderFunctions() -> [() -> ViewControllerProvider<Int>] {
+    required init(context _: ServiceProviderCreationContext) {}
+}
+
+private class TestResolver: Resolver {
+    typealias T = Int
+
+    func viewControllerProviderFunctions() -> [() -> AnyViewControllerProvider<Int>] {
         [TestViewControllerProvider.init]
     }
 
-    override func serviceProviderFunctions() -> [(ServiceProviderCreationContext) -> ServiceProvider] {
+    func serviceProviderFunctions() -> [(ServiceProviderCreationContext) -> ServiceProvider] {
         [TestServiceProvider.init(context:)]
     }
-}
-
-private class TestContext: Context {
-    var presentingContext: Context? { nil }
-    func close(animated: Bool, completion: CompletionBlock?) -> Bool { false }
-    func change<VC, TD>(to _: MadogUIIdentifier<VC, TD>, tokenData: TD, transition: Transition?, customisation: CustomisationBlock<VC>?) -> Context? { nil }
 }

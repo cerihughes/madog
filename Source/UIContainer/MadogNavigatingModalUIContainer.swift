@@ -16,9 +16,9 @@ open class MadogNavigatingModalUIContainer<Token>: MadogModalUIContainer<Token>,
 
     // MARK: - ForwardBackNavigationContext
 
-    public func navigateForward(token: Any, animated: Bool) -> Bool {
-        guard let token = token as? Token,
-            let toViewController = registry.createViewController(from: token, context: self),
+    public func navigateForward(token: Token, animated: Bool) -> Bool {
+        guard
+            let toViewController = registry.createViewController(from: token),
             let navigationController = provideNavigationController()
         else {
             return false

@@ -11,13 +11,13 @@ import UIKit
 /// A class that presents view controllers in a tab bar, and manages the navigation between them.
 ///
 /// At the moment, this is achieved with a UINavigationController that can be pushed / popped to / from.
-internal class TabBarNavigationUI<Token>: MadogNavigatingModalUIContainer<Token>, MultiContext {
+class TabBarNavigationUI<Token>: MadogNavigatingModalUIContainer<Token>, MultiContext {
     private let tabBarController = UITabBarController()
 
-    internal init(registry: Registry<Token>, tokens: [Token]) {
+    init(registry: AnyRegistry<Token>, tokens: [Token]) {
         super.init(registry: registry, viewController: tabBarController)
 
-        let viewControllers = tokens.compactMap { registry.createViewController(from: $0, context: self) }
+        let viewControllers = tokens.compactMap { registry.createViewController(from: $0) }
             .map { UINavigationController(rootViewController: $0) }
 
         tabBarController.viewControllers = viewControllers

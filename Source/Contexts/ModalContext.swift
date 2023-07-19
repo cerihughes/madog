@@ -8,60 +8,76 @@
 
 import UIKit
 
-public protocol ModalContext: AnyObject {
+public typealias AnyModalContext<Token> = any ModalContext<Token>
+
+public protocol ModalContext<Token>: Context {
+    associatedtype Token
+
     // swiftlint:disable function_parameter_count
     @discardableResult
-    func openModal<VC, TD>(identifier: MadogUIIdentifier<VC, TD>,
-                           tokenData: TD,
-                           presentationStyle: UIModalPresentationStyle?,
-                           transitionStyle: UIModalTransitionStyle?,
-                           popoverAnchor: Any?,
-                           animated: Bool,
-                           customisation: CustomisationBlock<VC>?,
-                           completion: CompletionBlock?) -> ModalToken? where VC: UIViewController, TD: TokenData
+    func openModal<VC>(
+        identifier: MadogUIIdentifier<VC>,
+        tokenData: TokenData<Token>,
+        presentationStyle: UIModalPresentationStyle?,
+        transitionStyle: UIModalTransitionStyle?,
+        popoverAnchor: Any?,
+        animated: Bool,
+        customisation: CustomisationBlock<VC>?,
+        completion: CompletionBlock?
+    ) -> AnyModalToken<Token>? where VC: UIViewController
     // swiftlint:enable function_parameter_count
 
     @discardableResult
-    func closeModal(token: ModalToken,
-                    animated: Bool,
-                    completion: CompletionBlock?) -> Bool
+    func closeModal(
+        token: AnyModalToken<Token>,
+        animated: Bool,
+        completion: CompletionBlock?
+    ) -> Bool
 }
 
 public extension ModalContext {
     @discardableResult
-    func openModal<VC, TD>(identifier: MadogUIIdentifier<VC, TD>,
-                           tokenData: TD,
-                           presentationStyle: UIModalPresentationStyle? = nil,
-                           transitionStyle: UIModalTransitionStyle? = nil,
-                           popoverAnchor: Any? = nil,
-                           animated: Bool,
-                           customisation: CustomisationBlock<VC>? = nil,
-                           completion: CompletionBlock? = nil) -> ModalToken? where VC: UIViewController, TD: TokenData {
-        openModal(identifier: identifier,
-                  tokenData: tokenData,
-                  presentationStyle: presentationStyle,
-                  transitionStyle: transitionStyle,
-                  popoverAnchor: popoverAnchor,
-                  animated: animated,
-                  customisation: customisation,
-                  completion: completion)
+    func openModal<VC>(
+        identifier: MadogUIIdentifier<VC>,
+        tokenData: TokenData<Token>,
+        presentationStyle: UIModalPresentationStyle? = nil,
+        transitionStyle: UIModalTransitionStyle? = nil,
+        popoverAnchor: Any? = nil,
+        animated: Bool,
+        customisation: CustomisationBlock<VC>? = nil,
+        completion: CompletionBlock? = nil
+    ) -> AnyModalToken<Token>? where VC: UIViewController {
+        openModal(
+            identifier: identifier,
+            tokenData: tokenData,
+            presentationStyle: presentationStyle,
+            transitionStyle: transitionStyle,
+            popoverAnchor: popoverAnchor,
+            animated: animated,
+            customisation: customisation,
+            completion: completion
+        )
     }
 
     @discardableResult
-    func closeModal(token: ModalToken, animated: Bool) -> Bool {
+    func closeModal(token: AnyModalToken<Token>, animated: Bool) -> Bool {
         closeModal(token: token, animated: animated, completion: nil)
     }
 }
 
-public protocol ModalToken {
-    var context: Context { get }
+public typealias AnyModalToken<Token> = any ModalToken<Token>
+
+public protocol ModalToken<Token> {
+    associatedtype Token
+
+    var context: AnyContext<Token> { get }
 }
 
-internal class ModalTokenImplementation: ModalToken {
-    internal let viewController: UIViewController
-    let context: Context
+class ModalTokenImplementation<Token>: ModalToken {
+    let viewController: UIViewController
+    let context: AnyContext<Token>
 
-    internal init(viewController: UIViewController, context: Context) {
+    init(viewController: UIViewController, context: AnyContext<Token>) {
         self.viewController = viewController
         self.context = context
     }

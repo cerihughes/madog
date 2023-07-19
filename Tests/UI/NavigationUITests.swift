@@ -14,7 +14,7 @@ import XCTest
 @testable import Madog
 
 class NavigationUITests: MadogKIFTestCase {
-    private var context: NavigationUIContext!
+    private var context: AnyNavigationUIContext<String>!
 
     override func afterEach() {
         context = nil
@@ -24,7 +24,7 @@ class NavigationUITests: MadogKIFTestCase {
 
     func testProtocolConformance() {
         context = renderUIAndAssert(token: "vc1")
-        XCTAssertNil(context as? MultiContext)
+        XCTAssertNil(context as? AnyMultiContext<String>)
     }
 
     func testRenderInitialUI() {
@@ -59,14 +59,16 @@ class NavigationUITests: MadogKIFTestCase {
     func testOpenNavigationModal() {
         context = renderUIAndAssert(token: "vc1")
 
-        let modalToken = context.openModal(identifier: .navigation,
-                                           tokenData: .single("vc2"),
-                                           presentationStyle: .formSheet,
-                                           animated: true)
+        let modalToken = context.openModal(
+            identifier: .navigation,
+            tokenData: .single("vc2"),
+            presentationStyle: .formSheet,
+            animated: true
+        )
         waitForTitle(token: "vc2")
         waitForLabel(token: "vc2")
 
-        let modalContext = modalToken?.context as? ForwardBackNavigationContext
+        let modalContext = modalToken?.context as? any ForwardBackNavigationContext<String>
         XCTAssertNotNil(modalContext)
 
         modalContext?.navigateForward(token: "vc3", animated: true)
@@ -80,15 +82,16 @@ class NavigationUITests: MadogKIFTestCase {
         waitForAbsenceOfTitle(token: "vc2") // "Back" no longer shows "vc2"
     }
 
-    private func renderUIAndAssert(token: String) -> NavigationUIContext? {
+    private func renderUIAndAssert(token: String) -> AnyNavigationUIContext<String>? {
         let context = madog.renderUI(identifier: .navigation, tokenData: .single(token), in: window)
         waitForTitle(token: token)
         waitForLabel(token: token)
-        return context as? NavigationUIContext
+        return context as? AnyNavigationUIContext<String>
     }
 
     private func navigateForwardAndAssert(token: String) {
-        context.navigateForward(token: token, animated: true)
+        let modalContext = context as? any ForwardBackNavigationContext<String>
+        modalContext?.navigateForward(token: token, animated: true)
         waitForTitle(token: token)
         waitForLabel(token: token)
     }

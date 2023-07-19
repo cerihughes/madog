@@ -46,31 +46,36 @@ class MadogTests: XCTestCase {
     }
 }
 
-private class TestResolver: Resolver<String> {
-    override func serviceProviderFunctions() -> [(ServiceProviderCreationContext) -> ServiceProvider] {
+private class TestResolver: Resolver {
+    typealias T = String
+
+    func serviceProviderFunctions() -> [(ServiceProviderCreationContext) -> ServiceProvider] {
         [TestServiceProvider.init(context:)]
     }
 
-    override func viewControllerProviderFunctions() -> [() -> ViewControllerProvider<String>] {
+    func viewControllerProviderFunctions() -> [() -> AnyViewControllerProvider<String>] {
         [ { TestViewControllerProvider(matchString: "match") } ]
     }
 }
 
-private class TestViewControllerProvider: BaseViewControllerProvider {
+private class TestViewControllerProvider: ViewControllerProvider {
     private let matchString: String
 
     init(matchString: String) {
         self.matchString = matchString
-        super.init()
     }
 
-    override func createViewController(token: String, context: Context) -> UIViewController? {
+    func createViewController(token: String) -> UIViewController? {
         if token == matchString {
             return UIViewController()
         }
 
-        return super.createViewController(token: token, context: context)
+        return nil
     }
 }
 
-private class TestServiceProvider: ServiceProvider {}
+private class TestServiceProvider: ServiceProvider {
+    var name = "TestServiceProvider"
+
+    required init(context _: ServiceProviderCreationContext) {}
+}

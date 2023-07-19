@@ -8,19 +8,23 @@
 
 import UIKit
 
-internal protocol MadogUIContainerDelegate: AnyObject {
-    func createUI<VC, TD>(identifier: MadogUIIdentifier<VC, TD>,
-                          tokenData: TD,
-                          isModal: Bool,
-                          customisation: CustomisationBlock<VC>?) -> MadogUIContainer? where VC: UIViewController, TD: TokenData
+protocol MadogUIContainerDelegate<Token>: AnyObject {
+    associatedtype Token
 
-    func context(for viewController: UIViewController) -> Context?
+    func createUI<VC>(
+        identifier: MadogUIIdentifier<VC>,
+        tokenData: TokenData<Token>,
+        isModal: Bool,
+        customisation: CustomisationBlock<VC>?
+    ) -> MadogUIContainer<Token>? where VC: UIViewController
+
+    func context(for viewController: UIViewController) -> AnyContext<Token>?
     func releaseContext(for viewController: UIViewController)
 }
 
-open class MadogUIContainer: Context {
-    internal weak var delegate: MadogUIContainerDelegate?
-    internal let viewController: UIViewController
+open class MadogUIContainer<Token>: Context {
+    weak var delegate: (any MadogUIContainerDelegate<Token>)?
+    let viewController: UIViewController
 
     public init(viewController: UIViewController) {
         self.viewController = viewController
@@ -28,7 +32,7 @@ open class MadogUIContainer: Context {
 
     // MARK: - Context
 
-    public var presentingContext: Context? {
+    public var presentingContext: AnyContext<Token>? {
         guard let presentingViewController = viewController.presentingViewController else {
             return nil
         }
@@ -40,10 +44,12 @@ open class MadogUIContainer: Context {
         false
     }
 
-    public func change<VC, TD>(to identifier: MadogUIIdentifier<VC, TD>,
-                               tokenData: TD,
-                               transition: Transition?,
-                               customisation: CustomisationBlock<VC>?) -> Context? where VC: UIViewController, TD: TokenData {
+    public func change<VC>(
+        to identifier: MadogUIIdentifier<VC>,
+        tokenData: TokenData<Token>,
+        transition: Transition?,
+        customisation: CustomisationBlock<VC>?
+    ) -> AnyContext<Token>? where VC: UIViewController {
         guard let delegate = delegate,
             let window = viewController.resolvedWindow,
             let container = delegate.createUI(identifier: identifier,

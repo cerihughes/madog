@@ -8,4 +8,9 @@
 
 import Foundation
 
-public protocol TokenData {}
+public enum TokenData<Token> {
+    case single(Token)
+    case multi([Token])
+    case splitSingle(Token, Token)
+    case splitMulti(Token, [Token])
+}

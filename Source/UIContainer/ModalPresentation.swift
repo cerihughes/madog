@@ -19,7 +19,7 @@ public protocol ModalPresentation {
                         completion: CompletionBlock?) -> Bool
 }
 
-internal class DefaultModalPresentation: ModalPresentation {
+class DefaultModalPresentation: ModalPresentation {
     func presentModally(presenting: UIViewController,
                         modal: UIViewController,
                         presentationStyle: UIModalPresentationStyle?,
@@ -36,3 +36,4 @@ internal class DefaultModalPresentation: ModalPresentation {
         return true
     }
 }
+// swiftlint:enable function_parameter_count

@@ -11,28 +11,30 @@
 import Foundation
 import UIKit
 
-internal let basicIdentifier = "basicIdentifier"
-internal let navigationIdentifier = "navigationIdentifier"
-internal let tabBarIdentifier = "tabBarIdentifier"
-internal let tabBarNavigationIdentifier = "tabBarNavigationIdentifier"
+let basicIdentifier = "basicIdentifier"
+let navigationIdentifier = "navigationIdentifier"
+let tabBarIdentifier = "tabBarIdentifier"
+let tabBarNavigationIdentifier = "tabBarNavigationIdentifier"
 
-public struct MadogUIIdentifier<VC, TD> where VC: UIViewController, TD: TokenData {
-    internal let value: String
+public struct MadogUIIdentifier<VC> where VC: UIViewController {
+    let value: String
 
     public init(_ value: String) {
         self.value = value
     }
 }
 
-public extension MadogUIIdentifier where VC == BasicUIContainerViewController, TD == SingleUITokenData {
+// THIS IS WHERE ALL OF THE TYPE GOODNESS CAN HAPPEN
+
+public extension MadogUIIdentifier where VC == BasicUIContainerViewController {
     static let basic = MadogUIIdentifier(basicIdentifier)
 }
 
-public extension MadogUIIdentifier where VC == UINavigationController, TD == SingleUITokenData {
+public extension MadogUIIdentifier where VC == UINavigationController {
     static let navigation = MadogUIIdentifier(navigationIdentifier)
 }
 
-public extension MadogUIIdentifier where VC == UITabBarController, TD == MultiUITokenData {
+public extension MadogUIIdentifier where VC == UITabBarController {
     static let tabBar = MadogUIIdentifier(tabBarIdentifier)
     static let tabBarNavigation = MadogUIIdentifier(tabBarNavigationIdentifier)
 }

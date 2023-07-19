@@ -8,9 +8,13 @@
 
 import Foundation
 
-public protocol ForwardBackNavigationContext: AnyObject {
+public typealias AnyForwardBackNavigationContext<Token> = any ForwardBackNavigationContext<Token>
+
+public protocol ForwardBackNavigationContext<Token>: Context {
+    associatedtype Token
+
     @discardableResult
-    func navigateForward(token: Any, animated: Bool) -> Bool
+    func navigateForward(token: Token, animated: Bool) -> Bool
     @discardableResult
     func navigateBack(animated: Bool) -> Bool
     @discardableResult

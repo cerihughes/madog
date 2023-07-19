@@ -71,14 +71,18 @@ class MadogKIFTestCase: KIFTestCase {
     }
 }
 
-private class TestResolver: Resolver<String> {
-    override func viewControllerProviderFunctions() -> [() -> ViewControllerProvider<String>] {
+private class TestResolver: Resolver {
+    typealias T = String
+
+    func viewControllerProviderFunctions() -> [() -> AnyViewControllerProvider<String>] {
         [TestViewControllerProvider.init]
     }
 }
 
-private class TestViewControllerProvider: BaseViewControllerProvider {
-    override func createViewController(token: String, context: Context) -> UIViewController? {
+private class TestViewControllerProvider: ViewControllerProvider {
+    typealias Token = String
+
+    func createViewController(token: String) -> UIViewController? {
         let viewController = TestViewController()
         viewController.title = token.viewControllerTitle
         viewController.label.text = token.viewControllerLabel
