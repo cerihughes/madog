@@ -15,7 +15,7 @@ public protocol ViewControllerProvider<T> {
     associatedtype T
 
     func configure(with serviceProvider: [String: ServiceProvider])
-    func createViewController(token: T) -> ViewController?
+    func createViewController(token: T, context: AnyContext<T>) -> ViewController?
 }
 
 public extension ViewControllerProvider {

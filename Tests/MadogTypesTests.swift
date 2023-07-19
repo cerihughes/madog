@@ -35,16 +35,18 @@ class MadogTypesTests: XCTestCase {
         XCTAssertEqual(resolver.serviceProviderFunctions().count, 1)
         XCTAssertEqual(resolver.viewControllerProviderFunctions().count, 1)
 
-        XCTAssertNil(registry.createViewController(from: 1))
+        let context = TestContext()
+
+        XCTAssertNil(registry.createViewController(from: 1, context: context))
         registrar.resolve(resolver: resolver)
-        XCTAssertNotNil(registry.createViewController(from: 0))
+        XCTAssertNotNil(registry.createViewController(from: 0, context: context))
     }
 }
 
 private class TestViewControllerProvider: ViewControllerProvider {
     typealias T = Int
 
-    func createViewController(token: Int) -> UIViewController? {
+    func createViewController(token: Int, context: AnyContext<Int>) -> UIViewController? {
         UIViewController()
     }
 }
@@ -52,7 +54,7 @@ private class TestViewControllerProvider: ViewControllerProvider {
 private class TestServiceProvider: ServiceProvider {
     var name = "TestServiceProvider"
 
-    required init(context _: ServiceProviderCreationContext) {}
+    init(context _: ServiceProviderCreationContext) {}
 }
 
 private class TestResolver: Resolver {
@@ -65,4 +67,15 @@ private class TestResolver: Resolver {
     func serviceProviderFunctions() -> [(ServiceProviderCreationContext) -> ServiceProvider] {
         [TestServiceProvider.init(context:)]
     }
+}
+
+private class TestContext: Context {
+    var presentingContext: AnyContext<Int>? { nil }
+    func close(animated: Bool, completion: CompletionBlock?) -> Bool { false }
+    func change<VC>(
+        to _: MadogUIIdentifier<VC>,
+        tokenData: TokenData<Int>,
+        transition: Transition?,
+        customisation: CustomisationBlock<VC>?
+    ) -> AnyContext<Int>? { nil }
 }

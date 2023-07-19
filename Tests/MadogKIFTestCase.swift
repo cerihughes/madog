@@ -82,7 +82,7 @@ private class TestResolver: Resolver {
 private class TestViewControllerProvider: ViewControllerProvider {
     typealias Token = String
 
-    func createViewController(token: String) -> UIViewController? {
+    func createViewController(token: String, context: AnyContext<String>) -> UIViewController? {
         let viewController = TestViewController()
         viewController.title = token.viewControllerTitle
         viewController.label.text = token.viewControllerLabel

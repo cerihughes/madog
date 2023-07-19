@@ -13,7 +13,7 @@ public typealias AnyRegistry<T> = any Registry<T>
 public protocol Registry<T> {
     associatedtype T
 
-    func createViewController(from token: T) -> ViewController?
+    func createViewController(from token: T, context: AnyContext<T>) -> ViewController?
 }
 
 /// A registry that looks up view controllers for a given Token <T>. This token should be a type that is able to
@@ -28,7 +28,7 @@ public protocol Registry<T> {
 class RegistryImplementation<T>: Registry {
     private var functions = [RegistryFunction]()
 
-    typealias RegistryFunction = (T) -> ViewController?
+    typealias RegistryFunction = (T, AnyContext<T>) -> ViewController?
 
     func add(registryFunction: @escaping RegistryFunction) {
         functions.append(registryFunction)
@@ -38,9 +38,9 @@ class RegistryImplementation<T>: Registry {
         functions.removeAll()
     }
 
-    func createViewController(from token: T) -> ViewController? {
+    func createViewController(from token: T, context: AnyContext<T>) -> ViewController? {
         for function in functions {
-            if let result = function(token) {
+            if let result = function(token, context) {
                 return result
             }
         }

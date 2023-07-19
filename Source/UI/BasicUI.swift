@@ -14,7 +14,7 @@ class BasicUI<Token>: MadogModalUIContainer<Token> {
     init?(registry: AnyRegistry<Token>, token: Token) {
         super.init(registry: registry, viewController: containerController)
 
-        guard let viewController = registry.createViewController(from: token) else {
+        guard let viewController = registry.createViewController(from: token, context: self) else {
             return nil
         }
 

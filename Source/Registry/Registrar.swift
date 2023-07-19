@@ -51,7 +51,7 @@ class Registrar<T> {
     func registerViewControllerProviders(functions: [ViewControllerProviderFunction<T>]) {
         for function in functions {
             let viewControllerProvider = function()
-            registry.add(registryFunction: viewControllerProvider.createViewController(token:))
+            registry.add(registryFunction: viewControllerProvider.createViewController(token:context:))
             viewControllerProvider.configure(with: serviceProviders)
             viewControllerProviders.append(viewControllerProvider)
         }

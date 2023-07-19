@@ -65,7 +65,7 @@ private class TestViewControllerProvider: ViewControllerProvider {
         self.matchString = matchString
     }
 
-    func createViewController(token: String) -> UIViewController? {
+    func createViewController(token: String, context: AnyContext<String>) -> UIViewController? {
         if token == matchString {
             return UIViewController()
         }
@@ -77,5 +77,5 @@ private class TestViewControllerProvider: ViewControllerProvider {
 private class TestServiceProvider: ServiceProvider {
     var name = "TestServiceProvider"
 
-    required init(context _: ServiceProviderCreationContext) {}
+    init(context _: ServiceProviderCreationContext) {}
 }
