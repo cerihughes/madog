@@ -11,13 +11,13 @@ import UIKit
 
 class LoginViewController: UIViewController {
     var authenticator: Authenticator!
-    weak var context: Context?
+    weak var context: AnyContext<SampleToken>?
 
     @IBOutlet private var usernameField: UITextField!
     @IBOutlet private var passwordField: UITextField!
     @IBOutlet private var activityIndicator: UIActivityIndicatorView!
 
-    static func createLoginViewController(authenticator: Authenticator, context: Context) -> LoginViewController? {
+    static func createLoginViewController(authenticator: Authenticator, context: AnyContext<SampleToken>) -> LoginViewController? {
         let storyboard = UIStoryboard(name: "LoginViewController", bundle: Bundle(for: LoginViewController.self))
         guard let loginViewController = storyboard.instantiateInitialViewController() as? LoginViewController else {
             return nil

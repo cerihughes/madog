@@ -11,9 +11,9 @@ import UIKit
 
 class LogoutViewController: UIViewController {
     private let authenticator: Authenticator
-    private weak var context: Context?
+    private weak var context: AnyContext<SampleToken>?
 
-    init(authenticator: Authenticator, context: Context) {
+    init(authenticator: Authenticator, context: AnyContext<SampleToken>) {
         self.authenticator = authenticator
         self.context = context
 
