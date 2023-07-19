@@ -10,7 +10,6 @@ import Foundation
 
 public protocol ServiceProvider {
     var name: String { get }
-    init(context: ServiceProviderCreationContext)
 }
 
 public protocol ServiceProviderCreationContext {
