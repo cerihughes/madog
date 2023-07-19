@@ -14,10 +14,10 @@ public typealias AnyViewControllerProvider<T> = any ViewControllerProvider<T>
 public protocol ViewControllerProvider<T> {
     associatedtype T
 
-    func configure(with providers: [String: ServiceProvider])
+    func configure(with serviceProvider: [String: ServiceProvider])
     func createViewController(token: T) -> ViewController?
 }
 
 public extension ViewControllerProvider {
-    func configure(with providers: [String: ServiceProvider]) {}
+    func configure(with serviceProvider: [String: ServiceProvider]) {}
 }
