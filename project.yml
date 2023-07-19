@@ -20,9 +20,6 @@ packages:
   KIF:
     url: https://github.com/kif-framework/KIF
     exactVersion: 3.8.6
-  Provident:
-    url: https://github.com/cerihughes/provident
-    branch: swift-5-7-protocols
 targets:
   Madog:
     type: framework
@@ -31,8 +28,6 @@ targets:
       INFOPLIST_FILE: Source/Info.plist
     sources:
       - Source
-    dependencies:
-      - package: Provident
     postCompileScripts:
       - script: export PATH="/opt/homebrew/bin:$PATH";swiftlint
         name: Swift Lint
