@@ -20,27 +20,19 @@ open class MadogNavigatingModalUIContainer<T>: MadogModalUIContainer<T>, Forward
         guard
             let toViewController = registry.createViewController(from: token, context: self),
             let navigationController = provideNavigationController()
-        else {
-            return false
-        }
+        else { return false }
 
         navigationController.pushViewController(toViewController, animated: animated)
         return true
     }
 
     public func navigateBack(animated: Bool) -> Bool {
-        guard let navigationController = provideNavigationController() else {
-            return false
-        }
-
+        guard let navigationController = provideNavigationController() else { return false }
         return navigationController.popViewController(animated: animated) != nil
     }
 
     public func navigateBackToRoot(animated _: Bool) -> Bool {
-        guard let navigationController = provideNavigationController() else {
-            return false
-        }
-
+        guard let navigationController = provideNavigationController() else { return false }
         return navigationController.popToRootViewController(animated: true) != nil
     }
 }

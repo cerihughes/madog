@@ -121,7 +121,7 @@ private class TestViewController: UIViewController {
 
 extension KIFUIViewTestActor {
     func usingWindow(_ window: UIWindow) -> KIFUIViewTestActor? {
-        usingPredicate(NSPredicate(block: { (evaluatedObject, _) -> Bool in
+        usingPredicate(NSPredicate(block: { evaluatedObject, _ -> Bool in
             (evaluatedObject as? UIView)?.window == window
         }))
     }

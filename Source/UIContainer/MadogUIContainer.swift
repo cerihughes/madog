@@ -33,9 +33,7 @@ open class MadogUIContainer<T>: Context {
     // MARK: - Context
 
     public var presentingContext: AnyContext<T>? {
-        guard let presentingViewController = viewController.presentingViewController else {
-            return nil
-        }
+        guard let presentingViewController = viewController.presentingViewController else { return nil }
         return delegate?.context(for: presentingViewController)
     }
 
@@ -50,7 +48,8 @@ open class MadogUIContainer<T>: Context {
         transition: Transition?,
         customisation: CustomisationBlock<VC>?
     ) -> C? where VC: UIViewController, C: Context<T> {
-        guard let delegate = delegate,
+        guard
+            let delegate = delegate,
             let window = viewController.resolvedWindow,
             let container = delegate.createUI(
                 identifier: identifier,
@@ -58,9 +57,7 @@ open class MadogUIContainer<T>: Context {
                 isModal: false,
                 customisation: customisation
             )
-        else {
-            return nil
-        }
+        else { return nil }
 
         window.setRootViewController(container.viewController, transition: transition)
         return container as? C

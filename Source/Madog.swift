@@ -78,9 +78,8 @@ public final class Madog<T>: MadogUIContainerDelegate {
             tokenData: tokenData,
             isModal: false,
             customisation: customisation
-        ) else {
-            return nil
-        }
+        ) else { return nil }
+
         window.setRootViewController(container.viewController, transition: transition)
         return container as? C
     }
@@ -111,15 +110,12 @@ public final class Madog<T>: MadogUIContainerDelegate {
 
         container.delegate = self
         persist(container: container, isModal: isModal)
-
         customisation?(viewController)
         return container
     }
 
     func context(for viewController: UIViewController) -> AnyContext<T>? {
-        if viewController == currentContainer?.viewController {
-            return currentContainer
-        }
+        if viewController == currentContainer?.viewController { return currentContainer }
         return modalContainers[viewController]
     }
 

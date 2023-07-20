@@ -23,12 +23,7 @@ class LoginViewControllerProvider: ViewControllerProvider {
     }
 
     func createViewController(token: SampleToken, context: AnyContext<SampleToken>) -> UIViewController? {
-        guard token.identifier == loginIdentifier,
-            let authenticator = authenticator
-        else {
-            return nil
-        }
-
+        guard token.identifier == loginIdentifier, let authenticator = authenticator else { return nil }
         return LoginViewController.createLoginViewController(authenticator: authenticator, context: context)
     }
 }

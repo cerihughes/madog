@@ -254,7 +254,10 @@ class MadogUIContainerTests: MadogKIFTestCase {
         XCTAssertTrue(modalContext1 === modalContext2?.presentingContext)
     }
 
-    private func createModal(context: AnyModalContext<String>, token: String) -> AnyModalToken<String, BasicUI<String>>? {
+    private func createModal(
+        context: AnyModalContext<String>,
+        token: String
+    ) -> AnyModalToken<String, BasicUI<String>>? {
         let modalToken = context.openModal(
             identifier: .basic(),
             tokenData: .single(token),
@@ -270,7 +273,10 @@ class MadogUIContainerTests: MadogKIFTestCase {
         return modalToken?.context as? AnyModalContext<String>
     }
 
-    private func createModal(context: AnyModalContext<String>, tokens: [String]) -> AnyModalToken<String, TabBarUI<String>>? {
+    private func createModal(
+        context: AnyModalContext<String>,
+        tokens: [String]
+    ) -> AnyModalToken<String, TabBarUI<String>>? {
         let modalToken = context.openModal(
             identifier: .tabBar(),
             tokenData: .multi(tokens),

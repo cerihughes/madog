@@ -26,37 +26,32 @@ class MadogUIContainerFactory<T> {
         _ = addUICreationFunction(identifier: basicIdentifier, function: BasicUI.init(registry:token:))
         _ = addUICreationFunction(identifier: navigationIdentifier, function: NavigationUI.init(registry:token:))
         _ = addUICreationFunction(identifier: tabBarIdentifier, function: TabBarUI.init(registry:tokens:))
-        _ = addUICreationFunction(identifier: tabBarNavigationIdentifier, function: TabBarNavigationUI.init(registry:tokens:))
+        _ = addUICreationFunction(
+            identifier: tabBarNavigationIdentifier,
+            function: TabBarNavigationUI.init(registry:tokens:)
+        )
     }
 
     func addUICreationFunction(identifier: String, function: @escaping SingleVCUIRegistryFunction<T>) -> Bool {
-        guard singleVCUIRegistry[identifier] == nil else {
-            return false
-        }
+        guard singleVCUIRegistry[identifier] == nil else { return false }
         singleVCUIRegistry[identifier] = function
         return true
     }
 
     func addUICreationFunction(identifier: String, function: @escaping MultiVCUIRegistryFunction<T>) -> Bool {
-        guard multiVCUIRegistry[identifier] == nil else {
-            return false
-        }
+        guard multiVCUIRegistry[identifier] == nil else { return false }
         multiVCUIRegistry[identifier] = function
         return true
     }
 
     func addUICreationFunction(identifier: String, function: @escaping SplitSingleVCUIRegistryFunction<T>) -> Bool {
-        guard splitSingleVCUIRegistry[identifier] == nil else {
-            return false
-        }
+        guard splitSingleVCUIRegistry[identifier] == nil else { return false }
         splitSingleVCUIRegistry[identifier] = function
         return true
     }
 
     func addUICreationFunction(identifier: String, function: @escaping SplitMultiVCUIRegistryFunction<T>) -> Bool {
-        guard splitMultiVCUIRegistry[identifier] == nil else {
-            return false
-        }
+        guard splitMultiVCUIRegistry[identifier] == nil else { return false }
         splitMultiVCUIRegistry[identifier] = function
         return true
     }

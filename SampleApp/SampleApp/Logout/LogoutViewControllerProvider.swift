@@ -23,12 +23,7 @@ class LogoutViewControllerProvider: ViewControllerProvider {
     }
 
     func createViewController(token: SampleToken, context: AnyContext<SampleToken>) -> UIViewController? {
-        guard let authenticator = authenticator,
-            token.identifier == logoutIdentifier
-        else {
-            return nil
-        }
-
+        guard let authenticator = authenticator, token.identifier == logoutIdentifier else { return nil }
         let viewController = LogoutViewController(authenticator: authenticator, context: context)
         viewController.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 0)
         return viewController

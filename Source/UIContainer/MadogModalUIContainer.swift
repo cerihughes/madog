@@ -47,9 +47,7 @@ open class MadogModalUIContainer<T>: MadogUIContainer<T>, ModalContext {
                 customisation: customisation
             ),
             let context = container as? C
-        else {
-            return nil
-        }
+        else { return nil }
 
         let presentedViewController = container.viewController
         let result = modalPresentation.presentModally(
@@ -71,14 +69,15 @@ open class MadogModalUIContainer<T>: MadogUIContainer<T>, ModalContext {
         completion: CompletionBlock?
     ) -> Bool where C: Context<T> {
         guard let token = token as? ModalTokenImplementation<T, C> else { return false }
-
         closeContext(presentedViewController: token.viewController, animated: animated, completion: completion)
         return true
     }
 
-    private func closeContext(presentedViewController: UIViewController,
-                              animated: Bool = false,
-                              completion: CompletionBlock? = nil) {
+    private func closeContext(
+        presentedViewController: UIViewController,
+        animated: Bool = false,
+        completion: CompletionBlock? = nil
+    ) {
         if let presentedPresentedViewController = presentedViewController.presentedViewController {
             closeContext(presentedViewController: presentedPresentedViewController, animated: animated)
         }
