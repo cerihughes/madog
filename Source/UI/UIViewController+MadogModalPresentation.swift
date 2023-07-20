@@ -18,13 +18,13 @@ extension UIViewController {
         animated: Bool,
         completion: CompletionBlock?
     ) {
-        if let presentationStyle = presentationStyle {
+        if let presentationStyle {
             viewController.modalPresentationStyle = presentationStyle
         }
-        if let transitionStyle = transitionStyle {
+        if let transitionStyle {
             viewController.modalTransitionStyle = transitionStyle
         }
-        if let popoverAnchor = popoverAnchor {
+        if let popoverAnchor {
             if let rect = popoverAnchor as? CGRect {
                 viewController.popoverPresentationController?.sourceRect = rect
             } else if let view = popoverAnchor as? UIView {

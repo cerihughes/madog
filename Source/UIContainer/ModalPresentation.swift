@@ -29,7 +29,8 @@ class DefaultModalPresentation: ModalPresentation {
         transitionStyle: UIModalTransitionStyle?,
         popoverAnchor: Any?,
         animated: Bool,
-        completion: CompletionBlock?) -> Bool {
+        completion: CompletionBlock?
+    ) -> Bool {
         presenting.madog_presentModally(
             viewController: modal,
             presentationStyle: presentationStyle,

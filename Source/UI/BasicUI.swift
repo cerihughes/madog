@@ -32,7 +32,7 @@ open class BasicUIContainerViewController: UIViewController {
     }
 
     private func removeContentViewController(_ viewController: UIViewController?) {
-        if let viewController = viewController {
+        if let viewController {
             viewController.willMove(toParent: nil)
             viewController.view.removeFromSuperview()
             viewController.removeFromParent()
@@ -40,7 +40,7 @@ open class BasicUIContainerViewController: UIViewController {
     }
 
     private func addContentViewController(_ viewController: UIViewController?) {
-        guard let viewController = viewController else { return }
+        guard let viewController else { return }
         viewController.willMove(toParent: self)
 
         addChild(viewController)

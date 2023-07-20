@@ -27,11 +27,7 @@ public protocol ModalContext<T>: Context {
     // swiftlint:enable function_parameter_count
 
     @discardableResult
-    func closeModal<C>(
-        token: AnyModalToken<T, C>,
-        animated: Bool,
-        completion: CompletionBlock?
-    ) -> Bool where C: Context<T>
+    func closeModal(token: AnyModalToken<T, some Context<T>>, animated: Bool, completion: CompletionBlock?) -> Bool
 }
 
 public extension ModalContext {
@@ -59,7 +55,7 @@ public extension ModalContext {
     }
 
     @discardableResult
-    func closeModal<C>(token: AnyModalToken<T, C>, animated: Bool) -> Bool where C: Context<T> {
+    func closeModal(token: AnyModalToken<T, some Context<T>>, animated: Bool) -> Bool {
         closeModal(token: token, animated: animated, completion: nil)
     }
 }

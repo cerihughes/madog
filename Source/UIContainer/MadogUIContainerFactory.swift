@@ -56,18 +56,18 @@ class MadogUIContainerFactory<T> {
         return true
     }
 
-    func createUI<VC, C>(
-        identifier: MadogUIIdentifier<VC, C, T>,
+    func createUI(
+        identifier: MadogUIIdentifier<some UIViewController, some Context<T>, T>,
         tokenData: TokenData<T>
-    ) -> MadogUIContainer<T>? where VC: UIViewController, C: Context<T> {
+    ) -> MadogUIContainer<T>? {
         switch tokenData {
-        case .single(let token):
+        case let .single(token):
             return singleVCUIRegistry[identifier.value]?(registry, token)
-        case .multi(let tokens):
+        case let .multi(tokens):
             return multiVCUIRegistry[identifier.value]?(registry, tokens)
-        case .splitSingle(let primaryToken, let secondaryToken):
+        case let .splitSingle(primaryToken, secondaryToken):
             return splitSingleVCUIRegistry[identifier.value]?(registry, primaryToken, secondaryToken)
-        case .splitMulti(let primaryToken, let secondaryTokens):
+        case let .splitMulti(primaryToken, secondaryTokens):
             return splitMultiVCUIRegistry[identifier.value]?(registry, primaryToken, secondaryTokens)
         }
     }

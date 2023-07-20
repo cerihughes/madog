@@ -24,7 +24,7 @@ class ViewController2Provider: ViewControllerProvider {
 
     func createViewController(token: SampleToken, context: AnyContext<SampleToken>) -> UIViewController? {
         guard
-            let sharedService = sharedService,
+            let sharedService,
             token.identifier == vc2Identifier,
             let stringData = token.stringData,
             let context = context as? AnyForwardBackNavigationContext<SampleToken>

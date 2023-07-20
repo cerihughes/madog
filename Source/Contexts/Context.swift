@@ -19,7 +19,7 @@ public struct Transition {
 }
 
 public typealias CompletionBlock = () -> Void
-public typealias CustomisationBlock<VC> = (VC) -> Void where VC: UIViewController
+public typealias CustomisationBlock<VC> = (VC) -> Void where VC: ViewController
 public typealias AnyContext<T> = any Context<T>
 
 public protocol Context<T>: AnyObject {

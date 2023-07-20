@@ -17,7 +17,10 @@ class LoginViewController: UIViewController {
     @IBOutlet private var passwordField: UITextField!
     @IBOutlet private var activityIndicator: UIActivityIndicatorView!
 
-    static func createLoginViewController(authenticator: Authenticator, context: AnyContext<SampleToken>) -> LoginViewController? {
+    static func createLoginViewController(
+        authenticator: Authenticator,
+        context: AnyContext<SampleToken>
+    ) -> LoginViewController? {
         let storyboard = UIStoryboard(name: "LoginViewController", bundle: Bundle(for: LoginViewController.self))
         guard let loginViewController = storyboard.instantiateInitialViewController() as? LoginViewController else {
             return nil
@@ -29,7 +32,7 @@ class LoginViewController: UIViewController {
     }
 
     override func viewDidAppear(_: Bool) {
-        guard let context = context else { return }
+        guard let context else { return }
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             self.usernameField.text = "SomeUsername"
             self.passwordField.text = "SomePassword123"

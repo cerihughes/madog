@@ -143,7 +143,7 @@ extension UIWindow {
     func setRootViewController(_ viewController: UIViewController, transition: Transition?) {
         rootViewController = viewController
 
-        if let transition = transition {
+        if let transition {
             UIView.transition(with: self, duration: transition.duration, options: transition.options, animations: {})
         }
     }

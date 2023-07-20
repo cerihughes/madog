@@ -49,14 +49,13 @@ open class MadogUIContainer<T>: Context {
         customisation: CustomisationBlock<VC>?
     ) -> C? where VC: UIViewController, C: Context<T> {
         guard
-            let delegate = delegate,
-            let window = viewController.resolvedWindow,
-            let container = delegate.createUI(
+            let container = delegate?.createUI(
                 identifier: identifier,
                 tokenData: tokenData,
                 isModal: false,
                 customisation: customisation
-            )
+            ),
+            let window = viewController.resolvedWindow
         else { return nil }
 
         window.setRootViewController(container.viewController, transition: transition)
