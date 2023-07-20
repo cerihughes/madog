@@ -17,7 +17,8 @@ class TabBarNavigationUI<Token>: MadogNavigatingModalUIContainer<Token>, MultiCo
     init(registry: Registry<Token>, tokens: [Token]) {
         super.init(registry: registry, viewController: tabBarController)
 
-        let viewControllers = tokens.compactMap { registry.createViewController(from: $0, context: self) }
+        let viewControllers = tokens
+            .compactMap { registry.createViewController(from: $0, context: self) }
             .map { UINavigationController(rootViewController: $0) }
 
         tabBarController.viewControllers = viewControllers

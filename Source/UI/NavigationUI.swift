@@ -17,9 +17,7 @@ class NavigationUI<Token>: MadogNavigatingModalUIContainer<Token> {
     init?(registry: Registry<Token>, token: Token) {
         super.init(registry: registry, viewController: navigationController)
 
-        guard let viewController = registry.createViewController(from: token, context: self) else {
-            return nil
-        }
+        guard let viewController = registry.createViewController(from: token, context: self) else { return nil }
 
         navigationController.setViewControllers([viewController], animated: false)
     }

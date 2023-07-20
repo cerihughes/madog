@@ -20,7 +20,8 @@ class SplitUI<Token>: MadogModalUIContainer<Token>, SplitContext {
     init?(registry: Registry<Token>, primaryToken: Token, secondaryToken: Token) {
         super.init(registry: registry, viewController: splitController)
 
-        guard let primaryViewController = registry.createViewController(from: primaryToken, context: self),
+        guard
+            let primaryViewController = registry.createViewController(from: primaryToken, context: self),
             let secondaryViewController = registry.createViewController(from: secondaryToken, context: self)
         else {
             return nil
@@ -32,7 +33,8 @@ class SplitUI<Token>: MadogModalUIContainer<Token>, SplitContext {
     // MARK: - SplitContext
 
     func showDetail(token: Any) -> Bool {
-        guard let token = token as? Token,
+        guard
+            let token = token as? Token,
             let viewController = registry.createViewController(from: token, context: self)
         else {
             return false

@@ -59,10 +59,12 @@ class NavigationUITests: MadogKIFTestCase {
     func testOpenNavigationModal() {
         context = renderUIAndAssert(token: "vc1")
 
-        let modalToken = context.openModal(identifier: .navigation,
-                                           tokenData: .single("vc2"),
-                                           presentationStyle: .formSheet,
-                                           animated: true)
+        let modalToken = context.openModal(
+            identifier: .navigation,
+            tokenData: .single("vc2"),
+            presentationStyle: .formSheet,
+            animated: true
+        )
         waitForTitle(token: "vc2")
         waitForLabel(token: "vc2")
 

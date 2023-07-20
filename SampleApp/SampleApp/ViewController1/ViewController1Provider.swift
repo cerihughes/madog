@@ -23,7 +23,8 @@ class ViewController1Provider: SingleViewControllerProvider<SampleToken> {
     }
 
     override func createViewController(token: SampleToken, context: Context) -> UIViewController? {
-        guard let sharedService = sharedService,
+        guard
+            let sharedService,
             token.identifier == vc1Identifier,
             let context = context as? ForwardBackNavigationContext
         else {

@@ -27,9 +27,7 @@ class ViewController2: UIViewController {
     }
 
     override func viewDidLoad() {
-        guard let view = view as? LabelView else {
-            return
-        }
+        guard let view = view as? LabelView else { return }
 
         view.label.text = stringData
 

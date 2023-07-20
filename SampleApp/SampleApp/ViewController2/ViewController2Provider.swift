@@ -23,7 +23,8 @@ class ViewController2Provider: SingleViewControllerProvider<SampleToken> {
     }
 
     override func createViewController(token: SampleToken, context: Context) -> UIViewController? {
-        guard let sharedService = sharedService,
+        guard
+            let sharedService,
             token.identifier == vc2Identifier,
             let stringData = token.stringData,
             let context = context as? ForwardBackNavigationContext
@@ -31,9 +32,11 @@ class ViewController2Provider: SingleViewControllerProvider<SampleToken> {
             return nil
         }
 
-        let viewController = ViewController2(sharedService: sharedService,
-                                             stringData: stringData,
-                                             context: context)
+        let viewController = ViewController2(
+            sharedService: sharedService,
+            stringData: stringData,
+            context: context
+        )
         viewController.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 0)
         return viewController
     }

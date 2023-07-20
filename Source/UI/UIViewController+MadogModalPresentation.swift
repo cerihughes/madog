@@ -10,19 +10,21 @@ import UIKit
 
 // swiftlint:disable function_parameter_count
 extension UIViewController {
-    func madog_presentModally(viewController: UIViewController,
-                              presentationStyle: UIModalPresentationStyle?,
-                              transitionStyle: UIModalTransitionStyle?,
-                              popoverAnchor: Any?,
-                              animated: Bool,
-                              completion: CompletionBlock?) {
-        if let presentationStyle = presentationStyle {
+    func madog_presentModally(
+        viewController: UIViewController,
+        presentationStyle: UIModalPresentationStyle?,
+        transitionStyle: UIModalTransitionStyle?,
+        popoverAnchor: Any?,
+        animated: Bool,
+        completion: CompletionBlock?
+    ) {
+        if let presentationStyle {
             viewController.modalPresentationStyle = presentationStyle
         }
-        if let transitionStyle = transitionStyle {
+        if let transitionStyle {
             viewController.modalTransitionStyle = transitionStyle
         }
-        if let popoverAnchor = popoverAnchor {
+        if let popoverAnchor {
             if let rect = popoverAnchor as? CGRect {
                 viewController.popoverPresentationController?.sourceRect = rect
             } else if let view = popoverAnchor as? UIView {

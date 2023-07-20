@@ -10,8 +10,10 @@ import UIKit
 
 public typealias SingleVCUIRegistryFunction<Token> = (Registry<Token>, Token) -> MadogModalUIContainer<Token>?
 public typealias MultiVCUIRegistryFunction<Token> = (Registry<Token>, [Token]) -> MadogModalUIContainer<Token>?
-public typealias SplitSingleVCUIRegistryFunction<Token> = (Registry<Token>, Token, Token) -> MadogModalUIContainer<Token>?
-public typealias SplitMultiVCUIRegistryFunction<Token> = (Registry<Token>, Token, [Token]) -> MadogModalUIContainer<Token>?
+public typealias SplitSingleVCUIRegistryFunction<Token> = (Registry<Token>, Token, Token)
+    -> MadogModalUIContainer<Token>?
+public typealias SplitMultiVCUIRegistryFunction<Token> = (Registry<Token>, Token, [Token])
+    -> MadogModalUIContainer<Token>?
 
 class MadogUIContainerFactory<Token> {
     private let registry: Registry<Token>
@@ -26,7 +28,10 @@ class MadogUIContainerFactory<Token> {
         _ = addUICreationFunction(identifier: basicIdentifier, function: BasicUI.init(registry:token:))
         _ = addUICreationFunction(identifier: navigationIdentifier, function: NavigationUI.init(registry:token:))
         _ = addUICreationFunction(identifier: tabBarIdentifier, function: TabBarUI.init(registry:tokens:))
-        _ = addUICreationFunction(identifier: tabBarNavigationIdentifier, function: TabBarNavigationUI.init(registry:tokens:))
+        _ = addUICreationFunction(
+            identifier: tabBarNavigationIdentifier,
+            function: TabBarNavigationUI.init(registry:tokens:)
+        )
     }
 
     func addUICreationFunction(identifier: String, function: @escaping SingleVCUIRegistryFunction<Token>) -> Bool {
@@ -61,8 +66,10 @@ class MadogUIContainerFactory<Token> {
         return true
     }
 
-    func createUI<VC, TD>(identifier: MadogUIIdentifier<VC, TD>,
-                                   tokenData: TD) -> MadogModalUIContainer<Token>? where VC: UIViewController, TD: TokenData {
+    func createUI<TD>(
+        identifier: MadogUIIdentifier<some UIViewController, TD>,
+        tokenData: TD
+    ) -> MadogModalUIContainer<Token>? where TD: TokenData {
         if let tokenData = tokenData as? SingleUITokenData, let token = tokenData.token as? Token {
             return singleVCUIRegistry[identifier.value]?(registry, token)
         }
@@ -70,13 +77,15 @@ class MadogUIContainerFactory<Token> {
             return multiVCUIRegistry[identifier.value]?(registry, tokens)
         }
         if let tokenData = tokenData as? SplitSingleUITokenData,
-            let primaryToken = tokenData.primaryToken as? Token,
-            let secondaryToken = tokenData.secondaryToken as? Token {
+           let primaryToken = tokenData.primaryToken as? Token,
+           let secondaryToken = tokenData.secondaryToken as? Token
+        {
             return splitSingleVCUIRegistry[identifier.value]?(registry, primaryToken, secondaryToken)
         }
         if let tokenData = tokenData as? SplitMultiUITokenData,
-            let primaryToken = tokenData.primaryToken as? Token,
-            let secondaryTokens = tokenData.secondaryTokens as? [Token] {
+           let primaryToken = tokenData.primaryToken as? Token,
+           let secondaryTokens = tokenData.secondaryTokens as? [Token]
+        {
             return splitMultiVCUIRegistry[identifier.value]?(registry, primaryToken, secondaryTokens)
         }
         return nil
