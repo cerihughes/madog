@@ -16,7 +16,7 @@ let navigationIdentifier = "navigationIdentifier"
 let tabBarIdentifier = "tabBarIdentifier"
 let tabBarNavigationIdentifier = "tabBarNavigationIdentifier"
 
-public struct MadogUIIdentifier<VC, C, T> where VC: UIViewController, C: Context<T> {
+public struct MadogUIIdentifier<VC, C, TD, T> where VC: UIViewController, C: Context<T>, TD: TokenData<T> {
     let value: String
 
     public init(_ value: String) {
@@ -30,19 +30,22 @@ public struct MadogUIIdentifier<VC, C, T> where VC: UIViewController, C: Context
 // and C: TabBarNavigationUIContext<T> respectively (the public protocol types), but that means we get "Generic
 // parameter 'C' could not be inferred" at the call site.
 
-public extension MadogUIIdentifier where VC == BasicUIContainerViewController, C == BasicUI<T> {
+public extension MadogUIIdentifier
+where VC == BasicUIContainerViewController, C == BasicUI<T>, TD == SingleUITokenData<T> {
     static func basic() -> Self { MadogUIIdentifier(basicIdentifier) }
 }
 
-public extension MadogUIIdentifier where VC == UINavigationController, C == NavigationUI<T> {
+public extension MadogUIIdentifier
+where VC == UINavigationController, C == NavigationUI<T>, TD == SingleUITokenData<T> {
     static func navigation() -> Self { MadogUIIdentifier(navigationIdentifier) }
 }
 
-public extension MadogUIIdentifier where VC == UITabBarController, C == TabBarUI<T> {
+public extension MadogUIIdentifier where VC == UITabBarController, C == TabBarUI<T>, TD == MultiUITokenData<T> {
     static func tabBar() -> Self { MadogUIIdentifier(tabBarIdentifier) }
 }
 
-public extension MadogUIIdentifier where VC == UITabBarController, C == TabBarNavigationUI<T> {
+public extension MadogUIIdentifier
+where VC == UITabBarController, C == TabBarNavigationUI<T>, TD == MultiUITokenData<T> {
     static func tabBarNavigation() -> Self { MadogUIIdentifier(tabBarNavigationIdentifier) }
 }
 

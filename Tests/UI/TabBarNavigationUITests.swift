@@ -70,13 +70,13 @@ class TabBarNavigationUITests: MadogKIFTestCase {
     }
 
     func testOpenMultiNavigationModal() {
-        let context = madog.renderUI(identifier: .basic(), tokenData: .single("vc1"), in: window)
+        let context = madog.renderUI(identifier: .basic(), tokenData: SingleUITokenData("vc1"), in: window)
         waitForLabel(token: "vc1")
         XCTAssertNotNil(context)
 
         let modalToken = context!.openModal(
             identifier: .tabBarNavigation(),
-            tokenData: .multi(["vc2", "vc3"]),
+            tokenData: MultiUITokenData(["vc2", "vc3"]),
             presentationStyle: .formSheet,
             animated: true
         )
@@ -120,7 +120,7 @@ class TabBarNavigationUITests: MadogKIFTestCase {
     }
 
     private func renderUIAndAssert(tokens: String ...) -> AnyTabBarNavigationUIContext<String>? {
-        let context = madog.renderUI(identifier: .tabBarNavigation(), tokenData: .multi(tokens), in: window)
+        let context = madog.renderUI(identifier: .tabBarNavigation(), tokenData: MultiUITokenData(tokens), in: window)
         tokens.forEach { waitForTitle(token: $0) }
         waitForLabel(token: tokens.first!)
         return context

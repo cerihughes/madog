@@ -14,16 +14,16 @@ public protocol ModalContext<T>: Context {
 
     // swiftlint:disable function_parameter_count
     @discardableResult
-    func openModal<VC, C>(
-        identifier: MadogUIIdentifier<VC, C, T>,
-        tokenData: TokenData<T>,
+    func openModal<VC, C, TD>(
+        identifier: MadogUIIdentifier<VC, C, TD, T>,
+        tokenData: TD,
         presentationStyle: UIModalPresentationStyle?,
         transitionStyle: UIModalTransitionStyle?,
         popoverAnchor: Any?,
         animated: Bool,
         customisation: CustomisationBlock<VC>?,
         completion: CompletionBlock?
-    ) -> AnyModalToken<T, C>? where VC: UIViewController, C: Context<T>
+    ) -> AnyModalToken<T, C>? where VC: UIViewController, C: Context<T>, TD: TokenData<T>
     // swiftlint:enable function_parameter_count
 
     @discardableResult
@@ -32,16 +32,16 @@ public protocol ModalContext<T>: Context {
 
 public extension ModalContext {
     @discardableResult
-    func openModal<VC, C>(
-        identifier: MadogUIIdentifier<VC, C, T>,
-        tokenData: TokenData<T>,
+    func openModal<VC, C, TD>(
+        identifier: MadogUIIdentifier<VC, C, TD, T>,
+        tokenData: TD,
         presentationStyle: UIModalPresentationStyle? = nil,
         transitionStyle: UIModalTransitionStyle? = nil,
         popoverAnchor: Any? = nil,
         animated: Bool,
         customisation: CustomisationBlock<VC>? = nil,
         completion: CompletionBlock? = nil
-    ) -> AnyModalToken<T, C>? where VC: UIViewController, C: Context<T> {
+    ) -> AnyModalToken<T, C>? where VC: UIViewController, C: Context<T>, TD: TokenData<T> {
         openModal(
             identifier: identifier,
             tokenData: tokenData,

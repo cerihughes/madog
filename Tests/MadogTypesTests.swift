@@ -72,10 +72,10 @@ private class TestResolver: Resolver {
 private class TestContext: Context {
     var presentingContext: AnyContext<Int>? { nil }
     func close(animated: Bool, completion: CompletionBlock?) -> Bool { false }
-    func change<VC>(
-        to _: MadogUIIdentifier<VC, some Context<Int>, Int>,
-        tokenData: TokenData<Int>,
+    func change<VC, TD>(
+        to _: MadogUIIdentifier<VC, some Context<Int>, TD, Int>,
+        tokenData: TD,
         transition: Transition?,
         customisation: CustomisationBlock<VC>?
-    ) -> AnyContext<Int>? where VC: UIViewController { nil }
+    ) -> AnyContext<Int>? where VC: UIViewController, TD: TokenData<Int> { nil }
 }

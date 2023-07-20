@@ -56,19 +56,22 @@ class MadogUIContainerFactory<T> {
         return true
     }
 
-    func createUI(
-        identifier: MadogUIIdentifier<some UIViewController, some Context<T>, T>,
-        tokenData: TokenData<T>
-    ) -> MadogUIContainer<T>? {
-        switch tokenData {
-        case let .single(token):
-            return singleVCUIRegistry[identifier.value]?(registry, token)
-        case let .multi(tokens):
-            return multiVCUIRegistry[identifier.value]?(registry, tokens)
-        case let .splitSingle(primaryToken, secondaryToken):
-            return splitSingleVCUIRegistry[identifier.value]?(registry, primaryToken, secondaryToken)
-        case let .splitMulti(primaryToken, secondaryTokens):
-            return splitMultiVCUIRegistry[identifier.value]?(registry, primaryToken, secondaryTokens)
+    func createUI<TD>(
+        identifier: MadogUIIdentifier<some UIViewController, some Context<T>, TD, T>,
+        tokenData: TD
+    ) -> MadogUIContainer<T>? where TD: TokenData<T> {
+        if let td = tokenData as? SingleUITokenData<T> {
+            return singleVCUIRegistry[identifier.value]?(registry, td.token)
         }
+        if let td = tokenData as? MultiUITokenData<T> {
+            return multiVCUIRegistry[identifier.value]?(registry, td.tokens)
+        }
+        if let td = tokenData as? SplitSingleUITokenData<T> {
+            return splitSingleVCUIRegistry[identifier.value]?(registry, td.primaryToken, td.secondaryToken)
+        }
+        if let td = tokenData as? SplitMultiUITokenData<T> {
+            return splitMultiVCUIRegistry[identifier.value]?(registry, td.primaryToken, td.secondaryTokens)
+        }
+        return nil
     }
 }

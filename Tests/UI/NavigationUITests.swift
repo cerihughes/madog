@@ -60,7 +60,7 @@ class NavigationUITests: MadogKIFTestCase {
 
         let modalToken = context.openModal(
             identifier: .navigation(),
-            tokenData: .single("vc2"),
+            tokenData: SingleUITokenData("vc2"),
             presentationStyle: .formSheet,
             animated: true
         )
@@ -82,7 +82,7 @@ class NavigationUITests: MadogKIFTestCase {
     }
 
     private func renderUIAndAssert(token: String) -> AnyNavigationUIContext<String>? {
-        let context = madog.renderUI(identifier: .navigation(), tokenData: .single(token), in: window)
+        let context = madog.renderUI(identifier: .navigation(), tokenData: SingleUITokenData(token), in: window)
         waitForTitle(token: token)
         waitForLabel(token: token)
         return context

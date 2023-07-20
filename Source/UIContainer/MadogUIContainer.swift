@@ -11,12 +11,12 @@ import UIKit
 protocol MadogUIContainerDelegate<T>: AnyObject {
     associatedtype T
 
-    func createUI<VC, C>(
-        identifier: MadogUIIdentifier<VC, C, T>,
-        tokenData: TokenData<T>,
+    func createUI<VC, C, TD>(
+        identifier: MadogUIIdentifier<VC, C, TD, T>,
+        tokenData: TD,
         isModal: Bool,
         customisation: CustomisationBlock<VC>?
-    ) -> MadogUIContainer<T>? where VC: UIViewController, C: Context<T>
+    ) -> MadogUIContainer<T>? where VC: UIViewController, C: Context<T>, TD: TokenData<T>
 
     func context(for viewController: UIViewController) -> AnyContext<T>?
     func releaseContext(for viewController: UIViewController)
@@ -42,12 +42,12 @@ open class MadogUIContainer<T>: Context {
         false
     }
 
-    public func change<VC, C>(
-        to identifier: MadogUIIdentifier<VC, C, T>,
-        tokenData: TokenData<T>,
+    public func change<VC, C, TD>(
+        to identifier: MadogUIIdentifier<VC, C, TD, T>,
+        tokenData: TD,
         transition: Transition?,
         customisation: CustomisationBlock<VC>?
-    ) -> C? where VC: UIViewController, C: Context<T> {
+    ) -> C? where VC: UIViewController, C: Context<T>, TD: TokenData<T> {
         guard
             let container = delegate?.createUI(
                 identifier: identifier,
