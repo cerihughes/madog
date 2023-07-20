@@ -16,7 +16,7 @@ let navigationIdentifier = "navigationIdentifier"
 let tabBarIdentifier = "tabBarIdentifier"
 let tabBarNavigationIdentifier = "tabBarNavigationIdentifier"
 
-public struct MadogUIIdentifier<VC> where VC: UIViewController {
+public struct MadogUIIdentifier<VC, C, T> where VC: UIViewController, C: Context<T> {
     let value: String
 
     public init(_ value: String) {
@@ -26,17 +26,20 @@ public struct MadogUIIdentifier<VC> where VC: UIViewController {
 
 // THIS IS WHERE ALL OF THE TYPE GOODNESS CAN HAPPEN
 
-public extension MadogUIIdentifier where VC == BasicUIContainerViewController {
-    static let basic = MadogUIIdentifier(basicIdentifier)
+public extension MadogUIIdentifier where VC == BasicUIContainerViewController, C == BasicUI<T> {
+    static func basic() -> Self { MadogUIIdentifier(basicIdentifier) }
 }
 
-public extension MadogUIIdentifier where VC == UINavigationController {
-    static let navigation = MadogUIIdentifier(navigationIdentifier)
+public extension MadogUIIdentifier where VC == UINavigationController, C == NavigationUI<T> {
+    static func navigation() -> Self { MadogUIIdentifier(navigationIdentifier) }
 }
 
-public extension MadogUIIdentifier where VC == UITabBarController {
-    static let tabBar = MadogUIIdentifier(tabBarIdentifier)
-    static let tabBarNavigation = MadogUIIdentifier(tabBarNavigationIdentifier)
+public extension MadogUIIdentifier where VC == UITabBarController, C == TabBarUI<T> {
+    static func tabBar() -> Self { MadogUIIdentifier(tabBarIdentifier) }
+}
+
+public extension MadogUIIdentifier where VC == UITabBarController, C == TabBarNavigationUI<T> {
+    static func tabBarNavigation() -> Self { MadogUIIdentifier(tabBarNavigationIdentifier) }
 }
 
 #endif

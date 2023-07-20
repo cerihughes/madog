@@ -11,7 +11,7 @@ import UIKit
 /// A class that presents view controllers, and manages the navigation between them.
 ///
 /// At the moment, this is achieved with a UINavigationController that can be pushed / popped to / from.
-class NavigationUI<Token>: MadogNavigatingModalUIContainer<Token> {
+public class NavigationUI<Token>: MadogNavigatingModalUIContainer<Token> {
     private let navigationController = UINavigationController()
 
     init?(registry: AnyRegistry<Token>, token: Token) {
@@ -24,7 +24,7 @@ class NavigationUI<Token>: MadogNavigatingModalUIContainer<Token> {
         navigationController.setViewControllers([viewController], animated: false)
     }
 
-    override func provideNavigationController() -> UINavigationController? {
+    override public func provideNavigationController() -> UINavigationController? {
         navigationController
     }
 }

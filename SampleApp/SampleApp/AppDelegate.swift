@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window.makeKeyAndVisible()
 
         let initial = SampleToken.login
-        let context = madog.renderUI(identifier: .split, tokenData: .splitSingle(initial, initial), in: window) { splitController in
+        let context = madog.renderUI(identifier: .split(), tokenData: .splitSingle(initial, initial), in: window) { splitController in
             splitController.preferredDisplayMode = .oneBesideSecondary
             splitController.presentsWithGesture = false
         }
@@ -40,12 +40,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let navigationContext = currentContext as? AnyForwardBackNavigationContext<SampleToken> {
             return navigationContext.navigateForward(token: token, animated: true)
         } else {
-            return currentContext.change(to: .navigation, tokenData: .single(token)) != nil
+            return currentContext.change(to: .navigation(), tokenData: .single(token)) != nil
         }
     }
 }
 
 let splitViewControllerIdentifier = "splitViewControllerIdentifier"
-extension MadogUIIdentifier where VC == UISplitViewController {
-    static let split = MadogUIIdentifier(splitViewControllerIdentifier)
+extension MadogUIIdentifier where VC == UISplitViewController, C == SplitUI<T> {
+    static func split() -> Self { MadogUIIdentifier(splitViewControllerIdentifier) }
 }

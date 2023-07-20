@@ -66,14 +66,14 @@ public final class Madog<Token>: MadogUIContainerDelegate {
     }
 
     @discardableResult
-    public func renderUI<VC>(
-        identifier: MadogUIIdentifier<VC>,
+    public func renderUI<VC, C>(
+        identifier: MadogUIIdentifier<VC, C, Token>,
         tokenData: TokenData<Token>,
         in window: UIWindow,
         transition: Transition? = nil,
         customisation: CustomisationBlock<VC>? = nil
-    ) -> AnyContext<Token>? where VC: UIViewController {
-        guard let context = createUI(
+    ) -> C? where VC: UIViewController, C: Context<Token> {
+        guard let thing = createUI(
             identifier: identifier,
             tokenData: tokenData,
             isModal: false,
@@ -81,8 +81,8 @@ public final class Madog<Token>: MadogUIContainerDelegate {
         ) else {
             return nil
         }
-        window.setRootViewController(context.viewController, transition: transition)
-        return context
+        window.setRootViewController(thing.container.viewController, transition: transition)
+        return thing.context
     }
 
     public var currentContext: AnyContext<Token>? {
@@ -95,24 +95,25 @@ public final class Madog<Token>: MadogUIContainerDelegate {
 
     // MARK: - MadogUIContainerDelegate
 
-    func createUI<VC>(
-        identifier: MadogUIIdentifier<VC>,
+    func createUI<VC, C>(
+        identifier: MadogUIIdentifier<VC, C, Token>,
         tokenData: TokenData<Token>,
         isModal: Bool,
         customisation: CustomisationBlock<VC>?
-    ) -> MadogUIContainer<Token>? where VC: UIViewController {
-        guard let container = factory.createUI(identifier: identifier, tokenData: tokenData) else {
+    ) -> DelegateThing<Token, C>? where VC: UIViewController, C: Context<Token> {
+        guard
+            let thing = factory.createUIThing(identifier: identifier, tokenData: tokenData),
+            case let container = thing.container,
+            let viewController = thing.container.viewController as? VC
+        else {
             return nil
         }
 
         container.delegate = self
         persist(container: container, isModal: isModal)
 
-        guard let viewController = container.viewController as? VC else {
-            return nil
-        }
         customisation?(viewController)
-        return container
+        return thing
     }
 
     func context(for viewController: UIViewController) -> AnyContext<Token>? {

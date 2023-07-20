@@ -60,7 +60,7 @@ class NavigationUITests: MadogKIFTestCase {
         context = renderUIAndAssert(token: "vc1")
 
         let modalToken = context.openModal(
-            identifier: .navigation,
+            identifier: .navigation(),
             tokenData: .single("vc2"),
             presentationStyle: .formSheet,
             animated: true
@@ -68,7 +68,7 @@ class NavigationUITests: MadogKIFTestCase {
         waitForTitle(token: "vc2")
         waitForLabel(token: "vc2")
 
-        let modalContext = modalToken?.context as? any ForwardBackNavigationContext<String>
+        let modalContext = modalToken?.context as? AnyForwardBackNavigationContext<String>
         XCTAssertNotNil(modalContext)
 
         modalContext?.navigateForward(token: "vc3", animated: true)
@@ -83,10 +83,10 @@ class NavigationUITests: MadogKIFTestCase {
     }
 
     private func renderUIAndAssert(token: String) -> AnyNavigationUIContext<String>? {
-        let context = madog.renderUI(identifier: .navigation, tokenData: .single(token), in: window)
+        let context = madog.renderUI(identifier: .navigation(), tokenData: .single(token), in: window)
         waitForTitle(token: token)
         waitForLabel(token: token)
-        return context as? AnyNavigationUIContext<String>
+        return context
     }
 
     private func navigateForwardAndAssert(token: String) {

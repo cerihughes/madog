@@ -42,7 +42,7 @@ class LoginViewController: UIViewController {
                 self.activityIndicator.stopAnimating()
 
                 let tokens: [SampleToken] = [.vc1, .logout]
-                context.change(to: .tabBarNavigation, tokenData: .multi(tokens))
+                context.change(to: .tabBarNavigation(), tokenData: .multi(tokens))
             })
         }
     }

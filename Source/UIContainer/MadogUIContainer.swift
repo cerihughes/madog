@@ -8,15 +8,20 @@
 
 import UIKit
 
+struct DelegateThing<Token, C> where C: Context {
+    let container: MadogUIContainer<Token>
+    let context: C
+}
+
 protocol MadogUIContainerDelegate<Token>: AnyObject {
     associatedtype Token
 
-    func createUI<VC>(
-        identifier: MadogUIIdentifier<VC>,
+    func createUI<VC, C>(
+        identifier: MadogUIIdentifier<VC, C, Token>,
         tokenData: TokenData<Token>,
         isModal: Bool,
         customisation: CustomisationBlock<VC>?
-    ) -> MadogUIContainer<Token>? where VC: UIViewController
+    ) -> DelegateThing<Token, C>? where VC: UIViewController, C: Context<Token>
 
     func context(for viewController: UIViewController) -> AnyContext<Token>?
     func releaseContext(for viewController: UIViewController)
@@ -44,24 +49,26 @@ open class MadogUIContainer<Token>: Context {
         false
     }
 
-    public func change<VC>(
-        to identifier: MadogUIIdentifier<VC>,
+    public func change<VC, C>(
+        to identifier: MadogUIIdentifier<VC, C, Token>,
         tokenData: TokenData<Token>,
         transition: Transition?,
         customisation: CustomisationBlock<VC>?
-    ) -> AnyContext<Token>? where VC: UIViewController {
+    ) -> C? where VC: UIViewController, C: Context<Token> {
         guard let delegate = delegate,
             let window = viewController.resolvedWindow,
-            let container = delegate.createUI(identifier: identifier,
-                                              tokenData: tokenData,
-                                              isModal: false,
-                                              customisation: customisation)
+            let container = delegate.createUI(
+                identifier: identifier,
+                tokenData: tokenData,
+                isModal: false,
+                customisation: customisation
+            )
         else {
             return nil
         }
 
-        window.setRootViewController(container.viewController, transition: transition)
-        return container
+        window.setRootViewController(container.container.viewController, transition: transition)
+        return container.context
     }
 }
 
