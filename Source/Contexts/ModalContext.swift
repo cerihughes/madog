@@ -8,44 +8,44 @@
 
 import UIKit
 
-public typealias AnyModalContext<Token> = any ModalContext<Token>
+public typealias AnyModalContext<T> = any ModalContext<T>
 
-public protocol ModalContext<Token>: Context {
+public protocol ModalContext<T>: Context {
 
     // swiftlint:disable function_parameter_count
     @discardableResult
     func openModal<VC, C>(
-        identifier: MadogUIIdentifier<VC, C, Token>,
-        tokenData: TokenData<Token>,
+        identifier: MadogUIIdentifier<VC, C, T>,
+        tokenData: TokenData<T>,
         presentationStyle: UIModalPresentationStyle?,
         transitionStyle: UIModalTransitionStyle?,
         popoverAnchor: Any?,
         animated: Bool,
         customisation: CustomisationBlock<VC>?,
         completion: CompletionBlock?
-    ) -> AnyModalToken<Token, C>? where VC: UIViewController, C: Context<Token>
+    ) -> AnyModalToken<T, C>? where VC: UIViewController, C: Context<T>
     // swiftlint:enable function_parameter_count
 
     @discardableResult
     func closeModal<C>(
-        token: AnyModalToken<Token, C>,
+        token: AnyModalToken<T, C>,
         animated: Bool,
         completion: CompletionBlock?
-    ) -> Bool where C: Context<Token>
+    ) -> Bool where C: Context<T>
 }
 
 public extension ModalContext {
     @discardableResult
     func openModal<VC, C>(
-        identifier: MadogUIIdentifier<VC, C, Token>,
-        tokenData: TokenData<Token>,
+        identifier: MadogUIIdentifier<VC, C, T>,
+        tokenData: TokenData<T>,
         presentationStyle: UIModalPresentationStyle? = nil,
         transitionStyle: UIModalTransitionStyle? = nil,
         popoverAnchor: Any? = nil,
         animated: Bool,
         customisation: CustomisationBlock<VC>? = nil,
         completion: CompletionBlock? = nil
-    ) -> AnyModalToken<Token, C>? where VC: UIViewController, C: Context<Token> {
+    ) -> AnyModalToken<T, C>? where VC: UIViewController, C: Context<T> {
         openModal(
             identifier: identifier,
             tokenData: tokenData,
@@ -59,7 +59,7 @@ public extension ModalContext {
     }
 
     @discardableResult
-    func closeModal<C>(token: AnyModalToken<Token, C>, animated: Bool) -> Bool where C: Context<Token> {
+    func closeModal<C>(token: AnyModalToken<T, C>, animated: Bool) -> Bool where C: Context<T> {
         closeModal(token: token, animated: animated, completion: nil)
     }
 }

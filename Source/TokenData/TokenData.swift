@@ -8,9 +8,9 @@
 
 import Foundation
 
-public enum TokenData<Token> {
-    case single(Token)
-    case multi([Token])
-    case splitSingle(Token, Token)
-    case splitMulti(Token, [Token])
+public enum TokenData<T> {
+    case single(T)
+    case multi([T])
+    case splitSingle(T, T)
+    case splitMulti(T, [T])
 }

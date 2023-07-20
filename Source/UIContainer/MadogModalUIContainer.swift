@@ -8,11 +8,11 @@
 
 import UIKit
 
-open class MadogModalUIContainer<Token>: MadogUIContainer<Token>, ModalContext {
-    public private(set) var registry: AnyRegistry<Token>
+open class MadogModalUIContainer<T>: MadogUIContainer<T>, ModalContext {
+    public private(set) var registry: AnyRegistry<T>
     var modalPresentation: ModalPresentation = DefaultModalPresentation()
 
-    public init(registry: AnyRegistry<Token>, viewController: UIViewController) {
+    public init(registry: AnyRegistry<T>, viewController: UIViewController) {
         self.registry = registry
         super.init(viewController: viewController)
     }
@@ -29,15 +29,15 @@ open class MadogModalUIContainer<Token>: MadogUIContainer<Token>, ModalContext {
 
     // swiftlint:disable function_parameter_count
     public func openModal<VC, C>(
-        identifier: MadogUIIdentifier<VC, C, Token>,
-        tokenData: TokenData<Token>,
+        identifier: MadogUIIdentifier<VC, C, T>,
+        tokenData: TokenData<T>,
         presentationStyle: UIModalPresentationStyle?,
         transitionStyle: UIModalTransitionStyle?,
         popoverAnchor: Any?,
         animated: Bool,
         customisation: CustomisationBlock<VC>?,
         completion: CompletionBlock?
-    ) -> AnyModalToken<Token, C>? where VC: UIViewController, C: Context<Token> {
+    ) -> AnyModalToken<T, C>? where VC: UIViewController, C: Context<T> {
         guard
             let delegate = delegate,
             let container = delegate.createUI(
@@ -65,11 +65,11 @@ open class MadogModalUIContainer<Token>: MadogUIContainer<Token>, ModalContext {
     // swiftlint:enable function_parameter_count
 
     public func closeModal<C>(
-        token: AnyModalToken<Token, C>,
+        token: AnyModalToken<T, C>,
         animated: Bool,
         completion: CompletionBlock?
-    ) -> Bool where C: Context<Token> {
-        guard let token = token as? ModalTokenImplementation<Token, C> else { return false }
+    ) -> Bool where C: Context<T> {
+        guard let token = token as? ModalTokenImplementation<T, C> else { return false }
 
         closeContext(presentedViewController: token.viewController, animated: animated, completion: completion)
         return true
@@ -89,7 +89,7 @@ open class MadogModalUIContainer<Token>: MadogUIContainer<Token>, ModalContext {
     public final func createModalToken<C>(
         viewController: UIViewController,
         context: C
-    ) -> AnyModalToken<Token, C> where C: Context<Token> {
+    ) -> AnyModalToken<T, C> where C: Context<T> {
         ModalTokenImplementation(viewController: viewController, context: context)
     }
 }

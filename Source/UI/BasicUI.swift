@@ -8,10 +8,10 @@
 
 import UIKit
 
-public class BasicUI<Token>: MadogModalUIContainer<Token> {
+public class BasicUI<T>: MadogModalUIContainer<T> {
     private let containerController = BasicUIContainerViewController()
 
-    init?(registry: AnyRegistry<Token>, token: Token) {
+    init?(registry: AnyRegistry<T>, token: T) {
         super.init(registry: registry, viewController: containerController)
 
         guard let viewController = registry.createViewController(from: token, context: self) else {

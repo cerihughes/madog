@@ -8,27 +8,27 @@
 
 import UIKit
 
-struct DelegateThing<Token, C> where C: Context {
-    let container: MadogUIContainer<Token>
+struct DelegateThing<T, C> where C: Context {
+    let container: MadogUIContainer<T>
     let context: C
 }
 
-protocol MadogUIContainerDelegate<Token>: AnyObject {
-    associatedtype Token
+protocol MadogUIContainerDelegate<T>: AnyObject {
+    associatedtype T
 
     func createUI<VC, C>(
-        identifier: MadogUIIdentifier<VC, C, Token>,
-        tokenData: TokenData<Token>,
+        identifier: MadogUIIdentifier<VC, C, T>,
+        tokenData: TokenData<T>,
         isModal: Bool,
         customisation: CustomisationBlock<VC>?
-    ) -> DelegateThing<Token, C>? where VC: UIViewController, C: Context<Token>
+    ) -> DelegateThing<T, C>? where VC: UIViewController, C: Context<T>
 
-    func context(for viewController: UIViewController) -> AnyContext<Token>?
+    func context(for viewController: UIViewController) -> AnyContext<T>?
     func releaseContext(for viewController: UIViewController)
 }
 
-open class MadogUIContainer<Token>: Context {
-    weak var delegate: (any MadogUIContainerDelegate<Token>)?
+open class MadogUIContainer<T>: Context {
+    weak var delegate: (any MadogUIContainerDelegate<T>)?
     let viewController: UIViewController
 
     public init(viewController: UIViewController) {
@@ -37,7 +37,7 @@ open class MadogUIContainer<Token>: Context {
 
     // MARK: - Context
 
-    public var presentingContext: AnyContext<Token>? {
+    public var presentingContext: AnyContext<T>? {
         guard let presentingViewController = viewController.presentingViewController else {
             return nil
         }
@@ -50,11 +50,11 @@ open class MadogUIContainer<Token>: Context {
     }
 
     public func change<VC, C>(
-        to identifier: MadogUIIdentifier<VC, C, Token>,
-        tokenData: TokenData<Token>,
+        to identifier: MadogUIIdentifier<VC, C, T>,
+        tokenData: TokenData<T>,
         transition: Transition?,
         customisation: CustomisationBlock<VC>?
-    ) -> C? where VC: UIViewController, C: Context<Token> {
+    ) -> C? where VC: UIViewController, C: Context<T> {
         guard let delegate = delegate,
             let window = viewController.resolvedWindow,
             let container = delegate.createUI(

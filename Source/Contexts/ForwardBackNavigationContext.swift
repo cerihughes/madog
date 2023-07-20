@@ -8,12 +8,12 @@
 
 import Foundation
 
-public typealias AnyForwardBackNavigationContext<Token> = any ForwardBackNavigationContext<Token>
+public typealias AnyForwardBackNavigationContext<T> = any ForwardBackNavigationContext<T>
 
-public protocol ForwardBackNavigationContext<Token>: Context {
+public protocol ForwardBackNavigationContext<T>: Context {
 
     @discardableResult
-    func navigateForward(token: Token, animated: Bool) -> Bool
+    func navigateForward(token: T, animated: Bool) -> Bool
     @discardableResult
     func navigateBack(animated: Bool) -> Bool
     @discardableResult

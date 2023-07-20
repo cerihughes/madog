@@ -8,35 +8,35 @@
 
 import UIKit
 
-public typealias NavigationUIContext<Token> = ModalContext<Token> & ForwardBackNavigationContext<Token>
-public typealias TabBarUIContext<Token> = ModalContext<Token> & MultiContext<Token>
-public typealias TabBarNavigationUIContext<Token> = TabBarUIContext<Token> & ForwardBackNavigationContext<Token>
+public typealias NavigationUIContext<T> = ModalContext<T> & ForwardBackNavigationContext<T>
+public typealias TabBarUIContext<T> = ModalContext<T> & MultiContext<T>
+public typealias TabBarNavigationUIContext<T> = TabBarUIContext<T> & ForwardBackNavigationContext<T>
 
-public typealias AnyNavigationUIContext<Token> = any NavigationUIContext<Token>
-public typealias AnyTabBarUIContext<Token> = any TabBarUIContext<Token>
-public typealias AnyTabBarNavigationUIContext<Token> = any TabBarNavigationUIContext<Token>
+public typealias AnyNavigationUIContext<T> = any NavigationUIContext<T>
+public typealias AnyTabBarUIContext<T> = any TabBarUIContext<T>
+public typealias AnyTabBarNavigationUIContext<T> = any TabBarNavigationUIContext<T>
 
-public final class Madog<Token>: MadogUIContainerDelegate {
-    private let registry = RegistryImplementation<Token>()
-    private let registrar: Registrar<Token>
-    private let factory: MadogUIContainerFactory<Token>
+public final class Madog<T>: MadogUIContainerDelegate {
+    private let registry = RegistryImplementation<T>()
+    private let registrar: Registrar<T>
+    private let factory: MadogUIContainerFactory<T>
 
-    private var currentContainer: MadogUIContainer<Token>?
-    private var modalContainers = [UIViewController: AnyContext<Token>]()
+    private var currentContainer: MadogUIContainer<T>?
+    private var modalContainers = [UIViewController: AnyContext<T>]()
 
     public init() {
         registrar = Registrar(registry: registry)
-        factory = MadogUIContainerFactory<Token>(registry: registry)
+        factory = MadogUIContainerFactory<T>(registry: registry)
     }
 
-    public func resolve(resolver: AnyResolver<Token>, launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) {
+    public func resolve(resolver: AnyResolver<T>, launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) {
         registrar.resolve(resolver: resolver, launchOptions: launchOptions)
     }
 
     @discardableResult
     public func addUICreationFunction(
         identifier: String,
-        function: @escaping SingleVCUIRegistryFunction<Token>
+        function: @escaping SingleVCUIRegistryFunction<T>
     ) -> Bool {
         factory.addUICreationFunction(identifier: identifier, function: function)
     }
@@ -44,7 +44,7 @@ public final class Madog<Token>: MadogUIContainerDelegate {
     @discardableResult
     public func addUICreationFunction(
         identifier: String,
-        function: @escaping MultiVCUIRegistryFunction<Token>
+        function: @escaping MultiVCUIRegistryFunction<T>
     ) -> Bool {
         factory.addUICreationFunction(identifier: identifier, function: function)
     }
@@ -52,7 +52,7 @@ public final class Madog<Token>: MadogUIContainerDelegate {
     @discardableResult
     public func addUICreationFunction(
         identifier: String,
-        function: @escaping SplitSingleVCUIRegistryFunction<Token>
+        function: @escaping SplitSingleVCUIRegistryFunction<T>
     ) -> Bool {
         factory.addUICreationFunction(identifier: identifier, function: function)
     }
@@ -60,19 +60,19 @@ public final class Madog<Token>: MadogUIContainerDelegate {
     @discardableResult
     public func addUICreationFunction(
         identifier: String,
-        function: @escaping SplitMultiVCUIRegistryFunction<Token>
+        function: @escaping SplitMultiVCUIRegistryFunction<T>
     ) -> Bool {
         factory.addUICreationFunction(identifier: identifier, function: function)
     }
 
     @discardableResult
     public func renderUI<VC, C>(
-        identifier: MadogUIIdentifier<VC, C, Token>,
-        tokenData: TokenData<Token>,
+        identifier: MadogUIIdentifier<VC, C, T>,
+        tokenData: TokenData<T>,
         in window: UIWindow,
         transition: Transition? = nil,
         customisation: CustomisationBlock<VC>? = nil
-    ) -> C? where VC: UIViewController, C: Context<Token> {
+    ) -> C? where VC: UIViewController, C: Context<T> {
         guard let thing = createUI(
             identifier: identifier,
             tokenData: tokenData,
@@ -85,7 +85,7 @@ public final class Madog<Token>: MadogUIContainerDelegate {
         return thing.context
     }
 
-    public var currentContext: AnyContext<Token>? {
+    public var currentContext: AnyContext<T>? {
         currentContainer
     }
 
@@ -96,11 +96,11 @@ public final class Madog<Token>: MadogUIContainerDelegate {
     // MARK: - MadogUIContainerDelegate
 
     func createUI<VC, C>(
-        identifier: MadogUIIdentifier<VC, C, Token>,
-        tokenData: TokenData<Token>,
+        identifier: MadogUIIdentifier<VC, C, T>,
+        tokenData: TokenData<T>,
         isModal: Bool,
         customisation: CustomisationBlock<VC>?
-    ) -> DelegateThing<Token, C>? where VC: UIViewController, C: Context<Token> {
+    ) -> DelegateThing<T, C>? where VC: UIViewController, C: Context<T> {
         guard
             let thing = factory.createUIThing(identifier: identifier, tokenData: tokenData),
             case let container = thing.container,
@@ -116,7 +116,7 @@ public final class Madog<Token>: MadogUIContainerDelegate {
         return thing
     }
 
-    func context(for viewController: UIViewController) -> AnyContext<Token>? {
+    func context(for viewController: UIViewController) -> AnyContext<T>? {
         if viewController == currentContainer?.viewController {
             return currentContainer
         }
@@ -133,7 +133,7 @@ public final class Madog<Token>: MadogUIContainerDelegate {
 
     // MARK: - Private
 
-    private func persist(container: MadogUIContainer<Token>, isModal: Bool) {
+    private func persist(container: MadogUIContainer<T>, isModal: Bool) {
         if isModal {
             modalContainers[container.viewController] = container
         } else {

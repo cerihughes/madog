@@ -77,5 +77,5 @@ private class TestContext: Context {
         tokenData: TokenData<Int>,
         transition: Transition?,
         customisation: CustomisationBlock<VC>?
-    ) -> AnyContext<Int>? where VC: UIViewController, C: Context<Token> { nil }
+    ) -> AnyContext<Int>? where VC: UIViewController, C: Context<Int> { nil }
 }
