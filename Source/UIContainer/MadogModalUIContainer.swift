@@ -45,12 +45,13 @@ open class MadogModalUIContainer<T>: MadogUIContainer<T>, ModalContext {
                 tokenData: tokenData,
                 isModal: true,
                 customisation: customisation
-            )
+            ),
+            let context = container as? C
         else {
             return nil
         }
 
-        let presentedViewController = container.container.viewController
+        let presentedViewController = container.viewController
         let result = modalPresentation.presentModally(
             presenting: viewController,
             modal: presentedViewController,
@@ -60,7 +61,7 @@ open class MadogModalUIContainer<T>: MadogUIContainer<T>, ModalContext {
             animated: animated,
             completion: completion
         )
-        return result ? createModalToken(viewController: presentedViewController, context: container.context) : nil
+        return result ? createModalToken(viewController: presentedViewController, context: context) : nil
     }
     // swiftlint:enable function_parameter_count
 

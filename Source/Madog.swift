@@ -73,7 +73,7 @@ public final class Madog<T>: MadogUIContainerDelegate {
         transition: Transition? = nil,
         customisation: CustomisationBlock<VC>? = nil
     ) -> C? where VC: UIViewController, C: Context<T> {
-        guard let thing = createUI(
+        guard let container = createUI(
             identifier: identifier,
             tokenData: tokenData,
             isModal: false,
@@ -81,8 +81,8 @@ public final class Madog<T>: MadogUIContainerDelegate {
         ) else {
             return nil
         }
-        window.setRootViewController(thing.container.viewController, transition: transition)
-        return thing.context
+        window.setRootViewController(container.viewController, transition: transition)
+        return container as? C
     }
 
     public var currentContext: AnyContext<T>? {
@@ -100,11 +100,11 @@ public final class Madog<T>: MadogUIContainerDelegate {
         tokenData: TokenData<T>,
         isModal: Bool,
         customisation: CustomisationBlock<VC>?
-    ) -> DelegateThing<T, C>? where VC: UIViewController, C: Context<T> {
+    ) -> MadogUIContainer<T>? where VC: UIViewController, C: Context<T> {
         guard
-            let thing = factory.createUIThing(identifier: identifier, tokenData: tokenData),
-            case let container = thing.container,
-            let viewController = thing.container.viewController as? VC
+            let container = factory.createUI(identifier: identifier, tokenData: tokenData),
+            container is C,
+            let viewController = container.viewController as? VC
         else {
             return nil
         }
@@ -113,7 +113,7 @@ public final class Madog<T>: MadogUIContainerDelegate {
         persist(container: container, isModal: isModal)
 
         customisation?(viewController)
-        return thing
+        return container
     }
 
     func context(for viewController: UIViewController) -> AnyContext<T>? {

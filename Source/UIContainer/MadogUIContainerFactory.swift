@@ -61,18 +61,7 @@ class MadogUIContainerFactory<T> {
         return true
     }
 
-    func createUIThing<VC, C>(
-        identifier: MadogUIIdentifier<VC, C, T>,
-        tokenData: TokenData<T>
-    ) -> DelegateThing<T, C>? where VC: UIViewController, C: Context<T> {
-        guard
-            let container = createUI(identifier: identifier, tokenData: tokenData),
-            let context = container as? C
-        else { return nil }
-        return .init(container: container, context: context)
-    }
-
-    private func createUI<VC, C>(
+    func createUI<VC, C>(
         identifier: MadogUIIdentifier<VC, C, T>,
         tokenData: TokenData<T>
     ) -> MadogUIContainer<T>? where VC: UIViewController, C: Context<T> {

@@ -8,11 +8,6 @@
 
 import UIKit
 
-struct DelegateThing<T, C> where C: Context {
-    let container: MadogUIContainer<T>
-    let context: C
-}
-
 protocol MadogUIContainerDelegate<T>: AnyObject {
     associatedtype T
 
@@ -21,7 +16,7 @@ protocol MadogUIContainerDelegate<T>: AnyObject {
         tokenData: TokenData<T>,
         isModal: Bool,
         customisation: CustomisationBlock<VC>?
-    ) -> DelegateThing<T, C>? where VC: UIViewController, C: Context<T>
+    ) -> MadogUIContainer<T>? where VC: UIViewController, C: Context<T>
 
     func context(for viewController: UIViewController) -> AnyContext<T>?
     func releaseContext(for viewController: UIViewController)
@@ -67,8 +62,8 @@ open class MadogUIContainer<T>: Context {
             return nil
         }
 
-        window.setRootViewController(container.container.viewController, transition: transition)
-        return container.context
+        window.setRootViewController(container.viewController, transition: transition)
+        return container as? C
     }
 }
 
