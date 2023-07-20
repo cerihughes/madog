@@ -24,7 +24,11 @@ public struct MadogUIIdentifier<VC, C, T> where VC: UIViewController, C: Context
     }
 }
 
-// THIS IS WHERE ALL OF THE TYPE GOODNESS CAN HAPPEN
+// Ideally, the C constraints on the extensions below would be protocol based, as we shouldn't really be exposing the
+// BasicUI, NavigationUI, TabBarUI and TabBarNavigationUI types (they shouldn't even be public).
+// Preferably, the extensions should constrain to C: ModalContext<T>, C: NavigationUIContext<T>, C: TabBarUIContext<T>
+// and C: TabBarNavigationUIContext<T> respectively (the public protocol types), but that means we get "Generic
+// parameter 'C' could not be inferred" at the call site.
 
 public extension MadogUIIdentifier where VC == BasicUIContainerViewController, C == BasicUI<T> {
     static func basic() -> Self { MadogUIIdentifier(basicIdentifier) }
