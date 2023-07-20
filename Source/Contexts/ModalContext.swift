@@ -57,11 +57,11 @@ public protocol ModalToken {
     var context: Context { get }
 }
 
-internal class ModalTokenImplementation: ModalToken {
-    internal let viewController: UIViewController
+class ModalTokenImplementation: ModalToken {
+    let viewController: UIViewController
     let context: Context
 
-    internal init(viewController: UIViewController, context: Context) {
+    init(viewController: UIViewController, context: Context) {
         self.viewController = viewController
         self.context = context
     }

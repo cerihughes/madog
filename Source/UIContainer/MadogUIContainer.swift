@@ -8,7 +8,7 @@
 
 import UIKit
 
-internal protocol MadogUIContainerDelegate: AnyObject {
+protocol MadogUIContainerDelegate: AnyObject {
     func createUI<VC, TD>(identifier: MadogUIIdentifier<VC, TD>,
                           tokenData: TD,
                           isModal: Bool,
@@ -19,8 +19,8 @@ internal protocol MadogUIContainerDelegate: AnyObject {
 }
 
 open class MadogUIContainer: Context {
-    internal weak var delegate: MadogUIContainerDelegate?
-    internal let viewController: UIViewController
+    weak var delegate: MadogUIContainerDelegate?
+    let viewController: UIViewController
 
     public init(viewController: UIViewController) {
         self.viewController = viewController

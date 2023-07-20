@@ -11,13 +11,13 @@
 import Foundation
 import UIKit
 
-internal let basicIdentifier = "basicIdentifier"
-internal let navigationIdentifier = "navigationIdentifier"
-internal let tabBarIdentifier = "tabBarIdentifier"
-internal let tabBarNavigationIdentifier = "tabBarNavigationIdentifier"
+let basicIdentifier = "basicIdentifier"
+let navigationIdentifier = "navigationIdentifier"
+let tabBarIdentifier = "tabBarIdentifier"
+let tabBarNavigationIdentifier = "tabBarNavigationIdentifier"
 
 public struct MadogUIIdentifier<VC, TD> where VC: UIViewController, TD: TokenData {
-    internal let value: String
+    let value: String
 
     public init(_ value: String) {
         self.value = value

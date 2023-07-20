@@ -19,7 +19,7 @@ public protocol ModalPresentation {
                         completion: CompletionBlock?) -> Bool
 }
 
-internal class DefaultModalPresentation: ModalPresentation {
+class DefaultModalPresentation: ModalPresentation {
     func presentModally(presenting: UIViewController,
                         modal: UIViewController,
                         presentationStyle: UIModalPresentationStyle?,

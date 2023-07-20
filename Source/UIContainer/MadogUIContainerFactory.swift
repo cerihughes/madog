@@ -13,14 +13,14 @@ public typealias MultiVCUIRegistryFunction<Token> = (Registry<Token>, [Token]) -
 public typealias SplitSingleVCUIRegistryFunction<Token> = (Registry<Token>, Token, Token) -> MadogModalUIContainer<Token>?
 public typealias SplitMultiVCUIRegistryFunction<Token> = (Registry<Token>, Token, [Token]) -> MadogModalUIContainer<Token>?
 
-internal class MadogUIContainerFactory<Token> {
+class MadogUIContainerFactory<Token> {
     private let registry: Registry<Token>
     private var singleVCUIRegistry = [String: SingleVCUIRegistryFunction<Token>]()
     private var multiVCUIRegistry = [String: MultiVCUIRegistryFunction<Token>]()
     private var splitSingleVCUIRegistry = [String: SplitSingleVCUIRegistryFunction<Token>]()
     private var splitMultiVCUIRegistry = [String: SplitMultiVCUIRegistryFunction<Token>]()
 
-    internal init(registry: Registry<Token>) {
+    init(registry: Registry<Token>) {
         self.registry = registry
 
         _ = addUICreationFunction(identifier: basicIdentifier, function: BasicUI.init(registry:token:))
@@ -29,7 +29,7 @@ internal class MadogUIContainerFactory<Token> {
         _ = addUICreationFunction(identifier: tabBarNavigationIdentifier, function: TabBarNavigationUI.init(registry:tokens:))
     }
 
-    internal func addUICreationFunction(identifier: String, function: @escaping SingleVCUIRegistryFunction<Token>) -> Bool {
+    func addUICreationFunction(identifier: String, function: @escaping SingleVCUIRegistryFunction<Token>) -> Bool {
         guard singleVCUIRegistry[identifier] == nil else {
             return false
         }
@@ -37,7 +37,7 @@ internal class MadogUIContainerFactory<Token> {
         return true
     }
 
-    internal func addUICreationFunction(identifier: String, function: @escaping MultiVCUIRegistryFunction<Token>) -> Bool {
+    func addUICreationFunction(identifier: String, function: @escaping MultiVCUIRegistryFunction<Token>) -> Bool {
         guard multiVCUIRegistry[identifier] == nil else {
             return false
         }
@@ -45,7 +45,7 @@ internal class MadogUIContainerFactory<Token> {
         return true
     }
 
-    internal func addUICreationFunction(identifier: String, function: @escaping SplitSingleVCUIRegistryFunction<Token>) -> Bool {
+    func addUICreationFunction(identifier: String, function: @escaping SplitSingleVCUIRegistryFunction<Token>) -> Bool {
         guard splitSingleVCUIRegistry[identifier] == nil else {
             return false
         }
@@ -53,7 +53,7 @@ internal class MadogUIContainerFactory<Token> {
         return true
     }
 
-    internal func addUICreationFunction(identifier: String, function: @escaping SplitMultiVCUIRegistryFunction<Token>) -> Bool {
+    func addUICreationFunction(identifier: String, function: @escaping SplitMultiVCUIRegistryFunction<Token>) -> Bool {
         guard splitMultiVCUIRegistry[identifier] == nil else {
             return false
         }
@@ -61,7 +61,7 @@ internal class MadogUIContainerFactory<Token> {
         return true
     }
 
-    internal func createUI<VC, TD>(identifier: MadogUIIdentifier<VC, TD>,
+    func createUI<VC, TD>(identifier: MadogUIIdentifier<VC, TD>,
                                    tokenData: TD) -> MadogModalUIContainer<Token>? where VC: UIViewController, TD: TokenData {
         if let tokenData = tokenData as? SingleUITokenData, let token = tokenData.token as? Token {
             return singleVCUIRegistry[identifier.value]?(registry, token)
