@@ -39,3 +39,4 @@ extension UIViewController {
         present(viewController, animated: animated, completion: completion)
     }
 }
+// swiftlint:enable function_parameter_count

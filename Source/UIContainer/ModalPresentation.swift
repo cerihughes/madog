@@ -20,6 +20,7 @@ public protocol ModalPresentation {
         completion: CompletionBlock?
     ) -> Bool
 }
+// swiftlint:enable function_parameter_count
 
 class DefaultModalPresentation: ModalPresentation {
     func presentModally(
