@@ -12,7 +12,7 @@ class Registrar<T> {
     let registry: RegistryImplementation<T>
 
     private(set) var serviceProviders = [String: ServiceProvider]()
-    private(set) var viewControllerProviders = [any ViewControllerProvider<T>]()
+    private(set) var viewControllerProviders = [AnyViewControllerProvider<T>]()
 
     init(registry: RegistryImplementation<T>) {
         self.registry = registry

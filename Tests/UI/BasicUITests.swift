@@ -23,7 +23,7 @@ class BasicUITests: MadogKIFTestCase {
 
     func testProtocolConformance() {
         context = renderUIAndAssert(token: "vc1")
-        XCTAssertNil(context as? any ForwardBackNavigationContext<String>)
+        XCTAssertNil(context as? AnyForwardBackNavigationContext<String>)
         XCTAssertNil(context as? AnyMultiContext<String>)
     }
 

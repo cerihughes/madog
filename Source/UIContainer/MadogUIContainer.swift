@@ -8,6 +8,8 @@
 
 import UIKit
 
+typealias AnyMadogUIContainerDelegate<T> = any MadogUIContainerDelegate<T>
+
 protocol MadogUIContainerDelegate<T>: AnyObject {
     associatedtype T
 
@@ -23,7 +25,7 @@ protocol MadogUIContainerDelegate<T>: AnyObject {
 }
 
 open class MadogUIContainer<T>: Context {
-    weak var delegate: (any MadogUIContainerDelegate<T>)?
+    weak var delegate: AnyMadogUIContainerDelegate<T>?
     let viewController: UIViewController
 
     public init(viewController: UIViewController) {
