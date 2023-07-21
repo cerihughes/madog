@@ -37,7 +37,7 @@ open class MadogModalUIContainer<T>: MadogUIContainer<T>, ModalContext {
         animated: Bool,
         customisation: CustomisationBlock<VC>?,
         completion: CompletionBlock?
-    ) -> AnyModalToken<T, C>? where VC: UIViewController, C: Context<T>, TD: TokenData<T> {
+    ) -> AnyModalToken<T, C>? where VC: UIViewController, C: Context<T>, TD: TokenData {
         guard
             let container = delegate?.createUI(
                 identifier: identifier,

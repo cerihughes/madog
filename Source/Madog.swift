@@ -72,7 +72,7 @@ public final class Madog<T>: MadogUIContainerDelegate {
         in window: UIWindow,
         transition: Transition? = nil,
         customisation: CustomisationBlock<VC>? = nil
-    ) -> C? where VC: UIViewController, C: Context<T>, TD: TokenData<T> {
+    ) -> C? where VC: UIViewController, C: Context<T>, TD: TokenData {
         guard let container = createUI(
             identifier: identifier,
             tokenData: tokenData,
@@ -99,7 +99,7 @@ public final class Madog<T>: MadogUIContainerDelegate {
         tokenData: TD,
         isModal: Bool,
         customisation: CustomisationBlock<VC>?
-    ) -> MadogUIContainer<T>? where VC: UIViewController, C: Context<T>, TD: TokenData<T> {
+    ) -> MadogUIContainer<T>? where VC: UIViewController, C: Context<T>, TD: TokenData {
         guard
             let container = factory.createUI(identifier: identifier, tokenData: tokenData),
             container is C,

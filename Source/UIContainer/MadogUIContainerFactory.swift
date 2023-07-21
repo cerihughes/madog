@@ -68,7 +68,7 @@ class MadogUIContainerFactory<T> {
     func createUI<TD>(
         identifier: MadogUIIdentifier<some UIViewController, some Context<T>, TD, T>,
         tokenData: TD
-    ) -> MadogUIContainer<T>? where TD: TokenData<T> {
+    ) -> MadogUIContainer<T>? where TD: TokenData {
         if let td = tokenData as? SingleUITokenData<T> {
             return singleVCUIRegistry[identifier.value]?(registry, td.token)
         }

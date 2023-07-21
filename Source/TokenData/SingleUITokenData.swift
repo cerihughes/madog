@@ -9,9 +9,11 @@
 import Foundation
 
 public struct SingleUITokenData<T>: TokenData {
-    public let token: T
+    let token: T
+}
 
-    public init(_ token: T) {
-        self.token = token
+public extension TokenData {
+    static func single<T>(_ token: T) -> SingleUITokenData<T> {
+        SingleUITokenData(token: token)
     }
 }

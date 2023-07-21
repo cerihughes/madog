@@ -23,7 +23,7 @@ public protocol ModalContext<T>: Context {
         animated: Bool,
         customisation: CustomisationBlock<VC>?,
         completion: CompletionBlock?
-    ) -> AnyModalToken<T, C>? where VC: UIViewController, C: Context<T>, TD: TokenData<T>
+    ) -> AnyModalToken<T, C>? where VC: UIViewController, C: Context<T>, TD: TokenData
     // swiftlint:enable function_parameter_count
 
     @discardableResult
@@ -41,7 +41,7 @@ public extension ModalContext {
         animated: Bool,
         customisation: CustomisationBlock<VC>? = nil,
         completion: CompletionBlock? = nil
-    ) -> AnyModalToken<T, C>? where VC: UIViewController, C: Context<T>, TD: TokenData<T> {
+    ) -> AnyModalToken<T, C>? where VC: UIViewController, C: Context<T>, TD: TokenData {
         openModal(
             identifier: identifier,
             tokenData: tokenData,

@@ -11,7 +11,7 @@
 import Foundation
 import UIKit
 
-public struct MadogUIIdentifier<VC, C, TD, T> where VC: UIViewController, C: Context<T>, TD: TokenData<T> {
+public struct MadogUIIdentifier<VC, C, TD, T> where VC: UIViewController, C: Context<T>, TD: TokenData {
     let value: String
 
     public init(_ value: String) {
