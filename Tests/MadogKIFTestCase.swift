@@ -72,16 +72,12 @@ class MadogKIFTestCase: KIFTestCase {
 }
 
 private class TestResolver: Resolver {
-    typealias T = String
-
     func viewControllerProviderFunctions() -> [() -> AnyViewControllerProvider<String>] {
         [TestViewControllerProvider.init]
     }
 }
 
 private class TestViewControllerProvider: ViewControllerProvider {
-    typealias Token = String
-
     func createViewController(token: String, context: AnyContext<String>) -> UIViewController? {
         let viewController = TestViewController()
         viewController.title = token.viewControllerTitle

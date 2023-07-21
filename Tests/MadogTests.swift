@@ -47,8 +47,6 @@ class MadogTests: XCTestCase {
 }
 
 private class TestResolver: Resolver {
-    typealias T = String
-
     func serviceProviderFunctions() -> [(ServiceProviderCreationContext) -> ServiceProvider] {
         [TestServiceProvider.init(context:)]
     }

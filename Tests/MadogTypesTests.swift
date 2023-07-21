@@ -44,8 +44,6 @@ class MadogTypesTests: XCTestCase {
 }
 
 private class TestViewControllerProvider: ViewControllerProvider {
-    typealias T = Int
-
     func createViewController(token: Int, context: AnyContext<Int>) -> UIViewController? {
         UIViewController()
     }
@@ -58,8 +56,6 @@ private class TestServiceProvider: ServiceProvider {
 }
 
 private class TestResolver: Resolver {
-    typealias T = Int
-
     func viewControllerProviderFunctions() -> [() -> AnyViewControllerProvider<Int>] {
         [TestViewControllerProvider.init]
     }
