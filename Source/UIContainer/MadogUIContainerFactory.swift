@@ -23,36 +23,45 @@ class MadogUIContainerFactory<T> {
     init(registry: RegistryImplementation<T>) {
         self.registry = registry
 
-        _ = addUICreationFunction(identifier: basicIdentifier, function: BasicUI.init(registry:token:))
-        _ = addUICreationFunction(identifier: navigationIdentifier, function: NavigationUI.init(registry:token:))
-        _ = addUICreationFunction(identifier: tabBarIdentifier, function: TabBarUI.init(registry:tokens:))
-        _ = addUICreationFunction(
-            identifier: tabBarNavigationIdentifier,
-            function: TabBarNavigationUI.init(registry:tokens:)
-        )
+        _ = addUICreationFunction(identifier: .basic(), function: BasicUI.init(registry:token:))
+        _ = addUICreationFunction(identifier: .navigation(), function: NavigationUI.init(registry:token:))
+        _ = addUICreationFunction(identifier: .tabBar(), function: TabBarUI.init(registry:tokens:))
+        _ = addUICreationFunction(identifier: .tabBarNavigation(), function: TabBarNavigationUI.init(registry:tokens:))
     }
 
-    func addUICreationFunction(identifier: String, function: @escaping SingleVCUIRegistryFunction<T>) -> Bool {
-        guard singleVCUIRegistry[identifier] == nil else { return false }
-        singleVCUIRegistry[identifier] = function
+    func addUICreationFunction(
+        identifier: MadogUIIdentifier<some ViewController, some Context<T>, SingleUITokenData<T>, T>,
+        function: @escaping SingleVCUIRegistryFunction<T>
+    ) -> Bool {
+        guard singleVCUIRegistry[identifier.value] == nil else { return false }
+        singleVCUIRegistry[identifier.value] = function
         return true
     }
 
-    func addUICreationFunction(identifier: String, function: @escaping MultiVCUIRegistryFunction<T>) -> Bool {
-        guard multiVCUIRegistry[identifier] == nil else { return false }
-        multiVCUIRegistry[identifier] = function
+    func addUICreationFunction(
+        identifier: MadogUIIdentifier<some ViewController, some Context<T>, MultiUITokenData<T>, T>,
+        function: @escaping MultiVCUIRegistryFunction<T>
+    ) -> Bool {
+        guard multiVCUIRegistry[identifier.value] == nil else { return false }
+        multiVCUIRegistry[identifier.value] = function
         return true
     }
 
-    func addUICreationFunction(identifier: String, function: @escaping SplitSingleVCUIRegistryFunction<T>) -> Bool {
-        guard splitSingleVCUIRegistry[identifier] == nil else { return false }
-        splitSingleVCUIRegistry[identifier] = function
+    func addUICreationFunction(
+        identifier: MadogUIIdentifier<some ViewController, some Context<T>, SplitSingleUITokenData<T>, T>,
+        function: @escaping SplitSingleVCUIRegistryFunction<T>
+    ) -> Bool {
+        guard splitSingleVCUIRegistry[identifier.value] == nil else { return false }
+        splitSingleVCUIRegistry[identifier.value] = function
         return true
     }
 
-    func addUICreationFunction(identifier: String, function: @escaping SplitMultiVCUIRegistryFunction<T>) -> Bool {
-        guard splitMultiVCUIRegistry[identifier] == nil else { return false }
-        splitMultiVCUIRegistry[identifier] = function
+    func addUICreationFunction(
+        identifier: MadogUIIdentifier<some ViewController, some Context<T>, SplitMultiUITokenData<T>, T>,
+        function: @escaping SplitMultiVCUIRegistryFunction<T>
+    ) -> Bool {
+        guard splitMultiVCUIRegistry[identifier.value] == nil else { return false }
+        splitMultiVCUIRegistry[identifier.value] = function
         return true
     }
 

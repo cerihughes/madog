@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         madog.resolve(resolver: SampleResolver(), launchOptions: launchOptions)
         let result = madog.addUICreationFunction(
-            identifier: splitViewControllerIdentifier,
+            identifier: .split(),
             function: SplitUI.init(registry:primaryToken:secondaryToken:)
         )
         guard result == true else {
@@ -53,7 +53,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
-let splitViewControllerIdentifier = "splitViewControllerIdentifier"
 extension MadogUIIdentifier where VC == UISplitViewController, C == SplitUI<T>, TD == SplitSingleUITokenData<T> {
-    static func split() -> Self { MadogUIIdentifier(splitViewControllerIdentifier) }
+    static func split() -> Self { MadogUIIdentifier("splitViewControllerIdentifier") }
 }

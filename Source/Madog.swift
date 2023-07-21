@@ -35,7 +35,7 @@ public final class Madog<T>: MadogUIContainerDelegate {
 
     @discardableResult
     public func addUICreationFunction(
-        identifier: String,
+        identifier: MadogUIIdentifier<some ViewController, some Context<T>, SingleUITokenData<T>, T>,
         function: @escaping SingleVCUIRegistryFunction<T>
     ) -> Bool {
         factory.addUICreationFunction(identifier: identifier, function: function)
@@ -43,7 +43,7 @@ public final class Madog<T>: MadogUIContainerDelegate {
 
     @discardableResult
     public func addUICreationFunction(
-        identifier: String,
+        identifier: MadogUIIdentifier<some ViewController, some Context<T>, MultiUITokenData<T>, T>,
         function: @escaping MultiVCUIRegistryFunction<T>
     ) -> Bool {
         factory.addUICreationFunction(identifier: identifier, function: function)
@@ -51,7 +51,7 @@ public final class Madog<T>: MadogUIContainerDelegate {
 
     @discardableResult
     public func addUICreationFunction(
-        identifier: String,
+        identifier: MadogUIIdentifier<some ViewController, some Context<T>, SplitSingleUITokenData<T>, T>,
         function: @escaping SplitSingleVCUIRegistryFunction<T>
     ) -> Bool {
         factory.addUICreationFunction(identifier: identifier, function: function)
@@ -59,7 +59,7 @@ public final class Madog<T>: MadogUIContainerDelegate {
 
     @discardableResult
     public func addUICreationFunction(
-        identifier: String,
+        identifier: MadogUIIdentifier<some ViewController, some Context<T>, SplitMultiUITokenData<T>, T>,
         function: @escaping SplitMultiVCUIRegistryFunction<T>
     ) -> Bool {
         factory.addUICreationFunction(identifier: identifier, function: function)
