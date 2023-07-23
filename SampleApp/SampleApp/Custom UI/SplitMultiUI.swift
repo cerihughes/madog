@@ -23,7 +23,6 @@ protocol SplitMultiContext<T>: Context {
 
 class SplitMultiUI<T>: MadogModalUIContainer<T>, SplitMultiContext {
     private let splitController = UISplitViewController()
-    private let navigationController = UINavigationController()
 
     init?(registry: AnyRegistry<T>, primaryToken: T, secondaryTokens: [T]) {
         super.init(registry: registry, viewController: splitController)
@@ -32,8 +31,9 @@ class SplitMultiUI<T>: MadogModalUIContainer<T>, SplitMultiContext {
             return nil
         }
 
-        let viewControllers = secondaryTokens.compactMap { registry.createViewController(from: $0, context: self) }
-        navigationController.viewControllers = viewControllers
+        let navigationController = UINavigationController()
+        navigationController.viewControllers = secondaryTokens
+            .compactMap { registry.createViewController(from: $0, context: self) }
 
         splitController.preferredDisplayMode = .oneBesideSecondary
         splitController.presentsWithGesture = false
@@ -43,8 +43,10 @@ class SplitMultiUI<T>: MadogModalUIContainer<T>, SplitMultiContext {
     // MARK: - SplitMultiContext
 
     func showDetail(tokens: [T]) -> Bool {
-        let viewControllers = tokens.compactMap { registry.createViewController(from: $0, context: self) }
-        navigationController.viewControllers = viewControllers
+        let navigationController = UINavigationController()
+        navigationController.viewControllers = tokens
+            .compactMap { registry.createViewController(from: $0, context: self) }
+        splitController.showDetailViewController(navigationController, sender: nil)
         return true
     }
 }
