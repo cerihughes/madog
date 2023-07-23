@@ -30,12 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window.makeKeyAndVisible()
 
         let initial = SampleToken.login
-        let context = madog.renderUI(
-            identifier: .split(), tokenData: .splitSingle(initial, initial), in: window
-        ) { splitController in
-            splitController.preferredDisplayMode = .oneBesideSecondary
-            splitController.presentsWithGesture = false
-        }
+        let context = madog.renderUI(identifier: .split(), tokenData: .splitSingle(initial, nil), in: window)
         return context != nil
     }
 

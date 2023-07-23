@@ -35,6 +35,8 @@ class SplitMultiUI<T>: MadogModalUIContainer<T>, SplitMultiContext {
         let viewControllers = secondaryTokens.compactMap { registry.createViewController(from: $0, context: self) }
         navigationController.viewControllers = viewControllers
 
+        splitController.preferredDisplayMode = .oneBesideSecondary
+        splitController.presentsWithGesture = false
         splitController.viewControllers = [primaryViewController, navigationController]
     }
 
