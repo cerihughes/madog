@@ -8,7 +8,7 @@
 import KIF
 import XCTest
 
-@testable import Madog
+@testable import MadogCore
 
 class TabBarUITests: MadogKIFTestCase {
     private var context: AnyTabBarUIContext<String>!

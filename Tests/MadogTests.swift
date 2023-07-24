@@ -5,7 +5,7 @@
 
 import XCTest
 
-@testable import Madog
+@testable import MadogCore
 
 class MadogTests: XCTestCase {
     private var madog: Madog<String>!

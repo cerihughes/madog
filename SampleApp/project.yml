@@ -27,7 +27,7 @@ targets:
     sources:
       - SampleApp
     dependencies:
-      - target: Madog/Madog
+      - target: Madog/MadogCore
     postCompileScripts:
       - script: export PATH="/opt/homebrew/bin:$PATH";swiftlint
         name: Swift Lint

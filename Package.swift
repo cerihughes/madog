@@ -5,10 +5,10 @@ let package = Package(
     name: "Madog",
     platforms: [.iOS(.v16)],
     products: [
-        .library(name: "Madog", targets: ["Madog"])
+        .library(name: "Madog", targets: ["MadogCore"])
     ],
     targets: [
-        .target(name: "Madog", path: "MadogCore"),
-        .testTarget(name: "MadogTests", dependencies: ["Madog"], path: "Tests")
+        .target(name: "MadogCore", path: "MadogCore"),
+        .testTarget(name: "MadogCoreTests", dependencies: ["MadogCore"], path: "Tests")
     ]
 )
