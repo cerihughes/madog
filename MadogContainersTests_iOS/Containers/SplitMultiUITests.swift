@@ -3,8 +3,6 @@
 //  Copyright © 2023 Ceri Hughes. All rights reserved.
 //
 
-#if canImport(KIF)
-
 import KIF
 import XCTest
 
@@ -72,5 +70,3 @@ class SplitMultiUITests: MadogKIFTestCase {
         return context
     }
 }
-
-#endif

@@ -3,8 +3,6 @@
 //  Copyright © 2019 Ceri Hughes. All rights reserved.
 //
 
-#if canImport(KIF)
-
 import KIF
 import XCTest
 
@@ -22,6 +20,7 @@ class MadogKIFTestCase: KIFTestCase {
         window.makeKeyAndVisible()
         madog = Madog()
         madog.resolve(resolver: TestResolver())
+        madog.registerDefaultContainers()
     }
 
     override func afterEach() {
@@ -137,5 +136,3 @@ extension KIFUIViewTestActor {
         usingLabel(token.viewControllerLabel)?.waitForAbsenceOfView()
     }
 }
-
-#endif
