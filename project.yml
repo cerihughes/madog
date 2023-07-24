@@ -25,9 +25,9 @@ targets:
     type: framework
     platform: iOS
     settings:
-      INFOPLIST_FILE: Source/Info.plist
+      INFOPLIST_FILE: Madog/Info.plist
     sources:
-      - Source
+      - Madog
     postCompileScripts:
       - script: export PATH="/opt/homebrew/bin:$PATH";swiftlint
         name: Swift Lint
