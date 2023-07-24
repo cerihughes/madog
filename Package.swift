@@ -8,7 +8,7 @@ let package = Package(
         .library(name: "Madog", targets: ["Madog"])
     ],
     targets: [
-        .target(name: "Madog", path: "Madog"),
+        .target(name: "Madog", path: "MadogCore"),
         .testTarget(name: "MadogTests", dependencies: ["Madog"], path: "Tests")
     ]
 )
