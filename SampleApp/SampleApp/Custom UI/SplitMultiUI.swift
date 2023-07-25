@@ -24,9 +24,7 @@ class SplitMultiUI<VC, C, T>: MadogModalUIContainer<T>, SplitMultiContext where 
     init?(registry: AnyRegistry<T>, tokenData: SplitMultiUITokenData<VC, C, T>) {
         super.init(registry: registry, viewController: splitController)
 
-        guard let primaryViewController = provideViewController(intent: tokenData.primaryIntent) else {
-            return nil
-        }
+        guard let primaryViewController = provideViewController(intent: tokenData.primaryIntent) else { return nil }
 
         let navigationController = UINavigationController()
         navigationController.viewControllers = tokenData.secondaryIntents

@@ -24,9 +24,7 @@ class SplitUI<VC, C, T>: MadogModalUIContainer<T>, SplitContext where VC: ViewCo
     init?(registry: AnyRegistry<T>, tokenData: SplitSingleUITokenData<VC, C, T>) {
         super.init(registry: registry, viewController: splitController)
 
-        guard let primaryViewController = provideViewController(intent: tokenData.primaryIntent) else {
-            return nil
-        }
+        guard let primaryViewController = provideViewController(intent: tokenData.primaryIntent) else { return nil }
 
         let secondaryViewController = tokenData.secondaryIntent.flatMap { provideViewController(intent: $0) }
 

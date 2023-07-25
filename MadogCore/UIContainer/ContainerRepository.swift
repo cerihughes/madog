@@ -5,7 +5,7 @@
 
 import Foundation
 
-class MadogUIContainerFactory<T> {
+class ContainerRepository<T> {
     private let registry: RegistryImplementation<T>
     private var singleRegistry = [String: AnySingleContainerFactory<T>]()
     private var multiRegistry = [String: AnyMultiContainerFactory<T>]()

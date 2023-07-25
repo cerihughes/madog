@@ -17,6 +17,15 @@ class BasicContainer<VC, C, T>: MadogModalUIContainer<T> where VC: ViewControlle
     }
 }
 
+struct BasicContainerFactory<T>: SingleContainerFactory {
+    func createContainer<VC, C>(
+        registry: AnyRegistry<T>,
+        tokenData: SingleUITokenData<VC, C, T>
+    ) -> MadogModalUIContainer<T>? where VC: UIViewController {
+        BasicContainer(registry: registry, tokenData: tokenData)
+    }
+}
+
 open class BasicUIContainerViewController: UIViewController {
     deinit {
         contentViewController = nil
@@ -47,14 +56,5 @@ open class BasicUIContainerViewController: UIViewController {
         viewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
         viewController.didMove(toParent: self)
-    }
-}
-
-struct BasicContainerFactory<T>: SingleContainerFactory {
-    func createContainer<VC, C>(
-        registry: AnyRegistry<T>,
-        tokenData: SingleUITokenData<VC, C, T>
-    ) -> MadogModalUIContainer<T>? where VC: UIViewController {
-        BasicContainer(registry: registry, tokenData: tokenData)
     }
 }
