@@ -30,17 +30,25 @@ class LoginViewController: UIViewController {
 
     override func viewDidAppear(_: Bool) {
         guard let context else { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            self.usernameField.text = "SomeUsername"
-            self.passwordField.text = "SomePassword123"
-            self.activityIndicator.startAnimating()
-
-            self.authenticator.login(username: "SomeUsername", password: "SomePassword123", completion: { _ in
-                self.activityIndicator.stopAnimating()
-
-                let tokens: [SampleToken] = [.vc1, .logout]
-                context.change(to: .tabBarNavigation(), tokenData: .multi(tokens))
-            })
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            self?.fakeLogin()
         }
+    }
+
+    private func fakeLogin() {
+        usernameField.text = "SomeUsername"
+        passwordField.text = "SomePassword123"
+        activityIndicator.startAnimating()
+
+        authenticator.login(username: "SomeUsername", password: "SomePassword123") { [weak self] _ in
+            self?.fakeNavigate()
+        }
+    }
+
+    private func fakeNavigate() {
+        activityIndicator.stopAnimating()
+
+        let tokens: [SampleToken] = [.vc1, .logout]
+        context?.change(to: .tabBarNavigation(), tokenData: .multi(tokens))
     }
 }
