@@ -11,14 +11,17 @@ public struct SplitSingleUITokenData<VC, C, T>: TokenData where VC: ViewControll
 }
 
 public extension TokenData {
-    static func splitSingle<VC, C, T>(_ primaryToken: T, _ secondaryToken: T?) -> SplitSingleUITokenData<VC, C, T> {
+    static func splitSingle<VC, C, T>(
+        _ primaryToken: T,
+        _ secondaryToken: T? = nil
+    ) -> SplitSingleUITokenData<VC, C, T> {
         let secondaryIntent = secondaryToken.map { TokenIntent<VC, C, T>.useParent($0) }
         return splitSingle(.useParent(primaryToken), secondaryIntent)
     }
 
     static func splitSingle<VC, C, T>(
         _ primaryIntent: TokenIntent<VC, C, T>,
-        _ secondaryIntent: TokenIntent<VC, C, T>?
+        _ secondaryIntent: TokenIntent<VC, C, T>? = nil
     ) -> SplitSingleUITokenData<VC, C, T> {
         .init(primaryIntent: primaryIntent, secondaryIntent: secondaryIntent)
     }
