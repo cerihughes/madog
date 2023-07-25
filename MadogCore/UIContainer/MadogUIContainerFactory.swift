@@ -7,10 +7,10 @@ import Foundation
 
 class MadogUIContainerFactory<T> {
     private let registry: RegistryImplementation<T>
-    private var singleVCUIRegistry = [String: Madog<T>.SingleUIFunction]()
-    private var multiVCUIRegistry = [String: Madog<T>.MultiUIFunction]()
-    private var splitSingleVCUIRegistry = [String: Madog<T>.SplitSingleUIFunction]()
-    private var splitMultiVCUIRegistry = [String: Madog<T>.SplitMultiUIFunction]()
+    private var singleRegistry = [String: Madog<T>.SingleUIFunction]()
+    private var multiRegistry = [String: Madog<T>.MultiUIFunction]()
+    private var splitSingleRegistry = [String: Madog<T>.SplitSingleUIFunction]()
+    private var splitMultiRegistry = [String: Madog<T>.SplitMultiUIFunction]()
 
     init(registry: RegistryImplementation<T>) {
         self.registry = registry
@@ -20,8 +20,8 @@ class MadogUIContainerFactory<T> {
         identifier: MadogUIIdentifier<some ViewController, C, SingleUITokenData<T>, T>,
         function: @escaping Madog<T>.SingleUIFunction
     ) -> Bool {
-        guard singleVCUIRegistry[identifier.value] == nil else { return false }
-        singleVCUIRegistry[identifier.value] = function
+        guard singleRegistry[identifier.value] == nil else { return false }
+        singleRegistry[identifier.value] = function
         return true
     }
 
@@ -29,8 +29,8 @@ class MadogUIContainerFactory<T> {
         identifier: MadogUIIdentifier<some ViewController, C, MultiUITokenData<T>, T>,
         function: @escaping Madog<T>.MultiUIFunction
     ) -> Bool {
-        guard multiVCUIRegistry[identifier.value] == nil else { return false }
-        multiVCUIRegistry[identifier.value] = function
+        guard multiRegistry[identifier.value] == nil else { return false }
+        multiRegistry[identifier.value] = function
         return true
     }
 
@@ -38,8 +38,8 @@ class MadogUIContainerFactory<T> {
         identifier: MadogUIIdentifier<some ViewController, C, SplitSingleUITokenData<T>, T>,
         function: @escaping Madog<T>.SplitSingleUIFunction
     ) -> Bool {
-        guard splitSingleVCUIRegistry[identifier.value] == nil else { return false }
-        splitSingleVCUIRegistry[identifier.value] = function
+        guard splitSingleRegistry[identifier.value] == nil else { return false }
+        splitSingleRegistry[identifier.value] = function
         return true
     }
 
@@ -47,8 +47,8 @@ class MadogUIContainerFactory<T> {
         identifier: MadogUIIdentifier<some ViewController, C, SplitMultiUITokenData<T>, T>,
         function: @escaping Madog<T>.SplitMultiUIFunction
     ) -> Bool {
-        guard splitMultiVCUIRegistry[identifier.value] == nil else { return false }
-        splitMultiVCUIRegistry[identifier.value] = function
+        guard splitMultiRegistry[identifier.value] == nil else { return false }
+        splitMultiRegistry[identifier.value] = function
         return true
     }
 
@@ -57,22 +57,18 @@ class MadogUIContainerFactory<T> {
         tokenData: TD
     ) -> MadogUIContainer<T>? where TD: TokenData {
         if let td = tokenData as? SingleUITokenData<T> {
-            return singleVCUIRegistry[identifier.value]?(registry, td.intent.token)
+            return singleRegistry[identifier.value]?(registry, td.intent.token)
         }
         if let td = tokenData as? MultiUITokenData<T> {
             let tokens = td.intents.map { $0.token }
-            return multiVCUIRegistry[identifier.value]?(registry, tokens)
+            return multiRegistry[identifier.value]?(registry, tokens)
         }
         if let td = tokenData as? SplitSingleUITokenData<T> {
-            return splitSingleVCUIRegistry[identifier.value]?(
-                registry,
-                td.primaryIntent.token,
-                td.secondaryIntent?.token
-            )
+            return splitSingleRegistry[identifier.value]?(registry, td.primaryIntent.token, td.secondaryIntent?.token)
         }
         if let td = tokenData as? SplitMultiUITokenData<T> {
             let secondaryTokens = td.secondaryIntents.map { $0.token }
-            return splitMultiVCUIRegistry[identifier.value]?(registry, td.primaryIntent.token, secondaryTokens)
+            return splitMultiRegistry[identifier.value]?(registry, td.primaryIntent.token, secondaryTokens)
         }
         return nil
     }
