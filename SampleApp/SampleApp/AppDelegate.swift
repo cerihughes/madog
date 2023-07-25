@@ -28,8 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         window.makeKeyAndVisible()
 
-        let initial = SampleToken.login
-        let context = madog.renderUI(identifier: .split(), tokenData: .splitSingle(initial, nil), in: window)
+        let context = madog.renderUI(identifier: .basic(), tokenData: .single(.login), in: window)
         return context != nil
     }
 
