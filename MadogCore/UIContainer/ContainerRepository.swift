@@ -16,43 +16,31 @@ class ContainerRepository<T> {
         self.registry = registry
     }
 
-    func addContainerFactory<VC, C>(
-        identifier: MadogUIIdentifier<VC, C, SingleUITokenData<VC, C, T>, T>,
-        factory: AnySingleContainerFactory<T>
-    ) -> Bool where VC: ViewController {
-        guard singleRegistry[identifier.value] == nil else { return false }
-        singleRegistry[identifier.value] = factory
+    func addContainerFactory(identifier: String, factory: AnySingleContainerFactory<T>) -> Bool {
+        guard singleRegistry[identifier] == nil else { return false }
+        singleRegistry[identifier] = factory
         return true
     }
 
-    func addContainerFactory<VC, C>(
-        identifier: MadogUIIdentifier<VC, C, MultiUITokenData<VC, C, T>, T>,
-        factory: AnyMultiContainerFactory<T>
-    ) -> Bool where VC: ViewController {
-        guard multiRegistry[identifier.value] == nil else { return false }
-        multiRegistry[identifier.value] = factory
+    func addContainerFactory(identifier: String, factory: AnyMultiContainerFactory<T>) -> Bool {
+        guard multiRegistry[identifier] == nil else { return false }
+        multiRegistry[identifier] = factory
         return true
     }
 
-    func addContainerFactory<VC, C>(
-        identifier: MadogUIIdentifier<VC, C, SplitSingleUITokenData<VC, C, T>, T>,
-        factory: AnySplitSingleContainerFactory<T>
-    ) -> Bool where VC: ViewController {
-        guard splitSingleRegistry[identifier.value] == nil else { return false }
-        splitSingleRegistry[identifier.value] = factory
+    func addContainerFactory(identifier: String, factory: AnySplitSingleContainerFactory<T>) -> Bool {
+        guard splitSingleRegistry[identifier] == nil else { return false }
+        splitSingleRegistry[identifier] = factory
         return true
     }
 
-    func addContainerFactory<VC, C>(
-        identifier: MadogUIIdentifier<VC, C, SplitMultiUITokenData<VC, C, T>, T>,
-        factory: AnySplitMultiContainerFactory<T>
-    ) -> Bool where VC: ViewController {
-        guard splitMultiRegistry[identifier.value] == nil else { return false }
-        splitMultiRegistry[identifier.value] = factory
+    func addContainerFactory(identifier: String, factory: AnySplitMultiContainerFactory<T>) -> Bool {
+        guard splitMultiRegistry[identifier] == nil else { return false }
+        splitMultiRegistry[identifier] = factory
         return true
     }
 
-    func createUI<VC, C, TD>(
+    func createContainer<VC, C, TD>(
         identifier: MadogUIIdentifier<VC, C, TD, T>,
         tokenData: TD
     ) -> MadogUIContainer<T>? where VC: ViewController, TD: TokenData {
