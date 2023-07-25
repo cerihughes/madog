@@ -6,7 +6,7 @@
 import MadogCore
 import UIKit
 
-class TestContainer<VC, C, T>: MadogModalUIContainer<T> where VC: UIViewController {
+class TestContainer<VC, C, T>: MadogModalUIContainer<T> where VC: ViewController {
     private let containerController = UIViewController()
 
     init?(registry: AnyRegistry<T>, tokenData: SingleUITokenData<VC, C, T>) {
