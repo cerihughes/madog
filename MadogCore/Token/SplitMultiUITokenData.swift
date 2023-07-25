@@ -6,13 +6,13 @@
 import Foundation
 
 public struct SplitMultiUITokenData<T>: TokenData {
-    let primaryIntent: TokenIntent<T>
-    let secondaryIntents: [TokenIntent<T>]
+    public let primaryIntent: TokenIntent<T>
+    public let secondaryIntents: [TokenIntent<T>]
 }
 
 public extension TokenData {
     static func splitMulti<T>(_ primaryToken: T, _ secondaryTokens: [T]) -> SplitMultiUITokenData<T> {
-        let secondaryIntents = secondaryTokens.map { TokenIntent.useParent($0) }
+        let secondaryIntents = secondaryTokens.map { TokenIntent<T>.useParent($0) }
         return splitMulti(.useParent(primaryToken), secondaryIntents)
     }
 

@@ -16,7 +16,7 @@ class SplitSingleUITests: MadogKIFTestCase {
 
         let result = madog.addUIFactory(
             identifier: .split(),
-            function: SplitUI.init(registry:primaryToken:secondaryToken:)
+            function: SplitUI.init(registry:tokenData:)
         )
         XCTAssertTrue(result)
     }

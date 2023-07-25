@@ -21,16 +21,16 @@ protocol SplitMultiContext<T>: Context {
 class SplitMultiUI<T>: MadogModalUIContainer<T>, SplitMultiContext {
     private let splitController = UISplitViewController()
 
-    init?(registry: AnyRegistry<T>, primaryToken: T, secondaryTokens: [T]) {
+    init?(registry: AnyRegistry<T>, tokenData: SplitMultiUITokenData<T>) {
         super.init(registry: registry, viewController: splitController)
 
-        guard let primaryViewController = registry.createViewController(from: primaryToken, context: self) else {
+        guard let primaryViewController = provideViewController(intent: tokenData.primaryIntent) else {
             return nil
         }
 
         let navigationController = UINavigationController()
-        navigationController.viewControllers = secondaryTokens
-            .compactMap { registry.createViewController(from: $0, context: self) }
+        navigationController.viewControllers = tokenData.secondaryIntents
+            .compactMap { provideViewController(intent: $0) }
 
         splitController.preferredDisplayMode = .oneBesideSecondary
         splitController.presentsWithGesture = false

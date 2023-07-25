@@ -16,7 +16,7 @@ class SplitMultiUITests: MadogKIFTestCase {
 
         let result = madog.addUIFactory(
             identifier: .splitMulti(),
-            function: SplitMultiUI.init(registry:primaryToken:secondaryTokens:)
+            function: SplitMultiUI.init(registry:tokenData:)
         )
         XCTAssertTrue(result)
     }

@@ -9,10 +9,10 @@ import UIKit
 class TestContainer<T>: MadogModalUIContainer<T> {
     private let containerController = UIViewController()
 
-    init?(registry: AnyRegistry<T>, token: T) {
+    init?(registry: AnyRegistry<T>, tokenData: SingleUITokenData<T>) {
         super.init(registry: registry, viewController: containerController)
 
-        guard let viewController = registry.createViewController(from: token, context: self) else { return nil }
+        guard let viewController = provideViewController(intent: tokenData.intent) else { return nil }
 
         viewController.willMove(toParent: containerController)
 

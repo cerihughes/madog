@@ -6,10 +6,10 @@
 import UIKit
 
 public final class Madog<T>: MadogUIContainerDelegate {
-    public typealias SingleUIFunction = (AnyRegistry<T>, T) -> MadogModalUIContainer<T>?
-    public typealias MultiUIFunction = (AnyRegistry<T>, [T]) -> MadogModalUIContainer<T>?
-    public typealias SplitSingleUIFunction = (AnyRegistry<T>, T, T?) -> MadogModalUIContainer<T>?
-    public typealias SplitMultiUIFunction = (AnyRegistry<T>, T, [T]) -> MadogModalUIContainer<T>?
+    public typealias SingleUIFunction = (AnyRegistry<T>, SingleUITokenData<T>) -> MadogModalUIContainer<T>?
+    public typealias MultiUIFunction = (AnyRegistry<T>, MultiUITokenData<T>) -> MadogModalUIContainer<T>?
+    public typealias SplitSingleUIFunction = (AnyRegistry<T>, SplitSingleUITokenData<T>) -> MadogModalUIContainer<T>?
+    public typealias SplitMultiUIFunction = (AnyRegistry<T>, SplitMultiUITokenData<T>) -> MadogModalUIContainer<T>?
 
     private let registry = RegistryImplementation<T>()
     private let registrar: Registrar<T>

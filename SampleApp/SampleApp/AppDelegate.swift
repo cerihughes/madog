@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         madog.registerDefaultContainers()
         let result = madog.addUIFactory(
             identifier: .split(),
-            function: SplitUI.init(registry:primaryToken:secondaryToken:)
+            function: SplitUI.init(registry:tokenData:)
         )
         guard result == true else {
             return false

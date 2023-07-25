@@ -57,18 +57,16 @@ class MadogUIContainerFactory<T> {
         tokenData: TD
     ) -> MadogUIContainer<T>? where TD: TokenData {
         if let td = tokenData as? SingleUITokenData<T> {
-            return singleRegistry[identifier.value]?(registry, td.intent.token)
+            return singleRegistry[identifier.value]?(registry, td)
         }
         if let td = tokenData as? MultiUITokenData<T> {
-            let tokens = td.intents.map { $0.token }
-            return multiRegistry[identifier.value]?(registry, tokens)
+            return multiRegistry[identifier.value]?(registry, td)
         }
         if let td = tokenData as? SplitSingleUITokenData<T> {
-            return splitSingleRegistry[identifier.value]?(registry, td.primaryIntent.token, td.secondaryIntent?.token)
+            return splitSingleRegistry[identifier.value]?(registry, td)
         }
         if let td = tokenData as? SplitMultiUITokenData<T> {
-            let secondaryTokens = td.secondaryIntents.map { $0.token }
-            return splitMultiRegistry[identifier.value]?(registry, td.primaryIntent.token, secondaryTokens)
+            return splitMultiRegistry[identifier.value]?(registry, td)
         }
         return nil
     }

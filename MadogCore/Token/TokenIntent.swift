@@ -5,15 +5,24 @@
 
 import Foundation
 
-public enum TokenIntent<T> {
-    case useParent(T)
+public struct TokenIntent<T> {
+    let internalIntent: InternalTokenIntent<T>
 }
 
-extension TokenIntent {
-    var token: T {
-        switch self {
-        case let .useParent(token):
-            return token
-        }
+public extension TokenIntent {
+    static func useParent<T>(_ token: T) -> TokenIntent<T> {
+        .init(internalIntent: .useParent(token))
     }
+
+    static func create<VC, C, TD, T>(
+        identifier: MadogUIIdentifier<VC, C, TD, T>,
+        tokenData: TD
+    ) -> TokenIntent where VC: ViewController, TD: TokenData {
+        .init(internalIntent: .create(VC.self, C.self, tokenData))
+    }
+}
+
+enum InternalTokenIntent<T> {
+    case useParent(T)
+    case create(ViewController.Type, Any.Type, TokenData)
 }

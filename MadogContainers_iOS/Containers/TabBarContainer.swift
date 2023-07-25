@@ -9,10 +9,10 @@ import UIKit
 class TabBarContainer<T>: MadogModalUIContainer<T>, MultiContext {
     private let tabBarController = UITabBarController()
 
-    init(registry: AnyRegistry<T>, tokens: [T]) {
+    init(registry: AnyRegistry<T>, tokenData: MultiUITokenData<T>) {
         super.init(registry: registry, viewController: tabBarController)
 
-        let viewControllers = tokens.compactMap { registry.createViewController(from: $0, context: self) }
+        let viewControllers = tokenData.intents.compactMap { provideViewController(intent: $0) }
 
         tabBarController.viewControllers = viewControllers
     }

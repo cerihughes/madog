@@ -6,7 +6,7 @@
 import Foundation
 
 public struct SingleUITokenData<T>: TokenData {
-    let intent: TokenIntent<T>
+    public let intent: TokenIntent<T>
 }
 
 public extension TokenData {

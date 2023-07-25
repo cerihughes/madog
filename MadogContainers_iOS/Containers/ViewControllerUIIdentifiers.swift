@@ -35,9 +35,9 @@ where VC == UITabBarController, C == AnyTabBarNavigationUIContext<T>, TD == Mult
 
 public extension Madog {
     func registerDefaultContainers() {
-        _ = addUIFactory(identifier: .basic(), function: BasicContainer.init(registry:token:))
-        _ = addUIFactory(identifier: .navigation(), function: NavigationContainer.init(registry:token:))
-        _ = addUIFactory(identifier: .tabBar(), function: TabBarContainer.init(registry:tokens:))
-        _ = addUIFactory(identifier: .tabBarNavigation(), function: TabBarNavigationContainer.init(registry:tokens:))
+        _ = addUIFactory(identifier: .basic(), function: BasicContainer.init(registry:tokenData:))
+        _ = addUIFactory(identifier: .navigation(), function: NavigationContainer.init(registry:tokenData:))
+        _ = addUIFactory(identifier: .tabBar(), function: TabBarContainer.init(registry:tokenData:))
+        _ = addUIFactory(identifier: .tabBarNavigation(), function: TabBarNavigationContainer.init(registry:tokenData:))
     }
 }

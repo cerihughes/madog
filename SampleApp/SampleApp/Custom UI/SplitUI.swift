@@ -21,14 +21,14 @@ protocol SplitContext<T>: Context {
 class SplitUI<T>: MadogModalUIContainer<T>, SplitContext {
     private let splitController = UISplitViewController()
 
-    init?(registry: AnyRegistry<T>, primaryToken: T, secondaryToken: T?) {
+    init?(registry: AnyRegistry<T>, tokenData: SplitSingleUITokenData<T>) {
         super.init(registry: registry, viewController: splitController)
 
-        guard let primaryViewController = registry.createViewController(from: primaryToken, context: self) else {
+        guard let primaryViewController = provideViewController(intent: tokenData.primaryIntent) else {
             return nil
         }
 
-        let secondaryViewController = secondaryToken.flatMap { registry.createViewController(from: $0, context: self) }
+        let secondaryViewController = tokenData.secondaryIntent.flatMap { provideViewController(intent: $0) }
 
         splitController.preferredDisplayMode = .oneBesideSecondary
         splitController.presentsWithGesture = false
