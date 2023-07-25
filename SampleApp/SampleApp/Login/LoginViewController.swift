@@ -3,6 +3,7 @@
 //  Copyright © 2019 Ceri Hughes. All rights reserved.
 //
 
+import MadogContainers_iOS
 import MadogCore
 import UIKit
 
@@ -47,7 +48,10 @@ class LoginViewController: UIViewController {
     private func fakeNavigate() {
         activityIndicator.stopAnimating()
 
-        let tokens: [SampleToken] = [.vc1, .logout]
-        context?.change(to: .tabBarNavigation(), tokenData: .multi(tokens))
+        let intents: [TokenIntent<UITabBarController, AnyTabBarNavigationUIContext<SampleToken>, SampleToken>] = [
+            TokenIntent.useParent(.vc1),
+            TokenIntent.useParent(.logout)
+        ]
+        context?.change(to: .tabBarNavigation(), tokenData: .multi(intents))
     }
 }
