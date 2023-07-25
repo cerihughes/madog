@@ -6,11 +6,16 @@
 import Foundation
 
 public struct MultiUITokenData<T>: TokenData {
-    let tokens: [T]
+    let intents: [TokenIntent<T>]
 }
 
 public extension TokenData {
     static func multi<T>(_ tokens: [T]) -> MultiUITokenData<T> {
-        MultiUITokenData(tokens: tokens)
+        let intents = tokens.map { TokenIntent.useParent($0) }
+        return multi(intents)
+    }
+
+    static func multi<T>(_ intents: [TokenIntent<T>]) -> MultiUITokenData<T> {
+        .init(intents: intents)
     }
 }

@@ -6,11 +6,15 @@
 import Foundation
 
 public struct SingleUITokenData<T>: TokenData {
-    let token: T
+    let intent: TokenIntent<T>
 }
 
 public extension TokenData {
     static func single<T>(_ token: T) -> SingleUITokenData<T> {
-        SingleUITokenData(token: token)
+        single(.useParent(token))
+    }
+
+    static func single<T>(_ intent: TokenIntent<T>) -> SingleUITokenData<T> {
+        .init(intent: intent)
     }
 }
