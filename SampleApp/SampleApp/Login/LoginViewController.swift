@@ -29,7 +29,6 @@ class LoginViewController: UIViewController {
     }
 
     override func viewDidAppear(_: Bool) {
-        guard let context else { return }
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
             self?.fakeLogin()
         }
