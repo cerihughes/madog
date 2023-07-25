@@ -14,10 +14,7 @@ class SplitSingleUITests: MadogKIFTestCase {
     override func beforeEach() {
         super.beforeEach()
 
-        let result = madog.addUIFactory(
-            identifier: .split(),
-            function: SplitUI.init(registry:tokenData:)
-        )
+        let result = madog.addContainerFactory(identifier: .split(), factory: SplitUIFactory())
         XCTAssertTrue(result)
     }
 

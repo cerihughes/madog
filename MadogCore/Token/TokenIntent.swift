@@ -5,24 +5,48 @@
 
 import Foundation
 
-public struct TokenIntent<T> {
-    let internalIntent: InternalTokenIntent<T>
+public struct TokenIntent<VC, C, T> where VC: ViewController {
+    let internalIntent: InternalTokenIntent<VC, C, T>
 }
 
 public extension TokenIntent {
-    static func useParent<T>(_ token: T) -> TokenIntent<T> {
-        .init(internalIntent: .useParent(token))
+    static func useParent(_ token: T) -> TokenIntent {
+        .init(internalIntent: InternalTokenIntent.parent(token))
     }
 
-    static func create<VC, C, TD, T>(
-        identifier: MadogUIIdentifier<VC, C, TD, T>,
-        tokenData: TD
-    ) -> TokenIntent where VC: ViewController, TD: TokenData {
-        .init(internalIntent: .create(VC.self, C.self, tokenData))
+    static func create(
+        identifier: MadogUIIdentifier<VC, C, SingleUITokenData<VC, C, T>, T>,
+        tokenData: SingleUITokenData<VC, C, T>
+    ) -> TokenIntent {
+        .init(internalIntent: .single(identifier, tokenData))
+    }
+
+    static func create(
+        identifier: MadogUIIdentifier<VC, C, MultiUITokenData<VC, C, T>, T>,
+        tokenData: MultiUITokenData<VC, C, T>
+    ) -> TokenIntent {
+        .init(internalIntent: .multi(identifier, tokenData))
+    }
+
+    static func create(
+        identifier: MadogUIIdentifier<VC, C, SplitSingleUITokenData<VC, C, T>, T>,
+        tokenData: SplitSingleUITokenData<VC, C, T>
+    ) -> TokenIntent {
+        .init(internalIntent: .splitSingle(identifier, tokenData))
+    }
+
+    static func create(
+        identifier: MadogUIIdentifier<VC, C, SplitMultiUITokenData<VC, C, T>, T>,
+        tokenData: SplitMultiUITokenData<VC, C, T>
+    ) -> TokenIntent {
+        .init(internalIntent: .splitMulti(identifier, tokenData))
     }
 }
 
-enum InternalTokenIntent<T> {
-    case useParent(T)
-    case create(ViewController.Type, Any.Type, TokenData)
+indirect enum InternalTokenIntent<VC, C, T> where VC: ViewController {
+    case parent(T)
+    case single(MadogUIIdentifier<VC, C, SingleUITokenData<VC, C, T>, T>, SingleUITokenData<VC, C, T>)
+    case multi(MadogUIIdentifier<VC, C, MultiUITokenData<VC, C, T>, T>, MultiUITokenData<VC, C, T>)
+    case splitSingle(MadogUIIdentifier<VC, C, SplitSingleUITokenData<VC, C, T>, T>, SplitSingleUITokenData<VC, C, T>)
+    case splitMulti(MadogUIIdentifier<VC, C, SplitMultiUITokenData<VC, C, T>, T>, SplitMultiUITokenData<VC, C, T>)
 }

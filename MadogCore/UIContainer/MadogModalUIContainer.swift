@@ -89,17 +89,31 @@ open class MadogModalUIContainer<T>: MadogUIContainer<T>, ModalContext {
         ModalTokenImplementation(viewController: viewController, context: context)
     }
 
-    public func provideViewController(intent: TokenIntent<T>) -> ViewController? {
+    public func provideViewController<VC, C>(
+        intent: TokenIntent<VC, C, T>
+    ) -> ViewController? where VC: ViewController {
         switch intent.internalIntent {
-        case let .useParent(token):
+        case let .parent(token):
             return useParent(token: token)
-        default:
-    //        case let .create(identifier, tokenData):
-            return nil
+        case let .single(identifier, tokenData):
+            return createUI(identifier: identifier, tokenData: tokenData)?.viewController
+        case let .multi(identifier, tokenData):
+            return createUI(identifier: identifier, tokenData: tokenData)?.viewController
+        case let .splitSingle(identifier, tokenData):
+            return createUI(identifier: identifier, tokenData: tokenData)?.viewController
+        case let .splitMulti(identifier, tokenData):
+            return createUI(identifier: identifier, tokenData: tokenData)?.viewController
         }
     }
 
-    func useParent(token: T) -> ViewController? {
+    private func useParent(token: T) -> ViewController? {
         registry.createViewController(from: token, context: self)
+    }
+
+    private func createUI<VC, C, TD>(
+        identifier: MadogUIIdentifier<VC, C, TD, T>,
+        tokenData: TD
+    ) -> MadogUIContainer<T>? {
+        delegate?.createUI(identifier: identifier, tokenData: tokenData, isModal: false, customisation: nil)
     }
 }

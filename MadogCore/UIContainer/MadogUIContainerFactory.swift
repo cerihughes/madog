@@ -7,66 +7,66 @@ import Foundation
 
 class MadogUIContainerFactory<T> {
     private let registry: RegistryImplementation<T>
-    private var singleRegistry = [String: Madog<T>.SingleUIFunction]()
-    private var multiRegistry = [String: Madog<T>.MultiUIFunction]()
-    private var splitSingleRegistry = [String: Madog<T>.SplitSingleUIFunction]()
-    private var splitMultiRegistry = [String: Madog<T>.SplitMultiUIFunction]()
+    private var singleRegistry = [String: AnySingleContainerFactory<T>]()
+    private var multiRegistry = [String: AnyMultiContainerFactory<T>]()
+    private var splitSingleRegistry = [String: AnySplitSingleContainerFactory<T>]()
+    private var splitMultiRegistry = [String: AnySplitMultiContainerFactory<T>]()
 
     init(registry: RegistryImplementation<T>) {
         self.registry = registry
     }
 
-    func addUIFactory<C>(
-        identifier: MadogUIIdentifier<some ViewController, C, SingleUITokenData<T>, T>,
-        function: @escaping Madog<T>.SingleUIFunction
-    ) -> Bool {
+    func addContainerFactory<VC, C>(
+        identifier: MadogUIIdentifier<VC, C, SingleUITokenData<VC, C, T>, T>,
+        factory: AnySingleContainerFactory<T>
+    ) -> Bool where VC: ViewController {
         guard singleRegistry[identifier.value] == nil else { return false }
-        singleRegistry[identifier.value] = function
+        singleRegistry[identifier.value] = factory
         return true
     }
 
-    func addUIFactory<C>(
-        identifier: MadogUIIdentifier<some ViewController, C, MultiUITokenData<T>, T>,
-        function: @escaping Madog<T>.MultiUIFunction
-    ) -> Bool {
+    func addContainerFactory<VC, C>(
+        identifier: MadogUIIdentifier<VC, C, MultiUITokenData<VC, C, T>, T>,
+        factory: AnyMultiContainerFactory<T>
+    ) -> Bool where VC: ViewController {
         guard multiRegistry[identifier.value] == nil else { return false }
-        multiRegistry[identifier.value] = function
+        multiRegistry[identifier.value] = factory
         return true
     }
 
-    func addUIFactory<C>(
-        identifier: MadogUIIdentifier<some ViewController, C, SplitSingleUITokenData<T>, T>,
-        function: @escaping Madog<T>.SplitSingleUIFunction
-    ) -> Bool {
+    func addContainerFactory<VC, C>(
+        identifier: MadogUIIdentifier<VC, C, SplitSingleUITokenData<VC, C, T>, T>,
+        factory: AnySplitSingleContainerFactory<T>
+    ) -> Bool where VC: ViewController {
         guard splitSingleRegistry[identifier.value] == nil else { return false }
-        splitSingleRegistry[identifier.value] = function
+        splitSingleRegistry[identifier.value] = factory
         return true
     }
 
-    func addUIFactory<C>(
-        identifier: MadogUIIdentifier<some ViewController, C, SplitMultiUITokenData<T>, T>,
-        function: @escaping Madog<T>.SplitMultiUIFunction
-    ) -> Bool {
+    func addContainerFactory<VC, C>(
+        identifier: MadogUIIdentifier<VC, C, SplitMultiUITokenData<VC, C, T>, T>,
+        factory: AnySplitMultiContainerFactory<T>
+    ) -> Bool where VC: ViewController {
         guard splitMultiRegistry[identifier.value] == nil else { return false }
-        splitMultiRegistry[identifier.value] = function
+        splitMultiRegistry[identifier.value] = factory
         return true
     }
 
-    func createUI<TD, C>(
-        identifier: MadogUIIdentifier<some ViewController, C, TD, T>,
+    func createUI<VC, C, TD>(
+        identifier: MadogUIIdentifier<VC, C, TD, T>,
         tokenData: TD
-    ) -> MadogUIContainer<T>? where TD: TokenData {
-        if let td = tokenData as? SingleUITokenData<T> {
-            return singleRegistry[identifier.value]?(registry, td)
+    ) -> MadogUIContainer<T>? where VC: ViewController, TD: TokenData {
+        if let td = tokenData as? SingleUITokenData<VC, C, T> {
+            return singleRegistry[identifier.value]?.createContainer(registry: registry, tokenData: td)
         }
-        if let td = tokenData as? MultiUITokenData<T> {
-            return multiRegistry[identifier.value]?(registry, td)
+        if let td = tokenData as? MultiUITokenData<VC, C, T> {
+            return multiRegistry[identifier.value]?.createContainer(registry: registry, tokenData: td)
         }
-        if let td = tokenData as? SplitSingleUITokenData<T> {
-            return splitSingleRegistry[identifier.value]?(registry, td)
+        if let td = tokenData as? SplitSingleUITokenData<VC, C, T> {
+            return splitSingleRegistry[identifier.value]?.createContainer(registry: registry, tokenData: td)
         }
-        if let td = tokenData as? SplitMultiUITokenData<T> {
-            return splitMultiRegistry[identifier.value]?(registry, td)
+        if let td = tokenData as? SplitMultiUITokenData<VC, C, T> {
+            return splitMultiRegistry[identifier.value]?.createContainer(registry: registry, tokenData: td)
         }
         return nil
     }

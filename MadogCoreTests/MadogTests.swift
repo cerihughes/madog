@@ -15,7 +15,7 @@ class MadogTests: XCTestCase {
 
         madog = Madog()
         madog.resolve(resolver: TestResolver())
-        madog.addUIFactory(identifier: .test(), function: TestContainer.init(registry:tokenData:))
+        madog.addContainerFactory(identifier: .test(), factory: TestContainerFactory())
     }
 
     override func tearDown() {

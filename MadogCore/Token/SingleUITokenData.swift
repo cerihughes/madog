@@ -5,16 +5,16 @@
 
 import Foundation
 
-public struct SingleUITokenData<T>: TokenData {
-    public let intent: TokenIntent<T>
+public struct SingleUITokenData<VC, C, T>: TokenData where VC: ViewController {
+    public let intent: TokenIntent<VC, C, T>
 }
 
 public extension TokenData {
-    static func single<T>(_ token: T) -> SingleUITokenData<T> {
+    static func single<VC, C, T>(_ token: T) -> SingleUITokenData<VC, C, T> {
         single(.useParent(token))
     }
 
-    static func single<T>(_ intent: TokenIntent<T>) -> SingleUITokenData<T> {
+    static func single<VC, C, T>(_ intent: TokenIntent<VC, C, T>) -> SingleUITokenData<VC, C, T> {
         .init(intent: intent)
     }
 }

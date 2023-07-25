@@ -5,21 +5,21 @@
 
 import Foundation
 
-public struct SplitMultiUITokenData<T>: TokenData {
-    public let primaryIntent: TokenIntent<T>
-    public let secondaryIntents: [TokenIntent<T>]
+public struct SplitMultiUITokenData<VC, C, T>: TokenData where VC: ViewController {
+    public let primaryIntent: TokenIntent<VC, C, T>
+    public let secondaryIntents: [TokenIntent<VC, C, T>]
 }
 
 public extension TokenData {
-    static func splitMulti<T>(_ primaryToken: T, _ secondaryTokens: [T]) -> SplitMultiUITokenData<T> {
-        let secondaryIntents = secondaryTokens.map { TokenIntent<T>.useParent($0) }
+    static func splitMulti<VC, C, T>(_ primaryToken: T, _ secondaryTokens: [T]) -> SplitMultiUITokenData<VC, C, T> {
+        let secondaryIntents = secondaryTokens.map { TokenIntent<VC, C, T>.useParent($0) }
         return splitMulti(.useParent(primaryToken), secondaryIntents)
     }
 
-    static func splitMulti<T>(
-        _ primaryIntent: TokenIntent<T>,
-        _ secondaryIntents: [TokenIntent<T>]
-    ) -> SplitMultiUITokenData<T> {
+    static func splitMulti<VC, C, T>(
+        _ primaryIntent: TokenIntent<VC, C, T>,
+        _ secondaryIntents: [TokenIntent<VC, C, T>]
+    ) -> SplitMultiUITokenData<VC, C, T> {
         .init(primaryIntent: primaryIntent, secondaryIntents: secondaryIntents)
     }
 }
