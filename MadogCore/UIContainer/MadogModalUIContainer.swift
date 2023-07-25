@@ -93,16 +93,16 @@ open class MadogModalUIContainer<T>: MadogUIContainer<T>, ModalContext {
         intent: TokenIntent<VC, C, T>
     ) -> ViewController? where VC: ViewController {
         switch intent.internalIntent {
-        case let .parent(token):
+        case let .useParent(token):
             return useParent(token: token)
-        case let .single(identifier, tokenData):
-            return createUI(identifier: identifier, tokenData: tokenData)?.viewController
-        case let .multi(identifier, tokenData):
-            return createUI(identifier: identifier, tokenData: tokenData)?.viewController
-        case let .splitSingle(identifier, tokenData):
-            return createUI(identifier: identifier, tokenData: tokenData)?.viewController
-        case let .splitMulti(identifier, tokenData):
-            return createUI(identifier: identifier, tokenData: tokenData)?.viewController
+        case let .createSingle(identifier, tokenData, customisation):
+            return createUI(identifier: identifier, tokenData: tokenData, customisation: customisation)?.viewController
+        case let .createMulti(identifier, tokenData, customisation):
+            return createUI(identifier: identifier, tokenData: tokenData, customisation: customisation)?.viewController
+        case let .createSplitSingle(identifier, tokenData, customisation):
+            return createUI(identifier: identifier, tokenData: tokenData, customisation: customisation)?.viewController
+        case let .createSplitMulti(identifier, tokenData, customisation):
+            return createUI(identifier: identifier, tokenData: tokenData, customisation: customisation)?.viewController
         }
     }
 
@@ -112,8 +112,9 @@ open class MadogModalUIContainer<T>: MadogUIContainer<T>, ModalContext {
 
     private func createUI<VC, C, TD>(
         identifier: MadogUIIdentifier<VC, C, TD, T>,
-        tokenData: TD
+        tokenData: TD,
+        customisation: CustomisationBlock<VC>?
     ) -> MadogUIContainer<T>? {
-        delegate?.createUI(identifier: identifier, tokenData: tokenData, isModal: false, customisation: nil)
+        delegate?.createUI(identifier: identifier, tokenData: tokenData, isModal: false, customisation: customisation)
     }
 }
