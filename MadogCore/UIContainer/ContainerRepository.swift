@@ -5,7 +5,7 @@
 
 import Foundation
 
-class MadogUIContainerFactory<T> {
+class ContainerRepository<T> {
     private let registry: RegistryImplementation<T>
     private var singleRegistry = [String: AnySingleContainerFactory<T>]()
     private var multiRegistry = [String: AnyMultiContainerFactory<T>]()
@@ -40,7 +40,7 @@ class MadogUIContainerFactory<T> {
         return true
     }
 
-    func createUI<TD>(identifier: String, tokenData: TD) -> MadogUIContainer<T>? where TD: TokenData {
+    func createContainer<TD>(identifier: String, tokenData: TD) -> MadogUIContainer<T>? where TD: TokenData {
         if let td = tokenData as? SingleUITokenData<T> {
             return singleRegistry[identifier]?.createContainer(registry: registry, tokenData: td)
         }

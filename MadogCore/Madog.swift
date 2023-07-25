@@ -8,14 +8,14 @@ import UIKit
 public final class Madog<T>: MadogUIContainerDelegate {
     private let registry = RegistryImplementation<T>()
     private let registrar: Registrar<T>
-    private let containerFactory: MadogUIContainerFactory<T>
+    private let containerRepository: ContainerRepository<T>
 
     private var currentContainer: MadogUIContainer<T>?
     private var modalContainers = [UIViewController: AnyContext<T>]()
 
     public init() {
         registrar = Registrar(registry: registry)
-        containerFactory = MadogUIContainerFactory<T>(registry: registry)
+        containerRepository = ContainerRepository<T>(registry: registry)
     }
 
     public func resolve(resolver: AnyResolver<T>, launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) {
@@ -27,7 +27,7 @@ public final class Madog<T>: MadogUIContainerDelegate {
         identifier: MadogUIIdentifier<VC, C, SingleUITokenData<T>, T>,
         factory: AnySingleContainerFactory<T>
     ) -> Bool where VC: ViewController {
-        containerFactory.addContainerFactory(identifier: identifier.value, factory: factory)
+        containerRepository.addContainerFactory(identifier: identifier.value, factory: factory)
     }
 
     @discardableResult
@@ -35,7 +35,7 @@ public final class Madog<T>: MadogUIContainerDelegate {
         identifier: MadogUIIdentifier<VC, C, MultiUITokenData<T>, T>,
         factory: AnyMultiContainerFactory<T>
     ) -> Bool where VC: ViewController {
-        containerFactory.addContainerFactory(identifier: identifier.value, factory: factory)
+        containerRepository.addContainerFactory(identifier: identifier.value, factory: factory)
     }
 
     @discardableResult
@@ -43,7 +43,7 @@ public final class Madog<T>: MadogUIContainerDelegate {
         identifier: MadogUIIdentifier<VC, C, SplitSingleUITokenData<T>, T>,
         factory: AnySplitSingleContainerFactory<T>
     ) -> Bool where VC: ViewController {
-        containerFactory.addContainerFactory(identifier: identifier.value, factory: factory)
+        containerRepository.addContainerFactory(identifier: identifier.value, factory: factory)
     }
 
     @discardableResult
@@ -51,7 +51,7 @@ public final class Madog<T>: MadogUIContainerDelegate {
         identifier: MadogUIIdentifier<VC, C, SplitMultiUITokenData<T>, T>,
         factory: AnySplitMultiContainerFactory<T>
     ) -> Bool where VC: ViewController {
-        containerFactory.addContainerFactory(identifier: identifier.value, factory: factory)
+        containerRepository.addContainerFactory(identifier: identifier.value, factory: factory)
     }
 
     @discardableResult
@@ -90,7 +90,7 @@ public final class Madog<T>: MadogUIContainerDelegate {
         customisation: CustomisationBlock<VC>?
     ) -> MadogUIContainer<T>? where VC: UIViewController, TD: TokenData {
         guard
-            let container = containerFactory.createUI(identifier: identifier.value, tokenData: tokenData),
+            let container = containerRepository.createContainer(identifier: identifier.value, tokenData: tokenData),
             container is C,
             let viewController = container.viewController as? VC
         else {
