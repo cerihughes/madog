@@ -9,7 +9,7 @@ import UIKit
 typealias SplitUIContext<T> = ModalContext<T> & SplitContext<T>
 typealias AnySplitUIContext<T> = any SplitUIContext<T>
 extension MadogUIIdentifier
-where VC == UISplitViewController, C == AnySplitUIContext<T>, TD == SplitSingleUITokenData<VC, C, T> {
+where VC == UISplitViewController, C == AnySplitUIContext<T>, TD == SplitSingleUITokenData<T> {
     static func split() -> Self { MadogUIIdentifier("splitViewControllerIdentifier") }
 }
 
@@ -18,10 +18,10 @@ protocol SplitContext<T>: Context {
     func showDetail(token: T) -> Bool
 }
 
-class SplitUI<VC, C, T>: MadogModalUIContainer<T>, SplitContext where VC: ViewController {
+class SplitUI<T>: MadogModalUIContainer<T>, SplitContext {
     private let splitController = UISplitViewController()
 
-    init?(registry: AnyRegistry<T>, tokenData: SplitSingleUITokenData<VC, C, T>) {
+    init?(registry: AnyRegistry<T>, tokenData: SplitSingleUITokenData<T>) {
         super.init(registry: registry, viewController: splitController)
 
         guard let primaryViewController = provideViewController(intent: tokenData.primaryIntent) else { return nil }
@@ -44,10 +44,7 @@ class SplitUI<VC, C, T>: MadogModalUIContainer<T>, SplitContext where VC: ViewCo
 }
 
 struct SplitUIFactory<T>: SplitSingleContainerFactory {
-    func createContainer<VC, C>(
-        registry: AnyRegistry<T>,
-        tokenData: SplitSingleUITokenData<VC, C, T>
-    ) -> MadogModalUIContainer<T>? where VC: UIViewController {
+    func createContainer(registry: AnyRegistry<T>, tokenData: SplitSingleUITokenData<T>) -> MadogModalUIContainer<T>? {
         SplitUI(registry: registry, tokenData: tokenData)
     }
 }

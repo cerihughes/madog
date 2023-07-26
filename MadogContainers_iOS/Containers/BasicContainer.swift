@@ -6,10 +6,10 @@
 import MadogCore
 import UIKit
 
-class BasicContainer<VC, C, T>: MadogModalUIContainer<T> where VC: ViewController {
+class BasicContainer<T>: MadogModalUIContainer<T> {
     private let containerController = BasicUIContainerViewController()
 
-    init?(registry: AnyRegistry<T>, tokenData: SingleUITokenData<VC, C, T>) {
+    init?(registry: AnyRegistry<T>, tokenData: SingleUITokenData<T>) {
         super.init(registry: registry, viewController: containerController)
 
         guard let viewController = provideViewController(intent: tokenData.intent) else { return nil }
@@ -18,10 +18,7 @@ class BasicContainer<VC, C, T>: MadogModalUIContainer<T> where VC: ViewControlle
 }
 
 struct BasicContainerFactory<T>: SingleContainerFactory {
-    func createContainer<VC, C>(
-        registry: AnyRegistry<T>,
-        tokenData: SingleUITokenData<VC, C, T>
-    ) -> MadogModalUIContainer<T>? where VC: UIViewController {
+    func createContainer(registry: AnyRegistry<T>, tokenData: SingleUITokenData<T>) -> MadogModalUIContainer<T>? {
         BasicContainer(registry: registry, tokenData: tokenData)
     }
 }

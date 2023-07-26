@@ -11,6 +11,7 @@ class SampleResolver: Resolver {
             LoginViewControllerProvider.init,
             ViewController1Provider.init,
             ViewController2Provider.init,
+            ViewController3Provider.init,
             LogoutViewControllerProvider.init
         ]
     }

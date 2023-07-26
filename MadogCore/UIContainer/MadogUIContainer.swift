@@ -10,8 +10,8 @@ typealias AnyMadogUIContainerDelegate<T> = any MadogUIContainerDelegate<T>
 protocol MadogUIContainerDelegate<T>: AnyObject {
     associatedtype T
 
-    func createUI<VC, C, TD>(
-        identifier: MadogUIIdentifier<VC, C, TD, T>,
+    func createUI<VC, TD>(
+        identifier: String,
         tokenData: TD,
         isModal: Bool,
         customisation: CustomisationBlock<VC>?
@@ -49,7 +49,7 @@ open class MadogUIContainer<T>: Context {
     ) -> C? where VC: ViewController, TD: TokenData {
         guard
             let container = delegate?.createUI(
-                identifier: identifier,
+                identifier: identifier.value,
                 tokenData: tokenData,
                 isModal: false,
                 customisation: customisation

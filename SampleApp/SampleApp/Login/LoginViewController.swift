@@ -48,9 +48,10 @@ class LoginViewController: UIViewController {
     private func fakeNavigate() {
         activityIndicator.stopAnimating()
 
-        let intents: [TokenIntent<UITabBarController, AnyTabBarNavigationUIContext<SampleToken>, SampleToken>] = [
-            TokenIntent.useParent(.vc1),
-            TokenIntent.useParent(.logout)
+        let intents: [TokenIntent<SampleToken>] = [
+            .useParent(.vc1),
+            .create(identifier: .split(), tokenData: .splitSingle(.vc3)),
+            .useParent(.logout)
         ]
         context?.change(to: .tabBarNavigation(), tokenData: .multi(intents))
     }

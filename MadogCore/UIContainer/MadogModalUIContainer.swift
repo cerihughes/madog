@@ -37,7 +37,7 @@ open class MadogModalUIContainer<T>: MadogUIContainer<T>, ModalContext {
     ) -> AnyModalToken<C>? where VC: ViewController, TD: TokenData {
         guard
             let container = delegate?.createUI(
-                identifier: identifier,
+                identifier: identifier.value,
                 tokenData: tokenData,
                 isModal: true,
                 customisation: customisation
@@ -89,19 +89,23 @@ open class MadogModalUIContainer<T>: MadogUIContainer<T>, ModalContext {
         ModalTokenImplementation(viewController: viewController, context: context)
     }
 
-    public func provideViewController<VC, C>(
-        intent: TokenIntent<VC, C, T>
+    public func provideViewController<VC>(
+        intent: TokenIntent<T>,
+        customisation: CustomisationBlock<VC>? = nil
     ) -> ViewController? where VC: ViewController {
-        switch intent.internalIntent {
-        case let .useParent(token):
-            return useParent(token: token)
-        case let .createSingle(identifier, tokenData, customisation):
+        if let intent = intent as? UseParentIntent<T> {
+            return useParent(token: intent.token)
+        }
+
+        guard let intent = intent as? ChangeIntent<T> else { return nil }
+        switch intent.intent {
+        case let .createSingle(identifier, tokenData):
             return createUI(identifier: identifier, tokenData: tokenData, customisation: customisation)?.viewController
-        case let .createMulti(identifier, tokenData, customisation):
+        case let .createMulti(identifier, tokenData):
             return createUI(identifier: identifier, tokenData: tokenData, customisation: customisation)?.viewController
-        case let .createSplitSingle(identifier, tokenData, customisation):
+        case let .createSplitSingle(identifier, tokenData):
             return createUI(identifier: identifier, tokenData: tokenData, customisation: customisation)?.viewController
-        case let .createSplitMulti(identifier, tokenData, customisation):
+        case let .createSplitMulti(identifier, tokenData):
             return createUI(identifier: identifier, tokenData: tokenData, customisation: customisation)?.viewController
         }
     }
@@ -110,11 +114,11 @@ open class MadogModalUIContainer<T>: MadogUIContainer<T>, ModalContext {
         registry.createViewController(from: token, context: self)
     }
 
-    private func createUI<VC, C, TD>(
-        identifier: MadogUIIdentifier<VC, C, TD, T>,
+    private func createUI<VC, TD>(
+        identifier: String,
         tokenData: TD,
-        customisation: CustomisationBlock<VC>?
-    ) -> MadogUIContainer<T>? {
+        customisation: CustomisationBlock<VC>? = nil
+    ) -> MadogUIContainer<T>? where TD: TokenData {
         delegate?.createUI(identifier: identifier, tokenData: tokenData, isModal: false, customisation: customisation)
     }
 }

@@ -40,21 +40,21 @@ class ContainerRepository<T> {
         return true
     }
 
-    func createContainer<VC, C, TD>(
-        identifier: MadogUIIdentifier<VC, C, TD, T>,
+    func createContainer<TD>(
+        identifier: String,
         tokenData: TD
-    ) -> MadogUIContainer<T>? where VC: ViewController, TD: TokenData {
-        if let td = tokenData as? SingleUITokenData<VC, C, T> {
-            return singleRegistry[identifier.value]?.createContainer(registry: registry, tokenData: td)
+    ) -> MadogUIContainer<T>? where TD: TokenData {
+        if let td = tokenData as? SingleUITokenData<T> {
+            return singleRegistry[identifier]?.createContainer(registry: registry, tokenData: td)
         }
-        if let td = tokenData as? MultiUITokenData<VC, C, T> {
-            return multiRegistry[identifier.value]?.createContainer(registry: registry, tokenData: td)
+        if let td = tokenData as? MultiUITokenData<T> {
+            return multiRegistry[identifier]?.createContainer(registry: registry, tokenData: td)
         }
-        if let td = tokenData as? SplitSingleUITokenData<VC, C, T> {
-            return splitSingleRegistry[identifier.value]?.createContainer(registry: registry, tokenData: td)
+        if let td = tokenData as? SplitSingleUITokenData<T> {
+            return splitSingleRegistry[identifier]?.createContainer(registry: registry, tokenData: td)
         }
-        if let td = tokenData as? SplitMultiUITokenData<VC, C, T> {
-            return splitMultiRegistry[identifier.value]?.createContainer(registry: registry, tokenData: td)
+        if let td = tokenData as? SplitMultiUITokenData<T> {
+            return splitMultiRegistry[identifier]?.createContainer(registry: registry, tokenData: td)
         }
         return nil
     }

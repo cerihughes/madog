@@ -5,17 +5,17 @@
 
 import Foundation
 
-public struct MultiUITokenData<VC, C, T>: TokenData where VC: ViewController {
-    public let intents: [TokenIntent<VC, C, T>]
+public struct MultiUITokenData<T>: TokenData {
+    public let intents: [TokenIntent<T>]
 }
 
 public extension TokenData {
-    static func multi<VC, C, T>(_ tokens: [T]) -> MultiUITokenData<VC, C, T> {
-        let intents = tokens.map { TokenIntent<VC, C, T>.useParent($0) }
+    static func multi<T>(_ tokens: [T]) -> MultiUITokenData<T> {
+        let intents = tokens.map { TokenIntent<T>.useParent($0) }
         return multi(intents)
     }
 
-    static func multi<VC, C, T>(_ intents: [TokenIntent<VC, C, T>]) -> MultiUITokenData<VC, C, T> {
+    static func multi<T>(_ intents: [TokenIntent<T>]) -> MultiUITokenData<T> {
         .init(intents: intents)
     }
 }

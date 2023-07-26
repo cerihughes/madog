@@ -6,10 +6,10 @@
 import MadogCore
 import UIKit
 
-class TestContainer<VC, C, T>: MadogModalUIContainer<T> where VC: ViewController {
+class TestContainer<T>: MadogModalUIContainer<T> {
     private let containerController = UIViewController()
 
-    init?(registry: AnyRegistry<T>, tokenData: SingleUITokenData<VC, C, T>) {
+    init?(registry: AnyRegistry<T>, tokenData: SingleUITokenData<T>) {
         super.init(registry: registry, viewController: containerController)
 
         guard let viewController = provideViewController(intent: tokenData.intent) else { return nil }
@@ -26,14 +26,11 @@ class TestContainer<VC, C, T>: MadogModalUIContainer<T> where VC: ViewController
 }
 
 struct TestContainerFactory<T>: SingleContainerFactory {
-    func createContainer<VC, C>(
-        registry: AnyRegistry<T>,
-        tokenData: SingleUITokenData<VC, C, T>
-    ) -> MadogModalUIContainer<T>? where VC: UIViewController {
+    func createContainer(registry: AnyRegistry<T>, tokenData: SingleUITokenData<T>) -> MadogModalUIContainer<T>? {
         TestContainer(registry: registry, tokenData: tokenData)
     }
 }
 
-extension MadogUIIdentifier where VC == UIViewController, C == AnyModalContext<T>, TD == SingleUITokenData<VC, C, T> {
+extension MadogUIIdentifier where VC == UIViewController, C == AnyModalContext<T>, TD == SingleUITokenData<T> {
     static func test() -> Self { MadogUIIdentifier("testIdentifier") }
 }

@@ -6,10 +6,10 @@
 import MadogCore
 import UIKit
 
-class TabBarContainer<VC, C, T>: MadogModalUIContainer<T>, MultiContext where VC: ViewController {
+class TabBarContainer<T>: MadogModalUIContainer<T>, MultiContext {
     private let tabBarController = UITabBarController()
 
-    init(registry: AnyRegistry<T>, tokenData: MultiUITokenData<VC, C, T>) {
+    init(registry: AnyRegistry<T>, tokenData: MultiUITokenData<T>) {
         super.init(registry: registry, viewController: tabBarController)
 
         let viewControllers = tokenData.intents.compactMap { provideViewController(intent: $0) }
@@ -26,10 +26,7 @@ class TabBarContainer<VC, C, T>: MadogModalUIContainer<T>, MultiContext where VC
 }
 
 struct TabBarContainerFactory<T>: MultiContainerFactory {
-    func createContainer<VC, C>(
-        registry: AnyRegistry<T>,
-        tokenData: MultiUITokenData<VC, C, T>
-    ) -> MadogModalUIContainer<T>? where VC: UIViewController {
+    func createContainer(registry: AnyRegistry<T>, tokenData: MultiUITokenData<T>) -> MadogModalUIContainer<T>? {
         TabBarContainer(registry: registry, tokenData: tokenData)
     }
 }
