@@ -22,10 +22,13 @@ protocol MadogUIContainerDelegate<T>: AnyObject {
 }
 
 open class MadogUIContainer<T>: Context {
-    weak var delegate: AnyMadogUIContainerDelegate<T>?
+    public private(set) var registry: AnyRegistry<T>
     let viewController: ViewController
 
-    public init(viewController: ViewController) {
+    weak var delegate: AnyMadogUIContainerDelegate<T>?
+
+    public init(registry: AnyRegistry<T>, viewController: ViewController) {
+        self.registry = registry
         self.viewController = viewController
     }
 
@@ -59,6 +62,39 @@ open class MadogUIContainer<T>: Context {
 
         window.setRootViewController(container.viewController, transition: transition)
         return container as? C
+    }
+
+    public func provideViewController<VC>(
+        intent: TokenIntent<T>,
+        customisation: CustomisationBlock<VC>? = nil
+    ) -> ViewController? where VC: ViewController {
+        if let intent = intent as? UseParentIntent<T> {
+            return useParent(token: intent.token)
+        }
+
+        guard let intent = intent as? ChangeIntent<T> else { return nil }
+        switch intent.intent {
+        case let .createSingle(identifier, tokenData):
+            return createUI(identifier: identifier, tokenData: tokenData, customisation: customisation)?.viewController
+        case let .createMulti(identifier, tokenData):
+            return createUI(identifier: identifier, tokenData: tokenData, customisation: customisation)?.viewController
+        case let .createSplitSingle(identifier, tokenData):
+            return createUI(identifier: identifier, tokenData: tokenData, customisation: customisation)?.viewController
+        case let .createSplitMulti(identifier, tokenData):
+            return createUI(identifier: identifier, tokenData: tokenData, customisation: customisation)?.viewController
+        }
+    }
+
+    private func useParent(token: T) -> ViewController? {
+        registry.createViewController(from: token, context: self)
+    }
+
+    private func createUI<VC, TD>(
+        identifier: String,
+        tokenData: TD,
+        customisation: CustomisationBlock<VC>? = nil
+    ) -> MadogUIContainer<T>? where TD: TokenData {
+        delegate?.createUI(identifier: identifier, tokenData: tokenData, isModal: false, customisation: customisation)
     }
 }
 

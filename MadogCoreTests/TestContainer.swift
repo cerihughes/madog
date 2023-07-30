@@ -4,33 +4,25 @@
 //
 
 import MadogCore
-import UIKit
 
 class TestContainer<T>: MadogModalUIContainer<T> {
-    private let containerController = UIViewController()
+    var contentViewController: ViewController?
 
     init?(registry: AnyRegistry<T>, tokenData: SingleUITokenData<T>) {
-        super.init(registry: registry, viewController: containerController)
+        super.init(registry: registry, viewController: ViewController())
 
         guard let viewController = provideViewController(intent: tokenData.intent) else { return nil }
 
-        viewController.willMove(toParent: containerController)
-
-        containerController.addChild(viewController)
-        containerController.view.addSubview(viewController.view)
-        viewController.view.frame = containerController.view.bounds
-        viewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-
-        viewController.didMove(toParent: containerController)
+        contentViewController = viewController
     }
 }
 
 struct TestContainerFactory<T>: SingleContainerFactory {
-    func createContainer(registry: AnyRegistry<T>, tokenData: SingleUITokenData<T>) -> MadogModalUIContainer<T>? {
+    func createContainer(registry: AnyRegistry<T>, tokenData: SingleUITokenData<T>) -> MadogUIContainer<T>? {
         TestContainer(registry: registry, tokenData: tokenData)
     }
 }
 
-extension MadogUIIdentifier where VC == UIViewController, C == AnyModalContext<T>, TD == SingleUITokenData<T> {
+extension MadogUIIdentifier where VC == ViewController, C == AnyModalContext<T>, TD == SingleUITokenData<T> {
     static func test() -> Self { MadogUIIdentifier("testIdentifier") }
 }
