@@ -34,6 +34,12 @@ jobs:
       - run: mkdir build
       - run: xcodegen
       - run: xcodebuild clean test -project Madog.xcodeproj -scheme Madog -resultBundlePath coverage.xcresult -destination "OS=16.2,name=iPhone 11" -destination "OS=16.2,name=iPad (10th generation)" -sdk iphonesimulator CODE_SIGNING_REQUIRED=NO
+      - name: Publish build failures
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v1
+        with:
+          name: Build
+          path: ${TARGET_BUILD_DIR}
       - name: Codecov
         uses: codecov/codecov-action@v3.1.0
         with:
