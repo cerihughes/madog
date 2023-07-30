@@ -14,7 +14,7 @@ class MadogTests: XCTestCase {
         super.setUp()
 
         madog = Madog()
-        madog.resolve(resolver: TestResolver())
+        madog.resolve(resolver: TestMatchResolver())
         madog.addContainerFactory(identifier: .test(), factory: TestContainerFactory())
     }
 
@@ -39,39 +39,7 @@ class MadogTests: XCTestCase {
         madog = Madog()
         XCTAssertEqual(madog.serviceProviders.count, 0)
 
-        madog.resolve(resolver: TestResolver())
+        madog.resolve(resolver: TestMatchResolver())
         XCTAssertEqual(madog.serviceProviders.count, 1)
     }
-}
-
-private class TestResolver: Resolver {
-    func serviceProviderFunctions() -> [(ServiceProviderCreationContext) -> ServiceProvider] {
-        [TestServiceProvider.init(context:)]
-    }
-
-    func viewControllerProviderFunctions() -> [() -> AnyViewControllerProvider<String>] {
-        [ { TestViewControllerProvider(matchString: "match") } ]
-    }
-}
-
-private class TestViewControllerProvider: ViewControllerProvider {
-    private let matchString: String
-
-    init(matchString: String) {
-        self.matchString = matchString
-    }
-
-    func createViewController(token: String, context: AnyContext<String>) -> UIViewController? {
-        if token == matchString {
-            return UIViewController()
-        }
-
-        return nil
-    }
-}
-
-private class TestServiceProvider: ServiceProvider {
-    var name = "TestServiceProvider"
-
-    init(context _: ServiceProviderCreationContext) {}
 }
