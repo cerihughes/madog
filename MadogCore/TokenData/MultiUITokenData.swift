@@ -15,7 +15,15 @@ public extension TokenData {
         return multi(intents)
     }
 
+    static func multi<T>(_ tokens: T...) -> MultiUITokenData<T> {
+        multi(tokens)
+    }
+
     static func multi<T>(_ intents: [TokenIntent<T>]) -> MultiUITokenData<T> {
+        .init(intents: intents)
+    }
+
+    static func multi<T>(_ intents: TokenIntent<T>...) -> MultiUITokenData<T> {
         .init(intents: intents)
     }
 }
