@@ -39,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: Build
-          path: ${TARGET_BUILD_DIR}
+          path: $TARGET_BUILD_DIR
       - name: Codecov
         uses: codecov/codecov-action@v3.1.0
         with:
