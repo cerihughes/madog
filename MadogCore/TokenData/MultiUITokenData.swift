@@ -13,6 +13,10 @@ public extension TokenData {
     static func multi<T>(_ tokens: [T]) -> MultiUITokenData<T> {
         MultiUITokenData(tokens: tokens)
     }
+
+    static func multi<T>(_ tokens: T...) -> MultiUITokenData<T> {
+        multi(tokens)
+    }
 }
 
 public typealias AnyMultiContainerFactory<T> = any MultiContainerFactory<T>
