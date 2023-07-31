@@ -33,15 +33,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_: UIApplication, open url: URL, options _: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        guard let currentContext = madog.currentContext else {
+        guard let rootContext = madog.rootContext else {
             return false
         }
 
         let token = SampleToken.createVC2Identifier(stringData: String(url.absoluteString.count))
-        if let navigationContext = currentContext as? AnyForwardBackNavigationContext<SampleToken> {
+        if let navigationContext = rootContext as? AnyForwardBackNavigationContext<SampleToken> {
             return navigationContext.navigateForward(token: token, animated: true)
         } else {
-            return currentContext.change(to: .navigation(), tokenData: .single(token)) != nil
+            return rootContext.change(to: .navigation(), tokenData: .single(token)) != nil
         }
     }
 }

@@ -14,7 +14,6 @@ class ViewController1: UIViewController {
     init(sharedService: Any, context: AnyForwardBackNavigationContext<SampleToken>) {
         self.sharedService = sharedService
         self.context = context
-
         super.init(nibName: nil, bundle: nil)
     }
 

@@ -10,7 +10,10 @@ public final class Madog<T>: MadogUIContainerDelegate {
     private let registrar: Registrar<T>
     private let containerRepository: ContainerRepository<T>
 
-    private var currentContainer: MadogUIContainer<T>?
+    private var nextContainerID = 0
+    private var rootContainer: MadogUIContainer<T>?
+    private var nestedContainers = [Int: [MadogUIContainer<T>]]()
+
     private var modalContainers = [ViewController: AnyContext<T>]()
 
     public init() {
@@ -66,6 +69,7 @@ public final class Madog<T>: MadogUIContainerDelegate {
             identifier: identifier.value,
             tokenData: tokenData,
             isModal: false,
+            parentContainerID: nil,
             customisation: customisation
         ) else { return nil }
 
@@ -73,8 +77,8 @@ public final class Madog<T>: MadogUIContainerDelegate {
         return container as? C
     }
 
-    public var currentContext: AnyContext<T>? {
-        currentContainer
+    public var rootContext: AnyContext<T>? {
+        rootContainer
     }
 
     public var serviceProviders: [String: ServiceProvider] {
@@ -87,12 +91,13 @@ public final class Madog<T>: MadogUIContainerDelegate {
         identifier: String,
         tokenData: TD,
         isModal: Bool,
+        parentContainerID: Int?,
         customisation: CustomisationBlock<VC>?
     ) -> MadogUIContainer<T>? where VC: ViewController, TD: TokenData {
         guard
             let container = containerRepository.createContainer(
                 identifier: identifier,
-                creationContext: .init(delegate: self),
+                creationContext: .init(containerID: nextContainerID, delegate: self),
                 tokenData: tokenData
             ),
             let viewController = container.viewController as? VC
@@ -100,19 +105,21 @@ public final class Madog<T>: MadogUIContainerDelegate {
             return nil
         }
 
-        persist(container: container, isModal: isModal)
+        nextContainerID += 1
+
+        persist(container: container, parentContainerID: parentContainerID, isModal: isModal)
         customisation?(viewController)
         return container
     }
 
     func context(for viewController: ViewController) -> AnyContext<T>? {
-        if viewController == currentContainer?.viewController { return currentContainer }
+        if viewController == rootContainer?.viewController { return rootContainer }
         return modalContainers[viewController]
     }
 
     func releaseContext(for viewController: ViewController) {
-        if viewController == currentContainer?.viewController {
-            currentContainer = nil
+        if viewController == rootContainer?.viewController {
+            rootContainer = nil
         } else {
             modalContainers[viewController] = nil
         }
@@ -120,12 +127,18 @@ public final class Madog<T>: MadogUIContainerDelegate {
 
     // MARK: - Private
 
-    private func persist(container: MadogUIContainer<T>, isModal: Bool) {
+    private func persist(container: MadogUIContainer<T>, parentContainerID: Int?, isModal: Bool) {
         if isModal {
             modalContainers[container.viewController] = container
         } else {
-            currentContainer = container
+            rootContainer = container
             modalContainers = [:] // Clear old modal contexts
+
+            if let parentContainerID {
+                var containers = nestedContainers[parentContainerID] ?? []
+                containers.append(container)
+                nestedContainers[parentContainerID] = containers
+            }
         }
     }
 }

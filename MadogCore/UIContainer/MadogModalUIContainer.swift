@@ -34,6 +34,7 @@ open class MadogModalUIContainer<T>: MadogUIContainer<T>, ModalContext {
                 identifier: identifier.value,
                 tokenData: tokenData,
                 isModal: true,
+                parentContainerID: nil,
                 customisation: customisation
             ),
             let context = container as? C

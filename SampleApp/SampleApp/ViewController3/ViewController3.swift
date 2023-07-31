@@ -14,8 +14,12 @@ class ViewController3: UIViewController {
 
     init(context: AnySplitUIContext<SampleToken>) {
         self.context = context
-
         super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func loadView() {
@@ -31,11 +35,6 @@ class ViewController3: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
-    }
-
-    @available(*, unavailable)
-    required init?(coder _: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
 
@@ -54,7 +53,7 @@ extension ViewController3: UITableViewDataSource {
 
 extension ViewController3: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        context?.showDetail(token: .createVC2Identifier(stringData: indexPath.displayString))
+        context?.showDetail(token: .createVC4Identifier(stringData: indexPath.displayString))
     }
 }
 

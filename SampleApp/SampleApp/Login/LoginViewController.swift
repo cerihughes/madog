@@ -49,10 +49,10 @@ class LoginViewController: UIViewController {
         activityIndicator.stopAnimating()
 
         let intents: [TokenIntent<SampleToken>] = [
-            .useParent(.vc1),
+            .create(identifier: .navigation(), tokenData: .single(.vc1)),
             .create(identifier: .split(), tokenData: .splitSingle(.vc3)),
             .useParent(.logout)
         ]
-        context?.change(to: .tabBarNavigation(), tokenData: .multi(intents))
+        context?.change(to: .tabBar(), tokenData: .multi(intents))
     }
 }

@@ -38,13 +38,7 @@ class ViewController2Provider: ViewControllerProvider {
 }
 
 extension SampleToken {
-    private static let stringDataKey = "stringData"
-
     static func createVC2Identifier(stringData: String) -> SampleToken {
         SampleToken(identifier: vc2Identifier, data: [stringDataKey: stringData])
-    }
-
-    var stringData: String? {
-        data[SampleToken.stringDataKey] as? String
     }
 }

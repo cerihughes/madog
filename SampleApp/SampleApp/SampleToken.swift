@@ -10,3 +10,11 @@ struct SampleToken {
     let identifier: String
     let data: [String: Any]
 }
+
+extension SampleToken {
+    static let stringDataKey = "stringData"
+
+    var stringData: String? {
+        data[SampleToken.stringDataKey] as? String
+    }
+}

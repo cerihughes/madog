@@ -15,7 +15,6 @@ class ViewController2: UIViewController {
         self.sharedService = sharedService
         self.stringData = stringData
         self.context = context
-
         super.init(nibName: nil, bundle: nil)
     }
 

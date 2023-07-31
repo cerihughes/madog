@@ -14,6 +14,7 @@ protocol MadogUIContainerDelegate<T>: AnyObject {
         identifier: String,
         tokenData: TD,
         isModal: Bool,
+        parentContainerID: Int?,
         customisation: CustomisationBlock<VC>?
     ) -> MadogUIContainer<T>? where VC: ViewController, TD: TokenData
 
@@ -23,17 +24,20 @@ protocol MadogUIContainerDelegate<T>: AnyObject {
 
 open class MadogUIContainer<T>: Context {
     public struct CreationContext<T> {
+        let containerID: Int
         weak var delegate: AnyMadogUIContainerDelegate<T>?
     }
 
     public private(set) var registry: AnyRegistry<T>
     let viewController: ViewController
 
+    private let containerID: Int
     private (set) weak var delegate: AnyMadogUIContainerDelegate<T>?
 
     public init(registry: AnyRegistry<T>, creationContext: CreationContext<T>, viewController: ViewController) {
         self.registry = registry
         self.viewController = viewController
+        containerID = creationContext.containerID
         delegate = creationContext.delegate
     }
 
@@ -60,6 +64,7 @@ open class MadogUIContainer<T>: Context {
                 identifier: identifier.value,
                 tokenData: tokenData,
                 isModal: false,
+                parentContainerID: nil,
                 customisation: customisation
             ),
             let window = viewController.resolvedWindow
@@ -99,7 +104,13 @@ open class MadogUIContainer<T>: Context {
         tokenData: TD,
         customisation: CustomisationBlock<VC>? = nil
     ) -> MadogUIContainer<T>? where TD: TokenData {
-        delegate?.createUI(identifier: identifier, tokenData: tokenData, isModal: false, customisation: customisation)
+        delegate?.createUI(
+            identifier: identifier,
+            tokenData: tokenData,
+            isModal: false,
+            parentContainerID: containerID,
+            customisation: customisation
+        )
     }
 }
 
