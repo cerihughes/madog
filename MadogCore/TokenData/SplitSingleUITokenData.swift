@@ -30,5 +30,9 @@ public extension TokenData {
 public typealias AnySplitSingleContainerFactory<T> = any SplitSingleContainerFactory<T>
 public protocol SplitSingleContainerFactory<T> {
     associatedtype T
-    func createContainer(registry: AnyRegistry<T>, tokenData: SplitSingleUITokenData<T>) -> MadogUIContainer<T>?
+    func createContainer(
+        registry: AnyRegistry<T>,
+        creationContext: MadogUIContainer<T>.CreationContext<T>,
+        tokenData: SplitSingleUITokenData<T>
+    ) -> MadogUIContainer<T>?
 }

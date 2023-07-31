@@ -21,8 +21,8 @@ protocol SplitMultiContext<T>: Context {
 class SplitMultiUI<T>: MadogModalUIContainer<T>, SplitMultiContext {
     private let splitController = UISplitViewController()
 
-    init?(registry: AnyRegistry<T>, tokenData: SplitMultiUITokenData<T>) {
-        super.init(registry: registry, viewController: splitController)
+    init?(registry: AnyRegistry<T>, creationContext: CreationContext<T>, tokenData: SplitMultiUITokenData<T>) {
+        super.init(registry: registry, creationContext: creationContext, viewController: splitController)
 
         guard let primaryViewController = provideViewController(intent: tokenData.primaryIntent) else { return nil }
 
@@ -47,7 +47,11 @@ class SplitMultiUI<T>: MadogModalUIContainer<T>, SplitMultiContext {
 }
 
 struct SplitMultiUIFactory<T>: SplitMultiContainerFactory {
-    func createContainer(registry: AnyRegistry<T>, tokenData: SplitMultiUITokenData<T>) -> MadogUIContainer<T>? {
-        SplitMultiUI(registry: registry, tokenData: tokenData)
+    func createContainer(
+        registry: AnyRegistry<T>,
+        creationContext: MadogUIContainer<T>.CreationContext<T>,
+        tokenData: SplitMultiUITokenData<T>
+    ) -> MadogUIContainer<T>? {
+        SplitMultiUI(registry: registry, creationContext: creationContext, tokenData: tokenData)
     }
 }

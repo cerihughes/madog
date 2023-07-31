@@ -12,8 +12,8 @@ import UIKit
 class NavigationContainer<T>: MadogNavigatingModalUIContainer<T> {
     private let navigationController = UINavigationController()
 
-    init?(registry: AnyRegistry<T>, tokenData: SingleUITokenData<T>) {
-        super.init(registry: registry, viewController: navigationController)
+    init?(registry: AnyRegistry<T>, creationContext: CreationContext<T>, tokenData: SingleUITokenData<T>) {
+        super.init(registry: registry, creationContext: creationContext, viewController: navigationController)
 
         guard let viewController = provideViewController(intent: tokenData.intent) else { return nil }
         navigationController.setViewControllers([viewController], animated: false)
@@ -25,7 +25,11 @@ class NavigationContainer<T>: MadogNavigatingModalUIContainer<T> {
 }
 
 struct NavigationContainerFactory<T>: SingleContainerFactory {
-    func createContainer(registry: AnyRegistry<T>, tokenData: SingleUITokenData<T>) -> MadogUIContainer<T>? {
-        NavigationContainer(registry: registry, tokenData: tokenData)
+    func createContainer(
+        registry: AnyRegistry<T>,
+        creationContext: MadogUIContainer<T>.CreationContext<T>,
+        tokenData: SingleUITokenData<T>
+    ) -> MadogUIContainer<T>? {
+        NavigationContainer(registry: registry, creationContext: creationContext, tokenData: tokenData)
     }
 }

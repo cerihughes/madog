@@ -90,13 +90,16 @@ public final class Madog<T>: MadogUIContainerDelegate {
         customisation: CustomisationBlock<VC>?
     ) -> MadogUIContainer<T>? where VC: ViewController, TD: TokenData {
         guard
-            let container = containerRepository.createContainer(identifier: identifier, tokenData: tokenData),
+            let container = containerRepository.createContainer(
+                identifier: identifier,
+                creationContext: .init(delegate: self),
+                tokenData: tokenData
+            ),
             let viewController = container.viewController as? VC
         else {
             return nil
         }
 
-        container.delegate = self
         persist(container: container, isModal: isModal)
         customisation?(viewController)
         return container

@@ -8,8 +8,8 @@ import MadogCore
 class TestMultiContainer<T>: MadogUIContainer<T>, MultiContext {
     var contentViewControllers = [ViewController]()
 
-    init(registry: AnyRegistry<T>, tokenData: MultiUITokenData<T>) {
-        super.init(registry: registry, viewController: ViewController())
+    init(registry: AnyRegistry<T>, creationContext: CreationContext<T>, tokenData: MultiUITokenData<T>) {
+        super.init(registry: registry, creationContext: creationContext, viewController: ViewController())
 
         let viewControllers = tokenData.intents.compactMap { provideViewController(intent: $0) }
 
@@ -26,8 +26,12 @@ class TestMultiContainer<T>: MadogUIContainer<T>, MultiContext {
 }
 
 struct TestMultiContainerFactory<T>: MultiContainerFactory {
-    func createContainer(registry: AnyRegistry<T>, tokenData: MultiUITokenData<T>) -> MadogUIContainer<T>? {
-        TestMultiContainer(registry: registry, tokenData: tokenData)
+    func createContainer(
+        registry: AnyRegistry<T>,
+        creationContext: MadogUIContainer<T>.CreationContext<T>,
+        tokenData: MultiUITokenData<T>
+    ) -> MadogUIContainer<T>? {
+        TestMultiContainer(registry: registry, creationContext: creationContext, tokenData: tokenData)
     }
 }
 

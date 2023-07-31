@@ -12,8 +12,8 @@ import UIKit
 class TabBarNavigationContainer<T>: MadogNavigatingModalUIContainer<T>, MultiContext {
     private let tabBarController = UITabBarController()
 
-    init(registry: AnyRegistry<T>, tokenData: MultiUITokenData<T>) {
-        super.init(registry: registry, viewController: tabBarController)
+    init(registry: AnyRegistry<T>, creationContext: CreationContext<T>, tokenData: MultiUITokenData<T>) {
+        super.init(registry: registry, creationContext: creationContext, viewController: tabBarController)
 
         let viewControllers = tokenData
             .intents.compactMap { provideViewController(intent: $0) }
@@ -35,7 +35,11 @@ class TabBarNavigationContainer<T>: MadogNavigatingModalUIContainer<T>, MultiCon
 }
 
 struct TabBarNavigationContainerFactory<T>: MultiContainerFactory {
-    func createContainer(registry: AnyRegistry<T>, tokenData: MultiUITokenData<T>) -> MadogUIContainer<T>? {
-        TabBarNavigationContainer(registry: registry, tokenData: tokenData)
+    func createContainer(
+        registry: AnyRegistry<T>,
+        creationContext: MadogUIContainer<T>.CreationContext<T>,
+        tokenData: MultiUITokenData<T>
+    ) -> MadogUIContainer<T>? {
+        TabBarNavigationContainer(registry: registry, creationContext: creationContext, tokenData: tokenData)
     }
 }
