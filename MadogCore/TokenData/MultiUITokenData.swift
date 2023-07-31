@@ -18,5 +18,5 @@ public extension TokenData {
 public typealias AnyMultiContainerFactory<T> = any MultiContainerFactory<T>
 public protocol MultiContainerFactory<T> {
     associatedtype T
-    func createContainer(registry: AnyRegistry<T>, tokenData: MultiUITokenData<T>) -> MadogModalUIContainer<T>?
+    func createContainer(registry: AnyRegistry<T>, tokenData: MultiUITokenData<T>) -> MadogUIContainer<T>?
 }
