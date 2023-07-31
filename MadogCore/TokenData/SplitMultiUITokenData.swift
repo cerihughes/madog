@@ -23,3 +23,9 @@ public extension TokenData {
         .init(primaryIntent: primaryIntent, secondaryIntents: secondaryIntents)
     }
 }
+
+public typealias AnySplitMultiContainerFactory<T> = any SplitMultiContainerFactory<T>
+public protocol SplitMultiContainerFactory<T> {
+    associatedtype T
+    func createContainer(registry: AnyRegistry<T>, tokenData: SplitMultiUITokenData<T>) -> MadogUIContainer<T>?
+}

@@ -27,3 +27,9 @@ public extension TokenData {
         .init(intents: intents)
     }
 }
+
+public typealias AnyMultiContainerFactory<T> = any MultiContainerFactory<T>
+public protocol MultiContainerFactory<T> {
+    associatedtype T
+    func createContainer(registry: AnyRegistry<T>, tokenData: MultiUITokenData<T>) -> MadogUIContainer<T>?
+}
