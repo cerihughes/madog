@@ -1,4 +1,4 @@
-name: Build Sample App on Xcode 15.0.1 iOS 17.0
+name: Build Sample App on Xcode 15.0.1 iOS 17.0.1
 
 on: [push, pull_request]
 
@@ -33,4 +33,4 @@ jobs:
       - run: set -o pipefail
       - run: xcodegen
       - run: cd SampleApp; xcodegen
-      - run: xcodebuild clean test -project SampleApp/SampleApp.xcodeproj -scheme SampleApp -destination "OS=17.0,name=iPhone 14" -sdk iphonesimulator CODE_SIGNING_REQUIRED=NO
+      - run: xcodebuild clean test -project SampleApp/SampleApp.xcodeproj -scheme SampleApp -destination "OS=17.0.1,name=iPhone 14" -sdk iphonesimulator CODE_SIGNING_REQUIRED=NO
