@@ -8,7 +8,7 @@
 
 import UIKit
 
-open class MadogNavigatingModalUIContainer<T>: MadogModalUIContainer<T>, ForwardBackNavigationContext {
+open class MadogNavigatingModalUIContainer<T>: MadogModalUIContainer<T>, NavigationUIContext {
     open func provideNavigationController() -> UINavigationController? {
         // OVERRIDE
         nil
