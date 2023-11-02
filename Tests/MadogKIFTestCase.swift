@@ -36,33 +36,38 @@ class MadogKIFTestCase: KIFTestCase {
     }
 
     @discardableResult
-    func waitForTitle(token: String) -> UIView? {
-        kif.usingLabel(token.viewControllerTitle)?
+    func waitForTitle(token: String, _ file: String = #file, _ line: Int = #line) -> UIView? {
+        viewTester(file, line)
+            .usingLabel(token.viewControllerTitle)?
             .usingWindow(window)?
             .waitForView()
     }
 
-    func waitForAbsenceOfTitle(token: String) {
-        kif.usingLabel(token.viewControllerTitle)?
+    func waitForAbsenceOfTitle(token: String, _ file: String = #file, _ line: Int = #line) {
+        viewTester(file, line)
+            .usingLabel(token.viewControllerTitle)?
             .usingWindow(window)?
             .waitForAbsenceOfView()
     }
 
     @discardableResult
-    func waitForLabel(token: String) -> UIView? {
-        kif.usingLabel(token.viewControllerLabel)?
+    func waitForLabel(token: String, _ file: String = #file, _ line: Int = #line) -> UIView? {
+        viewTester(file, line)
+            .usingLabel(token.viewControllerLabel)?
             .usingWindow(window)?
             .waitForView()
     }
 
-    func waitForAbsenceOfLabel(token: String) {
-        kif.usingLabel(token.viewControllerLabel)?
+    func waitForAbsenceOfLabel(token: String, _ file: String = #file, _ line: Int = #line) {
+        viewTester(file, line)
+            .usingLabel(token.viewControllerLabel)?
             .usingWindow(window)?
             .waitForAbsenceOfView()
     }
 
-    private var kif: KIFUIViewTestActor {
-        viewTester()
+    func waitForAnimationsToFinish(_ file: String = #file, _ line: Int = #line) {
+        viewTester(file, line)
+            .waitForAnimationsToFinish()
     }
 
     private func inWindowPredicate(evaluatedObject: Any?, bindings: [String: Any]?) -> Bool {
