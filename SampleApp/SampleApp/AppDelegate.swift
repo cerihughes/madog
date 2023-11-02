@@ -53,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
-typealias SplitUIContext<T> = ModalContext<T> & SplitContext<T>
+protocol SplitUIContext<T>: ModalContext, SplitContext {}
 typealias AnySplitUIContext<T> = any SplitUIContext<T>
 extension MadogUIIdentifier
 where VC == UISplitViewController, C == AnySplitUIContext<T>, TD == SplitSingleUITokenData<T> {
