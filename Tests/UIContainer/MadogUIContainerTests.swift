@@ -20,6 +20,8 @@ class MadogUIContainerTests: MadogKIFTestCase {
         XCTAssertNotNil(context)
 
         context?.close(animated: true)
+        waitForAnimationsToFinish()
+
         XCTAssertNil(context)
     }
 
@@ -32,6 +34,8 @@ class MadogUIContainerTests: MadogKIFTestCase {
         XCTAssertNotNil(modalContext)
 
         modalContext?.close(animated: true)
+        waitForAnimationsToFinish()
+
         XCTAssertNotNil(context)
         XCTAssertNil(modalContext)
     }
@@ -45,6 +49,8 @@ class MadogUIContainerTests: MadogKIFTestCase {
         XCTAssertNotNil(modalContext)
 
         context?.close(animated: true)
+        waitForAnimationsToFinish()
+
         XCTAssertNil(context)
         XCTAssertNil(modalContext)
         waitForLabel(token: "vc1") // Main UI should still be there
@@ -66,6 +72,8 @@ class MadogUIContainerTests: MadogKIFTestCase {
         XCTAssertNotNil(modal3Context)
 
         XCTAssertTrue(modal2Context!.close(animated: true)) // Closes modals vc3 and vc4
+        waitForAnimationsToFinish()
+
         XCTAssertNotNil(context)
         XCTAssertNotNil(modal1Context)
         XCTAssertNil(modal2Context)
@@ -75,6 +83,8 @@ class MadogUIContainerTests: MadogKIFTestCase {
         waitForAbsenceOfLabel(token: "vc4")
 
         context?.close(animated: true) // Closes main and modal 1
+        waitForAnimationsToFinish()
+
         XCTAssertNil(context)
         XCTAssertNil(modal1Context)
         waitForLabel(token: "vc1") // Main UI should still be there
@@ -147,6 +157,7 @@ class MadogUIContainerTests: MadogKIFTestCase {
         XCTAssertNotNil(modalToken)
 
         XCTAssertTrue(context!.closeModal(token: modalToken!, animated: true))
+        waitForAnimationsToFinish()
         waitForAbsenceOfTitle(token: "vc2")
     }
 
@@ -172,6 +183,7 @@ class MadogUIContainerTests: MadogKIFTestCase {
         XCTAssertNotNil(modalToken)
 
         XCTAssertTrue(context!.closeModal(token: modalToken!, animated: true))
+        waitForAnimationsToFinish()
         waitForAbsenceOfTitle(token: "vc2")
         waitForAbsenceOfTitle(token: "vc3")
     }
@@ -187,6 +199,7 @@ class MadogUIContainerTests: MadogKIFTestCase {
             animated: true,
             completion: { completionExpectation.fulfill() }
         )
+        waitForAnimationsToFinish()
         XCTAssertNotNil(modalToken)
         waitForExpectations(timeout: 10)
     }
@@ -200,11 +213,13 @@ class MadogUIContainerTests: MadogKIFTestCase {
             presentationStyle: .formSheet,
             animated: true
         )
+        waitForAnimationsToFinish()
         XCTAssertNotNil(modalToken)
         waitForLabel(token: "vc2")
 
         let completionExpectation = expectation(description: "Completion fired")
         context!.closeModal(token: modalToken!, animated: true, completion: { completionExpectation.fulfill() })
+        waitForAnimationsToFinish()
         waitForExpectations(timeout: 10)
     }
 
@@ -217,10 +232,12 @@ class MadogUIContainerTests: MadogKIFTestCase {
             presentationStyle: .formSheet,
             animated: true
         )
+        waitForAnimationsToFinish()
 
         let modalContext = modalToken!.context
         let completionExpectation = expectation(description: "Completion fired")
         modalContext.close(animated: true, completion: { completionExpectation.fulfill() })
+        waitForAnimationsToFinish()
         waitForExpectations(timeout: 10)
     }
 
@@ -236,6 +253,7 @@ class MadogUIContainerTests: MadogKIFTestCase {
             animated: true,
             completion: { completionExpectation1.fulfill() }
         )
+        waitForAnimationsToFinish()
         wait(for: [completionExpectation1], timeout: 10)
         let modalContext1 = modalToken?.context
 
@@ -247,6 +265,7 @@ class MadogUIContainerTests: MadogKIFTestCase {
             animated: true,
             completion: { completionExpectation2.fulfill() }
         )
+        waitForAnimationsToFinish()
         wait(for: [completionExpectation2], timeout: 10)
         let modalContext2 = modalToken?.context as? AnyModalContext<String>
 
@@ -264,6 +283,7 @@ class MadogUIContainerTests: MadogKIFTestCase {
             presentationStyle: .formSheet,
             animated: true
         )
+        waitForAnimationsToFinish()
         waitForLabel(token: token)
         return modalToken
     }
@@ -283,6 +303,7 @@ class MadogUIContainerTests: MadogKIFTestCase {
             presentationStyle: .formSheet,
             animated: true
         )
+        waitForAnimationsToFinish()
         tokens.forEach { waitForTitle(token: $0) }
 
         return modalToken
