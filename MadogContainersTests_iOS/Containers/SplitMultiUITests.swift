@@ -61,7 +61,7 @@ class SplitMultiUITests: MadogKIFTestCase {
     }
 
     private func renderUIAndAssert(_ token: String, _ tokens: [String]) -> AnySplitMultiContext<String>? {
-        let context = madog.renderUI(identifier: .splitMulti(), tokenData: .splitMulti(token, tokens), in: window)
+        let context = renderUIAndWait(identifier: .splitMulti(), tokenData: .splitMulti(token, tokens))
         waitForAbsenceOfTitle(token: token) // There should be no "Back" titles
         waitForLabel(token: token)
         return context

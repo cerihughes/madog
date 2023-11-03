@@ -28,7 +28,7 @@ class BasicUITests: MadogKIFTestCase {
     }
 
     private func renderUIAndAssert(token: String) -> AnyContext<String>? {
-        let context = madog.renderUI(identifier: .basic(), tokenData: .single(token), in: window)
+        let context = renderUIAndWait(identifier: .basic(), tokenData: .single(token))
         waitForAbsenceOfTitle(token: token) // There should be no "Back" titles
         waitForLabel(token: token)
         return context

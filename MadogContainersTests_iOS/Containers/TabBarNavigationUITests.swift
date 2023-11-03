@@ -65,7 +65,7 @@ class TabBarNavigationUITests: MadogKIFTestCase {
     }
 
     func testOpenMultiNavigationModal() {
-        let context = madog.renderUI(identifier: .basic(), tokenData: .single("vc1"), in: window)
+        let context = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
         waitForLabel(token: "vc1")
         XCTAssertNotNil(context)
 
@@ -115,7 +115,7 @@ class TabBarNavigationUITests: MadogKIFTestCase {
     }
 
     private func renderUIAndAssert(tokens: String ...) -> AnyMultiForwardBackNavigationContext<String>? {
-        let context = madog.renderUI(identifier: .tabBarNavigation(), tokenData: .multi(tokens), in: window)
+        let context = renderUIAndWait(identifier: .tabBarNavigation(), tokenData: .multi(tokens))
         tokens.forEach { waitForTitle(token: $0) }
         waitForLabel(token: tokens.first!)
         return context

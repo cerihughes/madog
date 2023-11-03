@@ -13,6 +13,21 @@ protocol MadogCUT<T>: KIFTestCase {
 }
 
 extension MadogCUT {
+    func renderUIAndWait<VC, C, TD>(
+        identifier: MadogUIIdentifier<VC, C, TD, T>,
+        tokenData: TD,
+        customisation: CustomisationBlock<VC>? = nil
+    ) -> C? where VC: ViewController, TD: TokenData {
+        let result = madog.renderUI(
+            identifier: identifier,
+            tokenData: tokenData,
+            in: window,
+            customisation: customisation
+        )
+        waitForAnimationsToFinish()
+        return result
+    }
+
     @discardableResult
     func closeContextAndWait(_ context: AnyContext<T>, completion: CompletionBlock? = nil) -> Bool {
         let result = context.close(animated: true, completion: completion)

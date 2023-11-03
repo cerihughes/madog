@@ -78,7 +78,7 @@ class NavigationUITests: MadogKIFTestCase {
     }
 
     private func renderUIAndAssert(token: String) -> AnyForwardBackNavigationContext<String>? {
-        let context = madog.renderUI(identifier: .navigation(), tokenData: .single(token), in: window)
+        let context = renderUIAndWait(identifier: .navigation(), tokenData: .single(token))
         waitForTitle(token: token)
         waitForLabel(token: token)
         return context
