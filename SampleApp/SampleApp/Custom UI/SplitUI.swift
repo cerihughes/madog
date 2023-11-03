@@ -14,7 +14,7 @@ protocol SplitContext<T>: Context {
     func showDetail(token: T) -> Bool
 }
 
-class SplitUI<T>: MadogModalUIContainer<T>, SplitContext {
+class SplitUI<T>: MadogModalUIContainer<T>, SplitUIContext {
     private let splitController = UISplitViewController()
 
     init?(registry: AnyRegistry<T>, primaryToken: T, secondaryToken: T) {
