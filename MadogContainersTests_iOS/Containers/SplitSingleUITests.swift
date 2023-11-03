@@ -9,7 +9,7 @@ import XCTest
 @testable import MadogCore
 
 class SplitSingleUITests: MadogKIFTestCase {
-    private var context: AnySplitUIContext<String>!
+    private var context: AnySplitContext<String>!
 
     override func beforeEach() {
         super.beforeEach()
@@ -54,7 +54,7 @@ class SplitSingleUITests: MadogKIFTestCase {
         waitForLabel(token: "vc2")
     }
 
-    private func renderUIAndAssert(_ token1: String, _ token2: String? = nil) -> AnySplitUIContext<String>? {
+    private func renderUIAndAssert(_ token1: String, _ token2: String? = nil) -> AnySplitContext<String>? {
         let context = madog.renderUI(identifier: .split(), tokenData: .splitSingle(token1, token2), in: window)
         waitForAbsenceOfTitle(token: token1) // There should be no "Back" titles
         waitForLabel(token: token1)

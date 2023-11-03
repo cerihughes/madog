@@ -9,7 +9,7 @@ import XCTest
 @testable import MadogCore
 
 class BasicUITests: MadogKIFTestCase {
-    private var context: AnyModalContext<String>!
+    private var context: AnyContext<String>!
 
     override func afterEach() {
         context = nil
@@ -27,7 +27,7 @@ class BasicUITests: MadogKIFTestCase {
         XCTAssertNotNil(context)
     }
 
-    private func renderUIAndAssert(token: String) -> AnyModalContext<String>? {
+    private func renderUIAndAssert(token: String) -> AnyContext<String>? {
         let context = madog.renderUI(identifier: .basic(), tokenData: .single(token), in: window)
         waitForAbsenceOfTitle(token: token) // There should be no "Back" titles
         waitForLabel(token: token)

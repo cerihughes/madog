@@ -10,7 +10,7 @@ import XCTest
 @testable import MadogContainers_iOS
 
 class TabBarUITests: MadogKIFTestCase {
-    private var context: AnyTabBarUIContext<String>!
+    private var context: AnyMultiContext<String>!
 
     override func afterEach() {
         context = nil
@@ -28,7 +28,7 @@ class TabBarUITests: MadogKIFTestCase {
         XCTAssertNotNil(context)
     }
 
-    private func renderUIAndAssert(tokens: String ...) -> AnyTabBarUIContext<String>? {
+    private func renderUIAndAssert(tokens: String ...) -> AnyMultiContext<String>? {
         let context = madog.renderUI(identifier: .tabBar(), tokenData: .multi(tokens), in: window)
         tokens.forEach { waitForTitle(token: $0) }
         waitForLabel(token: tokens.first!)

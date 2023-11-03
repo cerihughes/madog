@@ -230,16 +230,16 @@ class MadogUIContainerTests: MadogKIFTestCase {
             openExpectation2.fulfill()
         }
         wait(for: [openExpectation2], timeout: 10)
-        let modalContext2 = modalToken?.context as? AnyModalContext<String>
+        let modalContext2 = modalToken?.context as? AnyContext<String>
 
         XCTAssertTrue(context === modalContext1?.presentingContext)
         XCTAssertTrue(modalContext1 === modalContext2?.presentingContext)
     }
 
     private func createModal(
-        context: AnyModalContext<String>,
+        context: AnyContext<String>,
         token: String
-    ) -> AnyModalToken<AnyModalContext<String>>? {
+    ) -> AnyModalToken<AnyContext<String>>? {
         let openExpectation = expectation(description: "Modal \(token) opened")
         let modalToken = openModalAndWait(context, identifier: .basic(), tokenData: .single(token)) {
             openExpectation.fulfill()
@@ -249,15 +249,15 @@ class MadogUIContainerTests: MadogKIFTestCase {
         return modalToken
     }
 
-    private func createModalContext(context: AnyModalContext<String>, token: String) -> AnyModalContext<String>? {
+    private func createModalContext(context: AnyContext<String>, token: String) -> AnyContext<String>? {
         let modalToken = createModal(context: context, token: token)
-        return modalToken?.context as? AnyModalContext<String>
+        return modalToken?.context as? AnyContext<String>
     }
 
     private func createModal(
-        context: AnyModalContext<String>,
+        context: AnyContext<String>,
         tokens: [String]
-    ) -> AnyModalToken<AnyTabBarUIContext<String>>? {
+    ) -> AnyModalToken<AnyMultiContext<String>>? {
         let openExpectation = expectation(description: "Modal \(tokens) opened")
         let modalToken = openModalAndWait(context, identifier: .tabBar(), tokenData: .multi(tokens)) {
             openExpectation.fulfill()
@@ -267,8 +267,8 @@ class MadogUIContainerTests: MadogKIFTestCase {
         return modalToken
     }
 
-    private func createModalContext(context: AnyModalContext<String>, tokens: [String]) -> AnyModalContext<String>? {
+    private func createModalContext(context: AnyContext<String>, tokens: [String]) -> AnyContext<String>? {
         let modalToken = createModal(context: context, tokens: tokens)
-        return modalToken?.context as? AnyModalContext<String>
+        return modalToken?.context as? AnyContext<String>
     }
 }

@@ -21,7 +21,7 @@ extension MadogCUT {
     }
 
     func openModalAndWait<VC, C, TD>(
-        _ modalContext: AnyModalContext<T>,
+        _ modalContext: AnyContext<T>,
         identifier: MadogUIIdentifier<VC, C, TD, T>,
         tokenData: TD,
         completion: CompletionBlock? = nil
@@ -39,7 +39,7 @@ extension MadogCUT {
 
     @discardableResult
     func closeModalAndWait<C>(
-        _ modalContext: AnyModalContext<T>,
+        _ modalContext: AnyContext<T>,
         token: AnyModalToken<C>,
         completion: CompletionBlock? = nil
     ) -> Bool {

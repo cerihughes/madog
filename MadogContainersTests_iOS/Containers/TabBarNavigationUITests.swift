@@ -9,7 +9,7 @@ import XCTest
 @testable import MadogContainers_iOS
 
 class TabBarNavigationUITests: MadogKIFTestCase {
-    private var context: AnyTabBarNavigationUIContext<String>!
+    private var context: AnyMultiForwardBackNavigationContext<String>!
 
     override func afterEach() {
         context = nil
@@ -114,7 +114,7 @@ class TabBarNavigationUITests: MadogKIFTestCase {
         waitForLabel(token: "vc6")
     }
 
-    private func renderUIAndAssert(tokens: String ...) -> AnyTabBarNavigationUIContext<String>? {
+    private func renderUIAndAssert(tokens: String ...) -> AnyMultiForwardBackNavigationContext<String>? {
         let context = madog.renderUI(identifier: .tabBarNavigation(), tokenData: .multi(tokens), in: window)
         tokens.forEach { waitForTitle(token: $0) }
         waitForLabel(token: tokens.first!)
