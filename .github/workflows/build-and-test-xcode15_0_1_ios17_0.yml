@@ -35,8 +35,9 @@ jobs:
       - run: xcodegen
       - run: xcodebuild clean test -project Madog.xcodeproj -scheme Madog -resultBundlePath coverage.xcresult -destination "OS=17.0.1,name=iPhone 14" -destination "OS=17.0.1,name=iPad (10th generation)" -sdk iphonesimulator CODE_SIGNING_REQUIRED=NO
       - uses: actions/upload-artifact@v3
+        if: always()
         with:
-          name: test-session-results
+          name: test-session.xcresult
           path: ${{ github.workspace }}/coverage.xcresult
       - name: Codecov
         uses: codecov/codecov-action@v3.1.0
