@@ -37,7 +37,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: test-session-results
+          name: test-session.xcresult
           path: ${{ github.workspace }}/coverage.xcresult
       - name: Codecov
         uses: codecov/codecov-action@v3.1.0
