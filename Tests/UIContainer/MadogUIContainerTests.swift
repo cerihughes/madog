@@ -244,7 +244,11 @@ class MadogUIContainerTests: MadogKIFTestCase {
         context: AnyModalContext<String>,
         token: String
     ) -> AnyModalToken<AnyModalContext<String>>? {
-        let modalToken = openModalAndWait(context, identifier: .basic(), tokenData: .single(token))
+        let openExpectation = expectation(description: "Modal \(token) opened")
+        let modalToken = openModalAndWait(context, identifier: .basic(), tokenData: .single(token)) {
+            openExpectation.fulfill()
+        }
+        wait(for: [openExpectation], timeout: 10)
         waitForLabel(token: token)
         return modalToken
     }
@@ -258,7 +262,11 @@ class MadogUIContainerTests: MadogKIFTestCase {
         context: AnyModalContext<String>,
         tokens: [String]
     ) -> AnyModalToken<AnyTabBarUIContext<String>>? {
-        let modalToken = openModalAndWait(context, identifier: .tabBar(), tokenData: .multi(tokens))
+        let openExpectation = expectation(description: "Modal \(tokens) opened")
+        let modalToken = openModalAndWait(context, identifier: .tabBar(), tokenData: .multi(tokens)) {
+            openExpectation.fulfill()
+        }
+        wait(for: [openExpectation], timeout: 10)
         tokens.forEach { waitForTitle(token: $0) }
         return modalToken
     }
