@@ -41,7 +41,7 @@ jobs:
       - run: set -o pipefail
       - run: xcodegen
       - run: cd SampleApp; xcodegen
-      - run: xcodebuild test -project SampleApp/SampleApp.xcodeproj -scheme SampleApp -clonedSourcePackagesDirPath SPM -resultBundlePath coverage.xcresult -destination "OS=${{ matrix.ios }},name=${{ matrix.iphone }}" -sdk iphonesimulator CODE_SIGNING_REQUIRED=NO
+      - run: xcodebuild clean test -project SampleApp/SampleApp.xcodeproj -scheme SampleApp -clonedSourcePackagesDirPath SPM -resultBundlePath coverage.xcresult -destination "OS=${{ matrix.ios }},name=${{ matrix.iphone }}" -sdk iphonesimulator CODE_SIGNING_REQUIRED=NO
       - uses: actions/upload-artifact@v3
         if: always()
         with:
