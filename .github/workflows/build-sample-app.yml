@@ -1,4 +1,4 @@
-name: Build Sample App on Xcode 15.0.1 iOS 17.0.1
+name: Build Sample App
 
 on: [push, pull_request]
 
@@ -24,9 +24,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: SPM
-          key: ${{ runner.os }}-spm-xcode${{ matrix.xcode }}-${{ hashFiles('**/Package.resolved') }}
-          restore-keys: |
-            ${{ runner.os }}-sample-app-xcode${{ matrix.xcode }}-
+          key: ${{ runner.os }}-sample-app-xcode${{ matrix.xcode }}-${{ hashFiles('**/Package.resolved') }}
 
       # Install dependencies
       - run: brew install swiftlint xcodegen || true
