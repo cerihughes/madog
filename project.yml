@@ -3,6 +3,7 @@ schemes:
   Madog:
     build:
       targets:
+        Madog: all
         MadogContainers_iOS: all
         TestApp: [run]
     test:
@@ -23,6 +24,20 @@ packages:
     url: https://github.com/kif-framework/KIF
     exactVersion: 3.8.9
 targets:
+  Madog:
+    type: framework
+    platform: iOS
+    settings:
+      INFOPLIST_FILE: Madog/Info.plist
+    sources:
+      - Madog
+    dependencies:
+      - package: MadogCore
+      - target: MadogContainers_iOS
+    postCompileScripts:
+      - script: export PATH="/opt/homebrew/bin:$PATH";swiftlint
+        name: Swift Lint
+        basedOnDependencyAnalysis: false
   MadogContainers_iOS:
     type: framework
     platform: iOS

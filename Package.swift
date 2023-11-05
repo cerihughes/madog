@@ -16,6 +16,7 @@ let package = Package(
         .package(name: "KIF", url: "https://github.com/kif-framework/KIF", .exact("3.8.9"))
     ],
     targets: [
+        .target(name: "Madog", dependencies: ["MadogContainers_iOS"], path: "Madog"),
         .target(name: "MadogContainers_iOS", dependencies: ["MadogCore"], path: "MadogContainers_iOS"),
         .testTarget(
             name: "MadogContainersTests_iOS",
