@@ -5,7 +5,7 @@ let package = Package(
     name: "Madog",
     platforms: [.iOS(.v16)],
     products: [
-        .library(name: "Madog", targets: ["MadogContainers_iOS"])
+        .library(name: "Madog", targets: ["Madog"])
     ],
     dependencies: [
         .package(
