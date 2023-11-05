@@ -8,11 +8,7 @@ let package = Package(
         .library(name: "Madog", targets: ["Madog"])
     ],
     dependencies: [
-        .package(
-            name: "MadogCore",
-            url: "https://github.com/cerihughes/madog-core",
-            .branch("prepare-for-initial-release")
-        ),
+        .package(name: "MadogCore", url: "https://github.com/cerihughes/madog-core", .exact("1.0.0")),
         .package(name: "KIF", url: "https://github.com/kif-framework/KIF", .exact("3.8.9"))
     ],
     targets: [
