@@ -9,14 +9,7 @@ import XCTest
 @testable import MadogCore
 
 class SplitSingleUITests: MadogKIFTestCase {
-    private var context: AnySplitContext<String>!
-
-    override func beforeEach() {
-        super.beforeEach()
-
-        let result = madog.addContainerFactory(identifier: .split(), factory: SplitUIFactory())
-        XCTAssertTrue(result)
-    }
+    private var context: AnySplitSingleContext<String>!
 
     override func afterEach() {
         context = nil
@@ -54,8 +47,8 @@ class SplitSingleUITests: MadogKIFTestCase {
         waitForLabel(token: "vc2")
     }
 
-    private func renderUIAndAssert(_ token1: String, _ token2: String? = nil) -> AnySplitContext<String>? {
-        let context = renderUIAndWait(identifier: .split(), tokenData: .splitSingle(token1, token2))
+    private func renderUIAndAssert(_ token1: String, _ token2: String? = nil) -> AnySplitSingleContext<String>? {
+        let context = renderUIAndWait(identifier: .splitSingle(), tokenData: .splitSingle(token1, token2))
         waitForAbsenceOfTitle(token: token1) // There should be no "Back" titles
         waitForLabel(token: token1)
         return context

@@ -43,7 +43,6 @@ targets:
       TEST_TARGET_NAME: TestApp
     sources:
       - MadogContainersTests_iOS
-      - SampleApp/SampleApp/Custom UI
     dependencies:
       - package: MadogCore
       - package: KIF
