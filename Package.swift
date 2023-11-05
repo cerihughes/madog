@@ -13,7 +13,7 @@ let package = Package(
             url: "https://github.com/cerihughes/madog-core",
             .branch("prepare-for-initial-release")
         ),
-        .package(name: "KIF", url: "https://github.com/kif-framework/KIF", .exact("3.8.6"))
+        .package(name: "KIF", url: "https://github.com/kif-framework/KIF", .exact("3.8.9"))
     ],
     targets: [
         .target(name: "MadogContainers_iOS", dependencies: ["MadogCore"], path: "MadogContainers_iOS"),

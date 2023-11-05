@@ -1,0 +1,23 @@
+{
+  "pins" : [
+    {
+      "identity" : "kif",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kif-framework/KIF",
+      "state" : {
+        "revision" : "6c3ff27d9449eab614dae63e571596e4982a5205",
+        "version" : "3.8.9"
+      }
+    },
+    {
+      "identity" : "madog-core",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/cerihughes/madog-core",
+      "state" : {
+        "branch" : "prepare-for-initial-release",
+        "revision" : "914e770fd31ee50af608ad08994da47cad7a8cd2"
+      }
+    }
+  ],
+  "version" : 2
+}

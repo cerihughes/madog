@@ -21,7 +21,7 @@ packages:
     branch: prepare-for-initial-release
   KIF:
     url: https://github.com/kif-framework/KIF
-    exactVersion: 3.8.6
+    exactVersion: 3.8.9
 targets:
   MadogContainers_iOS:
     type: framework
