@@ -3,34 +3,37 @@ schemes:
   Madog:
     build:
       targets:
-        MadogCore: all
+        Madog: all
         MadogContainers_iOS: all
-        MadogCoreTests: [test]
         TestApp: [run]
     test:
       gatherCoverageData: true
       coverageTargets:
-        - MadogCore
         - MadogContainers_iOS
       targets: 
-        - MadogCoreTests
         - MadogContainersTests_iOS
 options:
   bundleIdPrefix: uk.co.cerihughes
   deploymentTarget:
     iOS: "16.0"
 packages:
+  MadogCore:
+    url: https://github.com/cerihughes/madog-core
+    exactVersion: 1.0.0
   KIF:
     url: https://github.com/kif-framework/KIF
-    exactVersion: 3.8.6
+    exactVersion: 3.8.9
 targets:
-  MadogCore:
+  Madog:
     type: framework
     platform: iOS
     settings:
-      INFOPLIST_FILE: MadogCore/Info.plist
+      INFOPLIST_FILE: Madog/Info.plist
     sources:
-      - MadogCore
+      - Madog
+    dependencies:
+      - package: MadogCore
+      - target: MadogContainers_iOS
     postCompileScripts:
       - script: export PATH="/opt/homebrew/bin:$PATH";swiftlint
         name: Swift Lint
@@ -43,22 +46,11 @@ targets:
     sources:
       - MadogContainers_iOS
     dependencies:
-      - target: MadogCore
+      - package: MadogCore
     postCompileScripts:
       - script: export PATH="/opt/homebrew/bin:$PATH";swiftlint
         name: Swift Lint
         basedOnDependencyAnalysis: false
-  MadogCoreTests:
-    type: bundle.unit-test
-    platform: iOS
-    settings:
-      TEST_TARGET_NAME: TestApp
-    sources:
-      - MadogCoreTests
-    dependencies:
-      - target: MadogCore
-      - target: TestApp
-      - package: KIF
   MadogContainersTests_iOS:
     type: bundle.unit-test
     platform: iOS
@@ -67,9 +59,10 @@ targets:
     sources:
       - MadogContainersTests_iOS
     dependencies:
-      - target: MadogCore
-      - target: TestApp
+      - package: MadogCore
       - package: KIF
+      - target: MadogContainers_iOS
+      - target: TestApp
   TestApp:
     type: application
     platform: iOS
