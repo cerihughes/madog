@@ -54,3 +54,15 @@ jobs:
         with:
             xcode: true
             xcode_archive_path: ${{ github.workspace }}/coverage.xcresult
+      - run: cd SampleApp; xcodegen
+      - run: xcodebuild test -project SampleApp/SampleApp.xcodeproj -scheme SampleApp -clonedSourcePackagesDirPath SPM -resultBundlePath coverage-app.xcresult -destination "OS=${{ matrix.ios }},name=${{ matrix.iphone }}" -sdk iphonesimulator CODE_SIGNING_REQUIRED=NO
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-session.xcresult
+          path: ${{ github.workspace }}/coverage-app.xcresult
+      - name: Codecov
+        uses: codecov/codecov-action@v3.1.0
+        with:
+            xcode: true
+            xcode_archive_path: ${{ github.workspace }}/coverage-app.xcresult
