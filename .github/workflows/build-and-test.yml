@@ -6,7 +6,7 @@ jobs:
   build:
     strategy:
       matrix:
-        xcode: [14.3.1, 15.0.1]
+        xcode: [14.3.1]
         include:
           - ios: 16.4
             xcode: 14.3.1
