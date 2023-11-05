@@ -12,26 +12,28 @@ import XCTest
 
 class MadogCustomisationTests: MadogKIFTestCase {
     func testMainCustomisationBlock() {
-        _ = renderUIAndWait(
+        let context = renderUIAndWait(
             identifier: .basic(),
             tokenData: .single("vc1"),
             customisation: customise(viewController:)
         )
 
+        XCTAssertNotNil(context)
         waitForTitle(token: "CUSTOMISED")
     }
 
-    func testModalCustomisationBlock() {
-        let context = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
+    func testModalCustomisationBlock() throws {
+        let context = try XCTUnwrap(renderUIAndWait(identifier: .basic(), tokenData: .single("vc1")))
 
         waitForAbsenceOfTitle(token: "CUSTOMISED")
-        _ = context?.openModal(
+        let token = context.openModal(
             identifier: .basic(),
             tokenData: .single("vc1"),
             animated: true,
             customisation: customise(viewController:)
         )
 
+        XCTAssertNotNil(token)
         waitForTitle(token: "CUSTOMISED")
     }
 
