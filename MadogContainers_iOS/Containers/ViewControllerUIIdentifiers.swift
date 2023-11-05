@@ -29,11 +29,23 @@ where VC == UITabBarController, C == AnyMultiForwardBackNavigationContext<T>, TD
     static func tabBarNavigation() -> Self { MadogUIIdentifier("tabBarNavigationIdentifier") }
 }
 
+public extension MadogUIIdentifier
+where VC == UISplitViewController, C == AnySplitSingleContext<T>, TD == SplitSingleUITokenData<T> {
+    static func splitSingle() -> Self { MadogUIIdentifier("splitViewControllerIdentifier") }
+}
+
+public extension MadogUIIdentifier
+where VC == UISplitViewController, C == AnySplitMultiContext<T>, TD == SplitMultiUITokenData<T> {
+    static func splitMulti() -> Self { MadogUIIdentifier("splitMultiViewControllerIdentifier") }
+}
+
 public extension Madog {
     func registerDefaultContainers() {
         _ = addContainerFactory(identifier: .basic(), factory: BasicContainerFactory())
         _ = addContainerFactory(identifier: .navigation(), factory: NavigationContainerFactory())
         _ = addContainerFactory(identifier: .tabBar(), factory: TabBarContainerFactory())
         _ = addContainerFactory(identifier: .tabBarNavigation(), factory: TabBarNavigationContainerFactory())
+        _ = addContainerFactory(identifier: .splitSingle(), factory: SplitSingleFactory())
+        _ = addContainerFactory(identifier: .splitMulti(), factory: SplitMultiFactory())
     }
 }

@@ -11,13 +11,6 @@ import XCTest
 class SplitMultiUITests: MadogKIFTestCase {
     private var context: AnySplitMultiContext<String>!
 
-    override func beforeEach() {
-        super.beforeEach()
-
-        let result = madog.addContainerFactory(identifier: .splitMulti(), factory: SplitMultiUIFactory())
-        XCTAssertTrue(result)
-    }
-
     override func afterEach() {
         context = nil
         super.afterEach()

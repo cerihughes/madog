@@ -18,18 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         madog.resolve(resolver: SampleResolver(), launchOptions: launchOptions)
         madog.registerDefaultContainers()
-        let result = madog.addContainerFactory(
-            identifier: .split(),
-            factory: SplitUIFactory()
-        )
-        guard result == true else {
-            return false
-        }
-
         window.makeKeyAndVisible()
 
         let initial = SampleToken.login
-        let context = madog.renderUI(identifier: .split(), tokenData: .splitSingle(initial, nil), in: window)
+        let context = madog.renderUI(identifier: .splitSingle(), tokenData: .splitSingle(initial, nil), in: window)
         return context != nil
     }
 
