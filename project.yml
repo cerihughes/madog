@@ -19,10 +19,10 @@ options:
 packages:
   MadogCore:
     url: https://github.com/cerihughes/madog-core
-    exactVersion: 1.0.0
+    majorVersion: 1.0.0
   KIF:
     url: https://github.com/kif-framework/KIF
-    exactVersion: 3.8.9
+    majorVersion: 3.8.0
 targets:
   Madog:
     type: framework
