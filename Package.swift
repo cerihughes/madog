@@ -16,7 +16,7 @@ let package = Package(
         .target(
             name: "MadogContainers_iOS",
             dependencies: [
-                .product(name: "MadogCore",package: "madog-core")
+                .product(name: "MadogCore", package: "madog-core")
             ],
             path: "MadogContainers_iOS"
         ),
