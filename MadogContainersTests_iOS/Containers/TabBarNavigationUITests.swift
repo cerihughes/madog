@@ -4,37 +4,38 @@
 //
 
 import KIF
+import MadogCore
 import XCTest
 
 @testable import MadogContainers_iOS
 
 class TabBarNavigationUITests: MadogKIFTestCase {
-    private var context: AnyMultiForwardBackNavigationContext<String>!
+    private var container: AnyContainer<String>!
 
     override func afterEach() {
-        context = nil
+        container = nil
         super.afterEach()
     }
 
     func testRenderInitialUI() {
-        context = renderUIAndAssert(tokens: "vc1", "vc2")
-        XCTAssertEqual(context.selectedIndex, 0)
-        XCTAssertNotNil(context)
+        container = renderUIAndAssert(tokens: "vc1", "vc2")
+        XCTAssertEqual(container.multi?.selectedIndex, 0)
+        XCTAssertNotNil(container)
     }
 
     func testNavigateForwardAndBack() {
-        context = renderUIAndAssert(tokens: "vc1", "vc2")
+        container = renderUIAndAssert(tokens: "vc1", "vc2")
 
         navigateForwardAndAssert(token: "vc3")
         waitForAbsenceOfLabel(token: "vc1")
 
-        context.navigateBack(animated: true)
+        container.forwardBack?.navigateBack(animated: true)
         waitForAbsenceOfLabel(token: "vc3")
         waitForLabel(token: "vc1")
     }
 
     func testBackToRoot() {
-        context = renderUIAndAssert(tokens: "vc1", "vc2")
+        container = renderUIAndAssert(tokens: "vc1", "vc2")
 
         navigateForwardAndAssert(token: "vc3")
         waitForAbsenceOfLabel(token: "vc1")
@@ -42,16 +43,16 @@ class TabBarNavigationUITests: MadogKIFTestCase {
         navigateForwardAndAssert(token: "vc4")
         waitForAbsenceOfLabel(token: "vc3")
 
-        context?.navigateBackToRoot(animated: true)
+        container.forwardBack?.navigateBackToRoot(animated: true)
         waitForAbsenceOfLabel(token: "vc4")
         waitForLabel(token: "vc1")
     }
 
     func testNavigateForwardAndBack_multitab() {
-        context = renderUIAndAssert(tokens: "vc1", "vc2")
+        container = renderUIAndAssert(tokens: "vc1", "vc2")
         navigateForwardAndAssert(token: "vc3")
 
-        context.selectedIndex = 1
+        container.multi?.selectedIndex = 1
         waitForAbsenceOfLabel(token: "vc3")
         waitForLabel(token: "vc2")
 
@@ -59,70 +60,70 @@ class TabBarNavigationUITests: MadogKIFTestCase {
         waitForAbsenceOfLabel(token: "vc2")
         waitForLabel(token: "vc4")
 
-        context.navigateBack(animated: true)
+        container.forwardBack?.navigateBack(animated: true)
         waitForAbsenceOfLabel(token: "vc4")
         waitForLabel(token: "vc2")
     }
 
     func testOpenMultiNavigationModal() {
-        let context = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
+        container = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
         waitForLabel(token: "vc1")
-        XCTAssertNotNil(context)
+        XCTAssertNotNil(container)
 
-        let modalToken = context!.openModal(
+        let modalToken = container.modal!.openModal(
             identifier: .tabBarNavigation(),
             tokenData: .multi("vc2", "vc3"),
             presentationStyle: .formSheet,
             animated: true
-        )
+        )!
         waitForTitle(token: "vc2")
         waitForLabel(token: "vc2")
         waitForTitle(token: "vc3")
         waitForAbsenceOfLabel(token: "vc3")
 
-        let modalContext = modalToken?.context
-        XCTAssertNotNil(modalContext)
+        let modalContainer = modalToken.container
+        XCTAssertNotNil(modalContainer)
 
-        modalContext?.navigateForward(token: "vc4", animated: true)
+        modalContainer.forwardBack?.navigateForward(token: "vc4", animated: true)
         waitForTitle(token: "vc4")
         waitForLabel(token: "vc4")
 
-        modalContext?.navigateForward(token: "vc5", animated: true)
-        modalContext?.navigateForward(token: "vc6", animated: true)
+        modalContainer.forwardBack?.navigateForward(token: "vc5", animated: true)
+        modalContainer.forwardBack?.navigateForward(token: "vc6", animated: true)
         waitForAbsenceOfTitle(token: "vc4") // "Back" no longer shows "vc4"
         waitForTitle(token: "vc5") // "Back" shows "vc5"
         waitForTitle(token: "vc6")
         waitForLabel(token: "vc6")
 
-        modalContext?.selectedIndex = 1
-        modalContext?.navigateForward(token: "vc7", animated: true)
+        modalContainer.multi?.selectedIndex = 1
+        modalContainer.forwardBack?.navigateForward(token: "vc7", animated: true)
         waitForTitle(token: "vc3") // "Back" shows "vc3"
         waitForTitle(token: "vc7")
         waitForLabel(token: "vc7")
 
-        modalContext?.navigateForward(token: "vc8", animated: true)
-        modalContext?.navigateForward(token: "vc9", animated: true)
+        modalContainer.forwardBack?.navigateForward(token: "vc8", animated: true)
+        modalContainer.forwardBack?.navigateForward(token: "vc9", animated: true)
         waitForAbsenceOfTitle(token: "vc7") // "Back" no longer shows "vc7"
         waitForTitle(token: "vc8") // "Back" shows "vc8"
         waitForTitle(token: "vc9")
         waitForLabel(token: "vc9")
 
-        modalContext?.selectedIndex = 0
+        modalContainer.multi?.selectedIndex = 0
         waitForAbsenceOfTitle(token: "vc8") // "Back" no longer shows "vc8"
         waitForTitle(token: "vc5") // "Back" shows "vc5"
         waitForTitle(token: "vc6")
         waitForLabel(token: "vc6")
     }
 
-    private func renderUIAndAssert(tokens: String ...) -> AnyMultiForwardBackNavigationContext<String>? {
-        let context = renderUIAndWait(identifier: .tabBarNavigation(), tokenData: .multi(tokens))
+    private func renderUIAndAssert(tokens: String ...) -> AnyContainer<String>? {
+        let container = renderUIAndWait(identifier: .tabBarNavigation(), tokenData: .multi(tokens))
         tokens.forEach { waitForTitle(token: $0) }
         waitForLabel(token: tokens.first!)
-        return context
+        return container
     }
 
     private func navigateForwardAndAssert(token: String) {
-        context.navigateForward(token: token, animated: true)
+        container.forwardBack?.navigateForward(token: token, animated: true)
         waitForLabel(token: token)
     }
 }

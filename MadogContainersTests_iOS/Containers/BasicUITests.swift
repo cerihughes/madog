@@ -9,28 +9,28 @@ import XCTest
 @testable import MadogCore
 
 class BasicUITests: MadogKIFTestCase {
-    private var context: AnyContext<String>!
+    private var container: AnyContainer<String>!
 
     override func afterEach() {
-        context = nil
+        container = nil
         super.afterEach()
     }
 
     func testProtocolConformance() {
-        context = renderUIAndAssert(token: "vc1")
-        XCTAssertNil(context as? AnyForwardBackNavigationContext<String>)
-        XCTAssertNil(context as? AnyMultiContext<String>)
+        container = renderUIAndAssert(token: "vc1")
+        XCTAssertNil(container.forwardBack)
+        XCTAssertNil(container.multi)
     }
 
     func testRenderInitialUI() {
-        context = renderUIAndAssert(token: "vc1")
-        XCTAssertNotNil(context)
+        container = renderUIAndAssert(token: "vc1")
+        XCTAssertNotNil(container)
     }
 
-    private func renderUIAndAssert(token: String) -> AnyContext<String>? {
-        let context = renderUIAndWait(identifier: .basic(), tokenData: .single(token))
+    private func renderUIAndAssert(token: String) -> AnyContainer<String>? {
+        let container = renderUIAndWait(identifier: .basic(), tokenData: .single(token))
         waitForAbsenceOfTitle(token: token) // There should be no "Back" titles
         waitForLabel(token: token)
-        return context
+        return container
     }
 }

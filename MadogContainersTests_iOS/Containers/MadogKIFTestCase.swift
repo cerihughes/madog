@@ -38,7 +38,7 @@ private class TestResolver: Resolver {
 }
 
 private class TestViewControllerProvider: ViewControllerProvider {
-    func createViewController(token: String, context: AnyContext<String>) -> UIViewController? {
+    func createViewController(token: String, container: AnyContainer<String>) -> UIViewController? {
         let viewController = TestViewController()
         viewController.title = token.viewControllerTitle
         viewController.label.text = token.viewControllerLabel

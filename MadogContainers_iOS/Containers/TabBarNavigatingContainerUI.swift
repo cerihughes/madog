@@ -9,14 +9,14 @@ import UIKit
 /// A class that presents view controllers in a tab bar, and manages the navigation between them.
 ///
 /// At the moment, this is achieved with a UINavigationController that can be pushed / popped to / from.
-class TabBarNavigationContainer<T>: MadogNavigatingModalUIContainer<T>, MultiForwardBackNavigationContext {
+class TabBarNavigatingContainerUI<T>: NavigatingContainerUI<T>, MultiContainer {
     private let tabBarController = UITabBarController()
 
     init(registry: AnyRegistry<T>, tokenData: MultiUITokenData<T>) {
         super.init(registry: registry, viewController: tabBarController)
 
         let viewControllers = tokenData.tokens
-            .compactMap { registry.createViewController(from: $0, context: self) }
+            .compactMap { registry.createViewController(from: $0, container: self) }
             .map { UINavigationController(rootViewController: $0) }
 
         tabBarController.viewControllers = viewControllers
@@ -26,7 +26,7 @@ class TabBarNavigationContainer<T>: MadogNavigatingModalUIContainer<T>, MultiFor
         tabBarController.selectedViewController as? UINavigationController
     }
 
-    // MARK: - MultiContext
+    // MARK: - MultiContainer
 
     var selectedIndex: Int {
         get { tabBarController.selectedIndex }
@@ -34,8 +34,10 @@ class TabBarNavigationContainer<T>: MadogNavigatingModalUIContainer<T>, MultiFor
     }
 }
 
-struct TabBarNavigationContainerFactory<T>: MultiContainerFactory {
-    func createContainer(registry: AnyRegistry<T>, tokenData: MultiUITokenData<T>) -> MadogUIContainer<T>? {
-        TabBarNavigationContainer(registry: registry, tokenData: tokenData)
+extension TabBarNavigatingContainerUI {
+    struct Factory: MultiContainerUIFactory {
+        func createContainer(registry: AnyRegistry<T>, tokenData: MultiUITokenData<T>) -> ContainerUI<T>? {
+            TabBarNavigatingContainerUI(registry: registry, tokenData: tokenData)
+        }
     }
 }

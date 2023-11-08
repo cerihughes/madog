@@ -10,238 +10,237 @@ import XCTest
 @testable import MadogContainers_iOS
 
 class MadogUIContainerTests: MadogKIFTestCase {
-    func testCloseReleasesMainContext() {
-        weak var context = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
+    func testCloseReleasesMainContainer() {
+        let container = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
         waitForLabel(token: "vc1")
-        XCTAssertNotNil(context)
+        XCTAssertNotNil(container.castValue)
 
-        closeContextAndWait(context!)
-        XCTAssertNil(context)
+        closeContainerAndWait(container)
+        XCTAssertNil(container.castValue)
     }
 
-    func testCloseModalReleasesModalContext() {
-        weak var context = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
+    func testCloseModalReleasesModalContainer() {
+        let container = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
         waitForLabel(token: "vc1")
-        XCTAssertNotNil(context)
+        XCTAssertNotNil(container.castValue)
 
-        weak var modalContext = createModalContext(context: context!, token: "vc2")
-        XCTAssertNotNil(modalContext)
+        let modalContainer = createModalContainer(container: container, token: "vc2")
+        XCTAssertNotNil(modalContainer.castValue)
 
-        closeContextAndWait(modalContext!)
-        XCTAssertNotNil(context)
-        XCTAssertNil(modalContext)
+        closeContainerAndWait(modalContainer)
+        XCTAssertNotNil(container.castValue)
+        XCTAssertNil(modalContainer.castValue)
     }
 
-    func testCloseMainReleasesBothContexts() {
-        weak var context = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
+    func testCloseMainReleasesBothContainers() {
+        let container = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
         waitForLabel(token: "vc1")
-        XCTAssertNotNil(context)
+        XCTAssertNotNil(container.castValue)
 
-        weak var modalContext = createModalContext(context: context!, token: "vc2")
-        XCTAssertNotNil(modalContext)
+        let modalContainer = createModalContainer(container: container, token: "vc2")
+        XCTAssertNotNil(modalContainer.castValue)
 
-        closeContextAndWait(context!)
+        closeContainerAndWait(container)
 
-        XCTAssertNil(context)
-        XCTAssertNil(modalContext)
+        XCTAssertNil(container.castValue)
+        XCTAssertNil(modalContainer.castValue)
         waitForLabel(token: "vc1") // Main UI should still be there
         waitForAbsenceOfLabel(token: "vc2")
     }
 
-    func testCloseWithNestedContexts() {
-        weak var context = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
+    func testCloseWithNestedContainers() {
+        let container = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
         waitForLabel(token: "vc1")
-        XCTAssertNotNil(context)
 
-        weak var modal1Context = createModalContext(context: context!, token: "vc2")
-        XCTAssertNotNil(modal1Context)
+        let modalContainer1 = createModalContainer(container: container, token: "vc2")
+        XCTAssertNotNil(modalContainer1.castValue)
 
-        weak var modal2Context = createModalContext(context: modal1Context!, token: "vc3")
-        XCTAssertNotNil(modal2Context)
+        let modalContainer2 = createModalContainer(container: modalContainer1, token: "vc3")
+        XCTAssertNotNil(modalContainer2.castValue)
 
-        weak var modal3Context = createModalContext(context: modal2Context!, token: "vc4")
-        XCTAssertNotNil(modal3Context)
+        let modalContainer3 = createModalContainer(container: modalContainer2, token: "vc4")
+        XCTAssertNotNil(modalContainer3.castValue)
 
-        XCTAssertTrue(closeContextAndWait(modal2Context!)) // Closes modals vc3 and vc4
+        XCTAssertTrue(closeContainerAndWait(modalContainer2)) // Closes modals vc3 and vc4
 
-        XCTAssertNotNil(context)
-        XCTAssertNotNil(modal1Context)
-        XCTAssertNil(modal2Context)
-        XCTAssertNil(modal3Context)
+        XCTAssertNotNil(container.castValue)
+        XCTAssertNotNil(modalContainer1.castValue)
+        XCTAssertNil(modalContainer2.castValue)
+        XCTAssertNil(modalContainer3.castValue)
         waitForLabel(token: "vc2")
         waitForAbsenceOfLabel(token: "vc3")
         waitForAbsenceOfLabel(token: "vc4")
 
-        closeContextAndWait(context!) // Closes main and modal 1
+        closeContainerAndWait(container) // Closes main and modal 1
 
-        XCTAssertNil(context)
-        XCTAssertNil(modal1Context)
+        XCTAssertNil(container.castValue)
+        XCTAssertNil(modalContainer1.castValue)
         waitForLabel(token: "vc1") // Main UI should still be there
         waitForAbsenceOfLabel(token: "vc2")
     }
 
     func testChangeSingleToMulti() {
-        let context1 = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
+        let container1 = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
         waitForLabel(token: "vc1")
-        XCTAssertNotNil(context1)
+        XCTAssertNotNil(container1.castValue)
 
-        let context2 = context1?.change(to: .tabBar(), tokenData: .multi("vc2", "vc3"))
+        let container2 = container1.change(to: .tabBar(), tokenData: .multi("vc2", "vc3"))!
         waitForAbsenceOfLabel(token: "vc1")
         waitForTitle(token: "vc2") // Titles should appear in the tab bar
         waitForTitle(token: "vc3")
-        XCTAssertNotNil(context2)
+        XCTAssertNotNil(container2.castValue)
     }
 
     func testChangeMultiToSingle() {
-        let context1 = renderUIAndWait(identifier: .tabBar(), tokenData: .multi("vc1", "vc2"))
+        let container1 = renderUIAndWait(identifier: .tabBar(), tokenData: .multi("vc1", "vc2"))
         waitForTitle(token: "vc1") // Titles should appear in the tab bar
         waitForTitle(token: "vc2")
-        XCTAssertNotNil(context1)
+        XCTAssertNotNil(container1.castValue)
 
-        let context2 = context1?.change(to: .basic(), tokenData: .single("vc3"))
+        let container2 = container1.change(to: .basic(), tokenData: .single("vc3"))!
         waitForAbsenceOfTitle(token: "vc1")
         waitForAbsenceOfTitle(token: "vc2")
         waitForLabel(token: "vc3")
-        XCTAssertNotNil(context2)
+        XCTAssertNotNil(container2.castValue)
     }
 
-    func testChangeReleasesOldModalContexts() {
-        weak var context1 = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
+    func testChangeReleasesOldmodalContainers() {
+        let container1 = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
         waitForLabel(token: "vc1")
-        XCTAssertNotNil(context1)
+        XCTAssertNotNil(container1.castValue)
 
-        weak var modal1Context = createModalContext(context: context1!, token: "vc2")
+        let modalContainer1 = createModalContainer(container: container1, token: "vc2")
         waitForLabel(token: "vc2")
-        XCTAssertNotNil(modal1Context)
+        XCTAssertNotNil(modalContainer1.castValue)
 
-        weak var modal2Context = createModalContext(context: modal1Context!, token: "vc3")
+        let modalContainer2 = createModalContainer(container: modalContainer1, token: "vc3")
         waitForLabel(token: "vc3")
-        XCTAssertNotNil(modal2Context)
+        XCTAssertNotNil(modalContainer2.castValue)
 
-        weak var context2 = context1?.change(to: .basic(), tokenData: .single("vc4"))
+        let container2 = container1.change(to: .basic(), tokenData: .single("vc4"))!
         waitForLabel(token: "vc4")
 
-        XCTAssertNil(context1)
-        XCTAssertNil(modal1Context)
-        XCTAssertNil(modal2Context)
-        XCTAssertNotNil(context2)
+        XCTAssertNil(container1.castValue)
+        XCTAssertNil(modalContainer1.castValue)
+        XCTAssertNil(modalContainer2.castValue)
+        XCTAssertNotNil(container2.castValue)
     }
 
     func testOpenSingleUIModal() {
-        let context = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
+        let container = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
         waitForLabel(token: "vc1")
-        XCTAssertNotNil(context)
+        XCTAssertNotNil(container.castValue)
 
-        let modalContext = createModalContext(context: context!, token: "vc2")
+        let modalContainer = createModalContainer(container: container, token: "vc2")
         waitForLabel(token: "vc2")
-        XCTAssertNotNil(modalContext)
+        XCTAssertNotNil(modalContainer.castValue)
     }
 
     func testCloseSingleUIModal() {
-        let context = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
+        let container = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
         waitForLabel(token: "vc1")
-        XCTAssertNotNil(context)
+        XCTAssertNotNil(container.castValue)
 
-        let modalToken = createModal(context: context!, token: "vc2")
+        let modalToken = createModal(container: container, token: "vc2")
         XCTAssertNotNil(modalToken)
 
-        XCTAssertTrue(closeModalAndWait(context!, token: modalToken!))
+        XCTAssertTrue(closeModalAndWait(container.modal!, token: modalToken))
         waitForAbsenceOfTitle(token: "vc2")
     }
 
     func testOpenMultiUIModal() {
-        let context = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
+        let container = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
         waitForLabel(token: "vc1")
-        XCTAssertNotNil(context)
+        XCTAssertNotNil(container.castValue)
 
-        let modalContext = createModalContext(context: context!, tokens: ["vc2", "vc3"])
+        let modalContainer = createModalContainer(container: container, tokens: ["vc2", "vc3"])
         waitForTitle(token: "vc2") // Titles should appear in the tab bar
         waitForTitle(token: "vc3")
-        XCTAssertNotNil(modalContext)
+        XCTAssertNotNil(modalContainer)
     }
 
     func testCloseMultiUIModal() {
-        let context = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
+        let container = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
         waitForLabel(token: "vc1")
-        XCTAssertNotNil(context)
+        XCTAssertNotNil(container.castValue)
 
-        let modalToken = createModal(context: context!, tokens: ["vc2", "vc3"])
+        let modalToken = createModal(container: container, tokens: ["vc2", "vc3"])
         waitForTitle(token: "vc2") // Titles should appear in the tab bar
         waitForTitle(token: "vc3")
         XCTAssertNotNil(modalToken)
 
-        XCTAssertTrue(closeModalAndWait(context!, token: modalToken!))
+        XCTAssertTrue(closeModalAndWait(container.modal!, token: modalToken))
         waitForAbsenceOfTitle(token: "vc2")
         waitForAbsenceOfTitle(token: "vc3")
     }
 
     func testOpenModalCompletionIsFired() {
-        let context = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
+        let container = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
 
         let completionExpectation = expectation(description: "Modal opened")
-        let modalToken = openModalAndWait(context!, identifier: .basic(), tokenData: .single("vc2")) {
+        let modalToken = openModalAndWait(container.modal!, identifier: .basic(), tokenData: .single("vc2")) {
             completionExpectation.fulfill()
         }
-        XCTAssertNotNil(modalToken)
+        XCTAssertNotNil(modalToken.container.castValue)
         waitForExpectations(timeout: 10)
     }
 
     func testCloseModalCompletionIsFired() {
-        let context = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
+        let container = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
 
-        let modalToken = openModalAndWait(context!, identifier: .basic(), tokenData: .single("vc2"))
+        let modalToken = openModalAndWait(container.modal!, identifier: .basic(), tokenData: .single("vc2"))
         XCTAssertNotNil(modalToken)
         waitForLabel(token: "vc2")
 
         let completionExpectation = expectation(description: "Modal closed")
-        closeModalAndWait(context!, token: modalToken!) { completionExpectation.fulfill() }
+        closeModalAndWait(container.modal!, token: modalToken) { completionExpectation.fulfill() }
         waitForExpectations(timeout: 10)
     }
 
     func testCloseCompletionIsFired() {
-        let context = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
+        let container = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
 
         let openExpectation = expectation(description: "Modal opened")
-        let modalToken = openModalAndWait(context!, identifier: .basic(), tokenData: .single("vc2")) {
+        let modalToken = openModalAndWait(container.modal!, identifier: .basic(), tokenData: .single("vc2")) {
             openExpectation.fulfill()
         }
         wait(for: [openExpectation], timeout: 10)
 
-        let modalContext = modalToken!.context
-        let closeExpectation = expectation(description: "Context closed")
+        let modalContainer = modalToken.container
+        let closeExpectation = expectation(description: "Container closed")
 
-        closeContextAndWait(modalContext) { closeExpectation.fulfill() }
+        closeContainerAndWait(modalContainer) { closeExpectation.fulfill() }
         waitForExpectations(timeout: 10)
     }
 
-    func testPresentingContext() {
-        let context = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
-        XCTAssertNil(context?.presentingContext)
+    func testPresentingContainer() {
+        let container = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
+        XCTAssertNil(container.presentingContainer)
 
         let openExpectation1 = expectation(description: "Modal 1 opened")
-        var modalToken = openModalAndWait(context!, identifier: .basic(), tokenData: .single("vc2")) {
+        var modalToken = openModalAndWait(container.modal!, identifier: .basic(), tokenData: .single("vc2")) {
             openExpectation1.fulfill()
         }
         wait(for: [openExpectation1], timeout: 10)
-        let modalContext1 = modalToken?.context
+        let modalContainer1 = modalToken.container
 
         let openExpectation2 = expectation(description: "Modal 2 opened")
-        modalToken = openModalAndWait(modalContext1!, identifier: .basic(), tokenData: .single("vc3")) {
+        modalToken = openModalAndWait(modalContainer1.modal!, identifier: .basic(), tokenData: .single("vc3")) {
             openExpectation2.fulfill()
         }
         wait(for: [openExpectation2], timeout: 10)
-        let modalContext2 = modalToken?.context as? AnyContext<String>
 
-        XCTAssertTrue(context === modalContext1?.presentingContext)
-        XCTAssertTrue(modalContext1 === modalContext2?.presentingContext)
+        let modalContainer2 = modalToken.container
+        XCTAssertTrue(container.uuid == modalContainer1.presentingContainer?.uuid)
+        XCTAssertTrue(modalContainer1.uuid == modalContainer2.presentingContainer?.uuid)
     }
 
     private func createModal(
-        context: AnyContext<String>,
+        container: AnyContainer<String>,
         token: String
-    ) -> AnyModalToken<AnyContext<String>>? {
+    ) -> AnyModalToken<String> {
         let openExpectation = expectation(description: "Modal \(token) opened")
-        let modalToken = openModalAndWait(context, identifier: .basic(), tokenData: .single(token)) {
+        let modalToken = openModalAndWait(container.modal!, identifier: .basic(), tokenData: .single(token)) {
             openExpectation.fulfill()
         }
         wait(for: [openExpectation], timeout: 10)
@@ -249,17 +248,16 @@ class MadogUIContainerTests: MadogKIFTestCase {
         return modalToken
     }
 
-    private func createModalContext(context: AnyContext<String>, token: String) -> AnyContext<String>? {
-        let modalToken = createModal(context: context, token: token)
-        return modalToken?.context as? AnyContext<String>
+    private func createModalContainer(container: AnyContainer<String>, token: String) -> AnyContainer<String> {
+        createModal(container: container, token: token).container
     }
 
     private func createModal(
-        context: AnyContext<String>,
+        container: AnyContainer<String>,
         tokens: [String]
-    ) -> AnyModalToken<AnyMultiContext<String>>? {
+    ) -> AnyModalToken<String> {
         let openExpectation = expectation(description: "Modal \(tokens) opened")
-        let modalToken = openModalAndWait(context, identifier: .tabBar(), tokenData: .multi(tokens)) {
+        let modalToken = openModalAndWait(container.modal!, identifier: .tabBar(), tokenData: .multi(tokens)) {
             openExpectation.fulfill()
         }
         wait(for: [openExpectation], timeout: 10)
@@ -267,8 +265,7 @@ class MadogUIContainerTests: MadogKIFTestCase {
         return modalToken
     }
 
-    private func createModalContext(context: AnyContext<String>, tokens: [String]) -> AnyContext<String>? {
-        let modalToken = createModal(context: context, tokens: tokens)
-        return modalToken?.context as? AnyContext<String>
+    private func createModalContainer(container: AnyContainer<String>, tokens: [String]) -> AnyContainer<String> {
+        createModal(container: container, tokens: tokens).container
     }
 }

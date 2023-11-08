@@ -9,22 +9,22 @@ import XCTest
 @testable import MadogCore
 
 class SplitMultiUITests: MadogKIFTestCase {
-    private var context: AnySplitMultiContext<String>!
+    private var container: AnyContainer<String>!
 
     override func afterEach() {
-        context = nil
+        container = nil
         super.afterEach()
     }
 
     func testProtocolConformance() {
-        context = renderUIAndAssert("vc1", ["vc2", "vc3"])
-        XCTAssertNil(context as? AnyForwardBackNavigationContext<String>)
-        XCTAssertNil(context as? AnyMultiContext<String>)
+        container = renderUIAndAssert("vc1", ["vc2", "vc3"])
+        XCTAssertNil(container.forwardBack)
+        XCTAssertNil(container.multi)
     }
 
     func testRenderInitialUI() {
-        context = renderUIAndAssert("vc1", ["vc2", "vc3"])
-        XCTAssertNotNil(context)
+        container = renderUIAndAssert("vc1", ["vc2", "vc3"])
+        XCTAssertNotNil(container)
         if isRunningOnIphone {
             assertRenderInitialUI_iPhone()
         } else if isRunningOnIpad {
@@ -45,18 +45,18 @@ class SplitMultiUITests: MadogKIFTestCase {
     }
 
     func testShowDetail() {
-        context = renderUIAndAssert("vc1", [])
-        XCTAssertNotNil(context)
+        container = renderUIAndAssert("vc1", [])
+        XCTAssertNotNil(container)
         waitForLabel(token: "vc1")
 
-        context.showDetail(tokens: ["vc2", "vc3"])
+        container.splitMulti?.showDetail(tokens: ["vc2", "vc3"])
         waitForLabel(token: "vc3")
     }
 
-    private func renderUIAndAssert(_ token: String, _ tokens: [String]) -> AnySplitMultiContext<String>? {
-        let context = renderUIAndWait(identifier: .splitMulti(), tokenData: .splitMulti(token, tokens))
+    private func renderUIAndAssert(_ token: String, _ tokens: [String]) -> AnyContainer<String>? {
+        let container = renderUIAndWait(identifier: .splitMulti(), tokenData: .splitMulti(token, tokens))
         waitForAbsenceOfTitle(token: token) // There should be no "Back" titles
         waitForLabel(token: token)
-        return context
+        return container
     }
 }
