@@ -17,17 +17,13 @@ class ViewController2Provider: ViewControllerProvider {
         }
     }
 
-    func createViewController(token: SampleToken, context: AnyContext<SampleToken>) -> UIViewController? {
-        guard
-            let sharedService,
-            case let .vc2(stringData) = token,
-            let context = context as? AnyForwardBackNavigationContext<SampleToken>
-        else { return nil }
+    func createViewController(token: SampleToken, container: AnyContainer<SampleToken>) -> UIViewController? {
+        guard let sharedService, case let .vc2(stringData) = token else { return nil }
 
         let viewController = ViewController2(
             sharedService: sharedService,
             stringData: stringData,
-            context: context
+            container: container
         )
         viewController.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 0)
         return viewController
