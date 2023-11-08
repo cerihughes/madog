@@ -19,7 +19,7 @@ options:
 packages:
   MadogCore:
     url: https://github.com/cerihughes/madog-core
-    branch: prep-for-release
+    majorVersion: 2.0.0
   KIF:
     url: https://github.com/kif-framework/KIF
     majorVersion: 3.8.0
