@@ -8,11 +8,11 @@ import UIKit
 
 class LogoutViewController: UIViewController {
     private let authenticator: Authenticator
-    private weak var context: AnyContext<SampleToken>?
+    private let container: AnyContainer<SampleToken>
 
-    init(authenticator: Authenticator, context: AnyContext<SampleToken>) {
+    init(authenticator: Authenticator, container: AnyContainer<SampleToken>) {
         self.authenticator = authenticator
-        self.context = context
+        self.container = container
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -39,7 +39,11 @@ extension LogoutViewController {
     @objc
     private func buttonTapGesture(sender _: UIButton) {
         authenticator.logout { _ in
-            self.context?.change(to: .basic(), tokenData: .single(.login))
+            self.container.change(
+                to: .basic(),
+                tokenData: .single(.login),
+                transition: .init(duration: 1, options: .transitionFlipFromLeft)
+            )
         }
     }
 }

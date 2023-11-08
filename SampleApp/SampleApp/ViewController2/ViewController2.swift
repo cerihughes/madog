@@ -9,12 +9,12 @@ import UIKit
 class ViewController2: UIViewController {
     private let sharedService: Any
     private let stringData: String
-    private weak var context: AnyForwardBackNavigationContext<SampleToken>?
+    private let container: AnyContainer<SampleToken>
 
-    init(sharedService: Any, stringData: String, context: AnyForwardBackNavigationContext<SampleToken>) {
+    init(sharedService: Any, stringData: String, container: AnyContainer<SampleToken>) {
         self.sharedService = sharedService
         self.stringData = stringData
-        self.context = context
+        self.container = container
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -32,7 +32,7 @@ class ViewController2: UIViewController {
 
     override func viewDidAppear(_: Bool) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            self.context?.navigateBack(animated: true)
+            self.container.forwardBack?.navigateBack(animated: true)
         }
     }
 

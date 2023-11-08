@@ -9,8 +9,8 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    let window = UIWindow()
-    let madog = Madog<SampleToken>()
+    private let window = UIWindow()
+    private let madog = Madog<SampleToken>()
 
     func application(
         _: UIApplication,
@@ -21,20 +21,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window.makeKeyAndVisible()
 
         let initial = SampleToken.login
-        let context = madog.renderUI(identifier: .splitSingle(), tokenData: .splitSingle(initial, nil), in: window)
-        return context != nil
+        let container = madog.renderUI(identifier: .splitSingle(), tokenData: .splitSingle(initial, nil), in: window)
+        return container != nil
     }
 
     func application(_: UIApplication, open url: URL, options _: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        guard let currentContext = madog.currentContext else {
-            return false
-        }
+        guard let currentContainer = madog.currentContainer else { return false }
 
         let token = SampleToken.vc2(String(url.absoluteString.count))
-        if let navigationContext = currentContext as? AnyForwardBackNavigationContext<SampleToken> {
-            return navigationContext.navigateForward(token: token, animated: true)
+        if let forwardBack = currentContainer.forwardBack {
+            return forwardBack.navigateForward(token: token, animated: true)
         } else {
-            return currentContext.change(to: .navigation(), tokenData: .single(token)) != nil
+            return currentContainer.change(to: .navigation(), tokenData: .single(token)) != nil
         }
     }
 }

@@ -8,12 +8,12 @@ import UIKit
 
 class ViewController1: UIViewController {
     private let sharedService: Any
-    private weak var context: AnyForwardBackNavigationContext<SampleToken>?
+    private let container: AnyContainer<SampleToken>
     private var pushCount = 0
 
-    init(sharedService: Any, context: AnyForwardBackNavigationContext<SampleToken>) {
+    init(sharedService: Any, container: AnyContainer<SampleToken>) {
         self.sharedService = sharedService
-        self.context = context
+        self.container = container
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -41,6 +41,6 @@ extension ViewController1 {
     private func buttonTapGesture(sender _: UIButton) {
         pushCount += 1
         let token = SampleToken.vc2(String(pushCount))
-        context?.navigateForward(token: token, animated: true)
+        container.forwardBack?.navigateForward(token: token, animated: true)
     }
 }

@@ -13,11 +13,11 @@ protocol MadogCUT<T>: KIFTestCase {
 }
 
 extension MadogCUT {
-    func renderUIAndWait<VC, C, TD>(
-        identifier: MadogUIIdentifier<VC, C, TD, T>,
+    func renderUIAndWait<VC, TD>(
+        identifier: ContainerUI<T>.Identifier<VC, TD>,
         tokenData: TD,
         customisation: CustomisationBlock<VC>? = nil
-    ) -> C? where VC: ViewController, TD: TokenData {
+    ) -> AnyContainer<T> where VC: ViewController, TD: TokenData {
         let result = madog.renderUI(
             identifier: identifier,
             tokenData: tokenData,
@@ -25,23 +25,23 @@ extension MadogCUT {
             customisation: customisation
         )
         waitForAnimationsToFinish()
-        return result
+        return result!
     }
 
     @discardableResult
-    func closeContextAndWait(_ context: AnyContext<T>, completion: CompletionBlock? = nil) -> Bool {
-        let result = context.close(animated: true, completion: completion)
+    func closeContainerAndWait(_ container: AnyContainer<T>, completion: CompletionBlock? = nil) -> Bool {
+        let result = container.close(animated: true, completion: completion)
         waitForAnimationsToFinish()
         return result
     }
 
-    func openModalAndWait<VC, C, TD>(
-        _ modalContext: AnyContext<T>,
-        identifier: MadogUIIdentifier<VC, C, TD, T>,
+    func openModalAndWait<VC, TD>(
+        _ modalContainer: AnyModalContainer<T>,
+        identifier: ContainerUI<T>.Identifier<VC, TD>,
         tokenData: TD,
         completion: CompletionBlock? = nil
-    ) -> AnyModalToken<C>? where VC: UIViewController, TD: TokenData {
-        let result = modalContext.openModal(
+    ) -> AnyModalToken<T> where VC: UIViewController, TD: TokenData {
+        let result = modalContainer.openModal(
             identifier: identifier,
             tokenData: tokenData,
             presentationStyle: .formSheet,
@@ -49,16 +49,16 @@ extension MadogCUT {
             completion: completion
         )
         waitForAnimationsToFinish()
-        return result
+        return result!
     }
 
     @discardableResult
-    func closeModalAndWait<C>(
-        _ modalContext: AnyContext<T>,
-        token: AnyModalToken<C>,
+    func closeModalAndWait(
+        _ modalContainer: AnyModalContainer<T>,
+        token: AnyModalToken<T>,
         completion: CompletionBlock? = nil
     ) -> Bool {
-        let result = modalContext.closeModal(token: token, animated: true, completion: completion)
+        let result = modalContainer.closeModal(token: token, animated: true, completion: completion)
         waitForAnimationsToFinish()
         return result
     }

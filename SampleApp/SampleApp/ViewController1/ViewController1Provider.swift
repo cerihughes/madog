@@ -17,14 +17,10 @@ class ViewController1Provider: ViewControllerProvider {
         }
     }
 
-    func createViewController(token: SampleToken, context: AnyContext<SampleToken>) -> UIViewController? {
-        guard
-            let sharedService,
-            token == .vc1,
-            let context = context as? AnyForwardBackNavigationContext<SampleToken>
-        else { return nil }
+    func createViewController(token: SampleToken, container: AnyContainer<SampleToken>) -> UIViewController? {
+        guard let sharedService, token == .vc1 else { return nil }
 
-        let viewController = ViewController1(sharedService: sharedService, context: context)
+        let viewController = ViewController1(sharedService: sharedService, container: container)
         viewController.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 0)
         return viewController
     }

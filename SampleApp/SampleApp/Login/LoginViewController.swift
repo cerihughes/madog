@@ -8,7 +8,7 @@ import UIKit
 
 class LoginViewController: UIViewController {
     var authenticator: Authenticator!
-    weak var context: AnyContext<SampleToken>?
+    var container: AnyContainer<SampleToken>!
 
     @IBOutlet private var usernameField: UITextField!
     @IBOutlet private var passwordField: UITextField!
@@ -16,7 +16,7 @@ class LoginViewController: UIViewController {
 
     static func createLoginViewController(
         authenticator: Authenticator,
-        context: AnyContext<SampleToken>
+        container: AnyContainer<SampleToken>
     ) -> LoginViewController? {
         let storyboard = UIStoryboard(name: "LoginViewController", bundle: Bundle(for: LoginViewController.self))
         guard let loginViewController = storyboard.instantiateInitialViewController() as? LoginViewController else {
@@ -24,12 +24,11 @@ class LoginViewController: UIViewController {
         }
 
         loginViewController.authenticator = authenticator
-        loginViewController.context = context
+        loginViewController.container = container
         return loginViewController
     }
 
     override func viewDidAppear(_: Bool) {
-        guard let context else { return }
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             self.usernameField.text = "SomeUsername"
             self.passwordField.text = "SomePassword123"
@@ -39,7 +38,11 @@ class LoginViewController: UIViewController {
                 self.activityIndicator.stopAnimating()
 
                 let tokens: [SampleToken] = [.vc1, .logout]
-                context.change(to: .tabBarNavigation(), tokenData: .multi(tokens))
+                self.container.change(
+                    to: .tabBarNavigation(),
+                    tokenData: .multi(tokens),
+                    transition: .init(duration: 1, options: .transitionFlipFromRight)
+                )
             })
         }
     }

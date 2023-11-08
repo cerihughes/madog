@@ -10,28 +10,28 @@ import XCTest
 @testable import MadogContainers_iOS
 
 class TabBarUITests: MadogKIFTestCase {
-    private var context: AnyMultiContext<String>!
+    private var container: AnyContainer<String>!
 
     override func afterEach() {
-        context = nil
+        container = nil
         super.afterEach()
     }
 
     func testProtocolConformance() {
-        context = renderUIAndAssert(tokens: "vc1", "vc2")
-        XCTAssertNil(context as? AnyForwardBackNavigationContext<String>)
+        container = renderUIAndAssert(tokens: "vc1", "vc2")
+        XCTAssertNil(container.forwardBack)
     }
 
     func testRenderInitialUI() {
-        context = renderUIAndAssert(tokens: "vc1", "vc2")
-        XCTAssertEqual(context.selectedIndex, 0)
-        XCTAssertNotNil(context)
+        container = renderUIAndAssert(tokens: "vc1", "vc2")
+        XCTAssertEqual(container.multi?.selectedIndex, 0)
+        XCTAssertNotNil(container)
     }
 
-    private func renderUIAndAssert(tokens: String ...) -> AnyMultiContext<String>? {
-        let context = renderUIAndWait(identifier: .tabBar(), tokenData: .multi(tokens))
+    private func renderUIAndAssert(tokens: String ...) -> AnyContainer<String>? {
+        let container = renderUIAndWait(identifier: .tabBar(), tokenData: .multi(tokens))
         tokens.forEach { waitForTitle(token: $0) }
         waitForLabel(token: tokens.first!)
-        return context
+        return container
     }
 }

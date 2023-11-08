@@ -10,34 +10,34 @@ import XCTest
 @testable import MadogContainers_iOS
 
 class NavigationUITests: MadogKIFTestCase {
-    private var context: AnyForwardBackNavigationContext<String>!
+    private var container: AnyContainer<String>!
 
     override func afterEach() {
-        context = nil
+        container = nil
         super.afterEach()
     }
 
     func testProtocolConformance() {
-        context = renderUIAndAssert(token: "vc1")
-        XCTAssertNil(context as? AnyMultiContext<String>)
+        container = renderUIAndAssert(token: "vc1")
+        XCTAssertNil(container.multi)
     }
 
     func testRenderInitialUI() {
-        context = renderUIAndAssert(token: "vc1")
-        XCTAssertNotNil(context)
+        container = renderUIAndAssert(token: "vc1")
+        XCTAssertNotNil(container)
     }
 
     func testNavigateForwardAndBack() {
-        context = renderUIAndAssert(token: "vc1")
+        container = renderUIAndAssert(token: "vc1")
         navigateForwardAndAssert(token: "vc2")
 
-        context.navigateBack(animated: true)
+        container.forwardBack?.navigateBack(animated: true)
         waitForLabel(token: "vc1")
         waitForAbsenceOfTitle(token: "vc2")
     }
 
     func testBackToRoot() {
-        context = renderUIAndAssert(token: "vc1")
+        container = renderUIAndAssert(token: "vc1")
 
         navigateForwardAndAssert(token: "vc2")
         waitForAbsenceOfLabel(token: "vc1")
@@ -46,15 +46,15 @@ class NavigationUITests: MadogKIFTestCase {
         waitForAbsenceOfLabel(token: "vc2")
         waitForAbsenceOfTitle(token: "vc1") // "Back" no longer shows "vc1"
 
-        context?.navigateBackToRoot(animated: true)
+        container.forwardBack?.navigateBackToRoot(animated: true)
         waitForTitle(token: "vc1")
         waitForLabel(token: "vc1")
     }
 
     func testOpenNavigationModal() {
-        context = renderUIAndAssert(token: "vc1")
+        container = renderUIAndAssert(token: "vc1")
 
-        let modalToken = context.openModal(
+        let modalToken = container.modal?.openModal(
             identifier: .navigation(),
             tokenData: .single("vc2"),
             presentationStyle: .formSheet,
@@ -63,29 +63,29 @@ class NavigationUITests: MadogKIFTestCase {
         waitForTitle(token: "vc2")
         waitForLabel(token: "vc2")
 
-        let modalContext = modalToken?.context as? AnyForwardBackNavigationContext<String>
-        XCTAssertNotNil(modalContext)
+        let modalContainer = modalToken?.container
+        let forwardBack = modalContainer?.forwardBack
 
-        modalContext?.navigateForward(token: "vc3", animated: true)
+        forwardBack?.navigateForward(token: "vc3", animated: true)
         waitForTitle(token: "vc3")
         waitForLabel(token: "vc3")
         waitForAbsenceOfLabel(token: "vc2")
 
-        modalContext?.navigateForward(token: "vc4", animated: true)
+        forwardBack?.navigateForward(token: "vc4", animated: true)
         waitForTitle(token: "vc4")
         waitForLabel(token: "vc4")
         waitForAbsenceOfTitle(token: "vc2") // "Back" no longer shows "vc2"
     }
 
-    private func renderUIAndAssert(token: String) -> AnyForwardBackNavigationContext<String>? {
-        let context = renderUIAndWait(identifier: .navigation(), tokenData: .single(token))
+    private func renderUIAndAssert(token: String) -> AnyContainer<String>? {
+        let container = renderUIAndWait(identifier: .navigation(), tokenData: .single(token))
         waitForTitle(token: token)
         waitForLabel(token: token)
-        return context
+        return container
     }
 
     private func navigateForwardAndAssert(token: String) {
-        context?.navigateForward(token: token, animated: true)
+        container?.forwardBack?.navigateForward(token: token, animated: true)
         waitForTitle(token: token)
         waitForLabel(token: token)
     }

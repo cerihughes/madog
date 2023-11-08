@@ -9,22 +9,22 @@ import XCTest
 @testable import MadogCore
 
 class SplitSingleUITests: MadogKIFTestCase {
-    private var context: AnySplitSingleContext<String>!
+    private var container: AnyContainer<String>!
 
     override func afterEach() {
-        context = nil
+        container = nil
         super.afterEach()
     }
 
     func testProtocolConformance() {
-        context = renderUIAndAssert("vc1", "vc2")
-        XCTAssertNil(context as? AnyForwardBackNavigationContext<String>)
-        XCTAssertNil(context as? AnyMultiContext<String>)
+        container = renderUIAndAssert("vc1", "vc2")
+        XCTAssertNil(container.forwardBack)
+        XCTAssertNil(container.multi)
     }
 
     func testRenderInitialUI() {
-        context = renderUIAndAssert("vc1", "vc2")
-        XCTAssertNotNil(context)
+        container = renderUIAndAssert("vc1", "vc2")
+        XCTAssertNotNil(container)
         if isRunningOnIphone {
             waitForAbsenceOfLabel(token: "vc2")
         } else if isRunningOnIpad {
@@ -33,24 +33,24 @@ class SplitSingleUITests: MadogKIFTestCase {
     }
 
     func testRenderInitialUI_noSecondary() {
-        context = renderUIAndAssert("vc1")
-        XCTAssertNotNil(context)
+        container = renderUIAndAssert("vc1")
+        XCTAssertNotNil(container)
         waitForAbsenceOfLabel(token: "vc2")
     }
 
     func testShowDetail() {
-        context = renderUIAndAssert("vc1")
-        XCTAssertNotNil(context)
+        container = renderUIAndAssert("vc1")
+        XCTAssertNotNil(container)
         waitForLabel(token: "vc1")
 
-        context.showDetail(token: "vc2")
+        container.splitSingle?.showDetail(token: "vc2")
         waitForLabel(token: "vc2")
     }
 
-    private func renderUIAndAssert(_ token1: String, _ token2: String? = nil) -> AnySplitSingleContext<String>? {
-        let context = renderUIAndWait(identifier: .splitSingle(), tokenData: .splitSingle(token1, token2))
+    private func renderUIAndAssert(_ token1: String, _ token2: String? = nil) -> AnyContainer<String>? {
+        let container = renderUIAndWait(identifier: .splitSingle(), tokenData: .splitSingle(token1, token2))
         waitForAbsenceOfTitle(token: token1) // There should be no "Back" titles
         waitForLabel(token: token1)
-        return context
+        return container
     }
 }

@@ -6,17 +6,17 @@
 import MadogCore
 import UIKit
 
-class SplitSingleContainer<T>: MadogUIContainer<T>, SplitSingleContext {
+class SplitSingleContainerUI<T>: ContainerUI<T>, SplitSingleContainer {
     private let splitController = UISplitViewController()
 
     init?(registry: AnyRegistry<T>, tokenData: SplitSingleUITokenData<T>) {
         super.init(registry: registry, viewController: splitController)
 
-        guard let primary = registry.createViewController(from: tokenData.primaryToken, context: self) else {
+        guard let primary = registry.createViewController(from: tokenData.primaryToken, container: self) else {
             return nil
         }
 
-        let secondary = tokenData.secondaryToken.flatMap { registry.createViewController(from: $0, context: self) }
+        let secondary = tokenData.secondaryToken.flatMap { registry.createViewController(from: $0, container: self) }
 
         splitController.preferredDisplayMode = .oneBesideSecondary
         splitController.presentsWithGesture = false
@@ -24,17 +24,19 @@ class SplitSingleContainer<T>: MadogUIContainer<T>, SplitSingleContext {
             .compactMap { $0 }
     }
 
-    // MARK: - SplitContext
+    // MARK: - SplitSingleContainer
 
     func showDetail(token: T) -> Bool {
-        guard let viewController = registry.createViewController(from: token, context: self) else { return false }
+        guard let viewController = registry.createViewController(from: token, container: self) else { return false }
         splitController.showDetailViewController(viewController, sender: nil)
         return true
     }
 }
 
-struct SplitSingleFactory<T>: SplitSingleContainerFactory {
-    func createContainer(registry: AnyRegistry<T>, tokenData: SplitSingleUITokenData<T>) -> MadogUIContainer<T>? {
-        SplitSingleContainer(registry: registry, tokenData: tokenData)
+extension SplitSingleContainerUI {
+    struct Factory: SplitSingleContainerUIFactory {
+        func createContainer(registry: AnyRegistry<T>, tokenData: SplitSingleUITokenData<T>) -> ContainerUI<T>? {
+            SplitSingleContainerUI(registry: registry, tokenData: tokenData)
+        }
     }
 }

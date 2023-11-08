@@ -17,8 +17,8 @@ class LoginViewControllerProvider: ViewControllerProvider {
         }
     }
 
-    func createViewController(token: SampleToken, context: AnyContext<SampleToken>) -> UIViewController? {
+    func createViewController(token: SampleToken, container: AnyContainer<SampleToken>) -> UIViewController? {
         guard token == .login, let authenticator else { return nil }
-        return LoginViewController.createLoginViewController(authenticator: authenticator, context: context)
+        return LoginViewController.createLoginViewController(authenticator: authenticator, container: container)
     }
 }
