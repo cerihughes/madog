@@ -5,11 +5,12 @@
 
 import KIF
 import MadogCore
+import MadogCoreTestUtilities
 import XCTest
 
 @testable import MadogContainers_iOS
 
-class TabBarUITests: MadogKIFTestCase {
+class TabBarUITests: ContainerKIFTestCase {
     private var container: AnyContainer<String>!
 
     override func afterEach() {

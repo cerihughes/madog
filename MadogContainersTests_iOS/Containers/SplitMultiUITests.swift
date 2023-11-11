@@ -4,11 +4,12 @@
 //
 
 import KIF
+import MadogCoreTestUtilities
 import XCTest
 
 @testable import MadogCore
 
-class SplitMultiUITests: MadogKIFTestCase {
+class SplitMultiUITests: ContainerKIFTestCase {
     private var container: AnyContainer<String>!
 
     override func afterEach() {
