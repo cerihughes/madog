@@ -4,10 +4,11 @@
 //
 
 import KIF
+import MadogCore
 import MadogCoreTestUtilities
 import XCTest
 
-@testable import MadogCore
+@testable import MadogContainers_iOS
 
 class BasicUITests: ContainerKIFTestCase {
     private var container: AnyContainer<String>!

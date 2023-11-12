@@ -3,8 +3,7 @@
 //  Copyright © 2019 Ceri Hughes. All rights reserved.
 //
 
-import MadogContainers_iOS
-import MadogCore
+import Madog
 import UIKit
 
 @UIApplicationMain
