@@ -9,14 +9,13 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     private let window = UIWindow()
-    private let madog = Madog<SampleToken>()
+    private let madog = Madog<SampleToken>.withDefaultContainers()
 
     func application(
         _: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         madog.resolve(resolver: SampleResolver(), launchOptions: launchOptions)
-        madog.registerDefaultContainers()
         window.makeKeyAndVisible()
 
         let initial = SampleToken.login
