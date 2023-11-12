@@ -34,6 +34,7 @@ targets:
       - Madog
     dependencies:
       - package: MadogCore
+        product: MadogCore
       - target: MadogContainers_iOS
     postCompileScripts:
       - script: export PATH="/opt/homebrew/bin:$PATH";swiftlint
@@ -61,6 +62,7 @@ targets:
       - MadogContainersTests_iOS
     dependencies:
       - package: MadogCore
+        product: MadogCoreTestUtilities
       - package: KIF
       - target: MadogContainers_iOS
       - target: TestApp
