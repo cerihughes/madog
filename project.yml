@@ -9,8 +9,9 @@ schemes:
     test:
       gatherCoverageData: true
       coverageTargets:
+        - Madog
         - MadogContainers_iOS
-      targets: 
+      targets:
         - MadogContainersTests_iOS
 options:
   bundleIdPrefix: uk.co.cerihughes
@@ -19,7 +20,7 @@ options:
 packages:
   MadogCore:
     url: https://github.com/cerihughes/madog-core
-    majorVersion: 2.0.0
+    majorVersion: 2.1.0
   KIF:
     url: https://github.com/kif-framework/KIF
     majorVersion: 3.8.0
@@ -32,7 +33,6 @@ targets:
     sources:
       - Madog
     dependencies:
-      - package: MadogCore
       - target: MadogContainers_iOS
     postCompileScripts:
       - script: export PATH="/opt/homebrew/bin:$PATH";swiftlint
@@ -47,6 +47,7 @@ targets:
       - MadogContainers_iOS
     dependencies:
       - package: MadogCore
+        product: MadogCore
     postCompileScripts:
       - script: export PATH="/opt/homebrew/bin:$PATH";swiftlint
         name: Swift Lint
@@ -60,6 +61,7 @@ targets:
       - MadogContainersTests_iOS
     dependencies:
       - package: MadogCore
+        product: MadogCoreTestUtilities
       - package: KIF
       - target: MadogContainers_iOS
       - target: TestApp

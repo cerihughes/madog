@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import MadogCore
+import Madog
 
 let serviceProvider1Name = "serviceProvider1Name"
 

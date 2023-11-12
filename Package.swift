@@ -8,11 +8,15 @@ let package = Package(
         .library(name: "Madog", targets: ["Madog"])
     ],
     dependencies: [
-        .package(url: "https://github.com/cerihughes/madog-core", .upToNextMajor(from: "2.0.0")),
+        .package(url: "https://github.com/cerihughes/madog-core", .upToNextMajor(from: "2.1.0")),
         .package(url: "https://github.com/kif-framework/KIF", .upToNextMajor(from: "3.8.0"))
     ],
     targets: [
-        .target(name: "Madog", dependencies: ["MadogContainers_iOS"], path: "Madog"),
+        .target(
+            name: "Madog",
+            dependencies: ["MadogContainers_iOS", .product(name: "MadogCore", package: "madog-core")],
+            path: "Madog"
+        ),
         .target(
             name: "MadogContainers_iOS",
             dependencies: [
@@ -22,7 +26,11 @@ let package = Package(
         ),
         .testTarget(
             name: "MadogContainersTests_iOS",
-            dependencies: ["MadogContainers_iOS", "KIF"],
+            dependencies: [
+                "MadogContainers_iOS",
+                "KIF",
+                .product(name: "MadogCoreTestUtilities", package: "madog-core")
+            ],
             path: "MadogContainersTests_iOS"
         )
     ]
