@@ -33,8 +33,6 @@ targets:
     sources:
       - Madog
     dependencies:
-      - package: MadogCore
-        product: MadogCore
       - target: MadogContainers_iOS
     postCompileScripts:
       - script: export PATH="/opt/homebrew/bin:$PATH";swiftlint
@@ -49,6 +47,7 @@ targets:
       - MadogContainers_iOS
     dependencies:
       - package: MadogCore
+        product: MadogCore
     postCompileScripts:
       - script: export PATH="/opt/homebrew/bin:$PATH";swiftlint
         name: Swift Lint
