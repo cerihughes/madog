@@ -12,7 +12,13 @@ let package = Package(
         .package(url: "https://github.com/kif-framework/KIF", .upToNextMajor(from: "3.8.0"))
     ],
     targets: [
-        .target(name: "Madog", dependencies: ["MadogContainers_iOS"], path: "Madog"),
+        .target(
+            name: "Madog", dependencies: [
+                "MadogContainers_iOS",
+                .product(name: "MadogCore", package: "madog-core")
+            ],
+            path: "Madog"
+        ),
         .target(
             name: "MadogContainers_iOS",
             dependencies: [
