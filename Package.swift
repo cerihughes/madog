@@ -13,7 +13,8 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Madog", dependencies: ["MadogContainers_iOS", .product(name: "MadogCore", package: "madog-core")],
+            name: "Madog",
+            dependencies: ["MadogContainers_iOS", .product(name: "MadogCore", package: "madog-core")],
             path: "Madog"
         ),
         .target(
@@ -25,7 +26,11 @@ let package = Package(
         ),
         .testTarget(
             name: "MadogContainersTests_iOS",
-            dependencies: ["MadogContainers_iOS", "KIF", .product(name: "MadogCoreTestUtilities", package: "madog-core")],
+            dependencies: [
+                "MadogContainers_iOS",
+                "KIF",
+                .product(name: "MadogCoreTestUtilities", package: "madog-core")
+            ],
             path: "MadogContainersTests_iOS"
         )
     ]
