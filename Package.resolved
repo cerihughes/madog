@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/cerihughes/madog-core",
       "state" : {
-        "revision" : "2cfc121d6fa9bd96b623140eb40474966b2be4c2",
-        "version" : "2.1.0"
+        "branch" : "fix-dependencies",
+        "revision" : "6c4a8a4f651dc146ad4cb3709d0cd6ac705dfdd3"
       }
     },
     {
