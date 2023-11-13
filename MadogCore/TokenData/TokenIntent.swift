@@ -15,7 +15,7 @@ public class TokenIntent<T> {
         tokenData: SingleUITokenData<T>,
         customisation: CustomisationBlock<VC2>? = nil
     ) -> TokenIntent<T> where VC2: ViewController {
-        ChangeIntent(intent: .createSingle(identifier.value, tokenData))
+        ChangeIntent(intent: .createSingle(identifier.value, tokenData), customisation: customisation)
     }
 
     public static func create<VC2, C2>(
@@ -23,7 +23,7 @@ public class TokenIntent<T> {
         tokenData: MultiUITokenData<T>,
         customisation: CustomisationBlock<VC2>? = nil
     ) -> TokenIntent<T> where VC2: ViewController {
-        ChangeIntent(intent: .createMulti(identifier.value, tokenData))
+        ChangeIntent(intent: .createMulti(identifier.value, tokenData), customisation: customisation)
     }
 
     public static func create<VC2, C2>(
@@ -31,7 +31,7 @@ public class TokenIntent<T> {
         tokenData: SplitSingleUITokenData<T>,
         customisation: CustomisationBlock<VC2>? = nil
     ) -> TokenIntent<T> where VC2: ViewController {
-        ChangeIntent(intent: .createSplitSingle(identifier.value, tokenData))
+        ChangeIntent(intent: .createSplitSingle(identifier.value, tokenData), customisation: customisation)
     }
 
     public static func create<VC2, C2>(
@@ -39,7 +39,7 @@ public class TokenIntent<T> {
         tokenData: SplitMultiUITokenData<T>,
         customisation: CustomisationBlock<VC2>? = nil
     ) -> TokenIntent<T> where VC2: ViewController {
-        ChangeIntent(intent: .createSplitMulti(identifier.value, tokenData))
+        ChangeIntent(intent: .createSplitMulti(identifier.value, tokenData), customisation: customisation)
     }
 }
 
@@ -51,11 +51,14 @@ class UseParentIntent<T>: TokenIntent<T> {
     }
 }
 
-class ChangeIntent<T>: TokenIntent<T> {
+class ChangeIntent<VC, T>: TokenIntent<T> where VC: ViewController {
     let intent: InternalChangeIntent<T>
+    let customisation: CustomisationBlock<VC>?
 
-    init(intent: InternalChangeIntent<T>) {
+
+    init(intent: InternalChangeIntent<T>, customisation: CustomisationBlock<VC>?) {
         self.intent = intent
+        self.customisation = customisation
     }
 }
 

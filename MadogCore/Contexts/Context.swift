@@ -22,6 +22,7 @@ public typealias AnyContext<T> = any Context<T>
 public protocol Context<T>: AnyObject {
     associatedtype T
 
+    var parentContext: AnyContext<T>? { get }
     var presentingContext: AnyContext<T>? { get }
 
     @discardableResult

@@ -50,7 +50,9 @@ class LoginViewController: UIViewController {
 
         let intents: [TokenIntent<SampleToken>] = [
             .create(identifier: .navigation(), tokenData: .single(.vc1)),
-            .create(identifier: .split(), tokenData: .splitSingle(.vc3)),
+            .create(identifier: .split(), tokenData: .splitSingle(.vc3)) {
+                $0.tabBarItem = .init(tabBarSystemItem: .history, tag: 0)
+            },
             .useParent(.logout)
         ]
         context?.change(to: .tabBar(), tokenData: .multi(intents))

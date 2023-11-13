@@ -26,18 +26,10 @@ where VC == UITabBarController, C == AnyTabBarUIContext<T>, TD == MultiUITokenDa
     static func tabBar() -> Self { MadogUIIdentifier("tabBarIdentifier") }
 }
 
-public typealias TabBarNavigationUIContext<T> = TabBarUIContext<T> & ForwardBackNavigationContext<T>
-public typealias AnyTabBarNavigationUIContext<T> = any TabBarNavigationUIContext<T>
-public extension MadogUIIdentifier
-where VC == UITabBarController, C == AnyTabBarNavigationUIContext<T>, TD == MultiUITokenData<T> {
-    static func tabBarNavigation() -> Self { MadogUIIdentifier("tabBarNavigationIdentifier") }
-}
-
 public extension Madog {
     func registerDefaultContainers() {
         _ = addContainerFactory(identifier: .basic(), factory: BasicContainerFactory())
         _ = addContainerFactory(identifier: .navigation(), factory: NavigationContainerFactory())
         _ = addContainerFactory(identifier: .tabBar(), factory: TabBarContainerFactory())
-        _ = addContainerFactory(identifier: .tabBarNavigation(), factory: TabBarNavigationContainerFactory())
     }
 }

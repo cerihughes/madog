@@ -19,9 +19,7 @@ class ViewController4Provider: ViewControllerProvider {
 }
 
 extension SampleToken {
-
     static func createVC4Identifier(stringData: String) -> SampleToken {
         SampleToken(identifier: vc4Identifier, data: [stringDataKey: stringData])
     }
-
 }

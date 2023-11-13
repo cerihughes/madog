@@ -43,6 +43,11 @@ open class MadogUIContainer<T>: Context {
 
     // MARK: - Context
 
+    public var parentContext: AnyContext<T>? {
+        guard let parentViewController = viewController.parent else { return nil }
+        return delegate?.context(for: parentViewController)
+    }
+
     public var presentingContext: AnyContext<T>? {
         guard let presentingViewController = viewController.presentingViewController else { return nil }
         return delegate?.context(for: presentingViewController)
@@ -82,7 +87,7 @@ open class MadogUIContainer<T>: Context {
             return useParent(token: intent.token)
         }
 
-        guard let intent = intent as? ChangeIntent<T> else { return nil }
+        guard let intent = intent as? ChangeIntent<VC, T> else { return nil }
         switch intent.intent {
         case let .createSingle(identifier, tokenData):
             return createUI(identifier: identifier, tokenData: tokenData, customisation: customisation)?.viewController

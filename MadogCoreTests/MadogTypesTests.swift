@@ -63,6 +63,7 @@ private class TestResolver: Resolver {
 }
 
 private class TestContext: Context {
+    var parentContext: AnyContext<Int>? { nil }
     var presentingContext: AnyContext<Int>? { nil }
     func close(animated: Bool, completion: CompletionBlock?) -> Bool { false }
     func change<VC, C, TD>(

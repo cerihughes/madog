@@ -4,12 +4,13 @@
 //
 
 import KIF
+import MadogCore
 import XCTest
 
 @testable import MadogContainers_iOS
 
 class TabBarNavigationUITests: MadogKIFTestCase {
-    private var context: AnyTabBarNavigationUIContext<String>!
+    private var context: AnyTabBarUIContext<String>!
 
     override func afterEach() {
         context = nil
@@ -22,13 +23,13 @@ class TabBarNavigationUITests: MadogKIFTestCase {
         XCTAssertNotNil(context)
     }
 
-    func testNavigateForwardAndBack() {
+    func testNavigateForwardAndBack() throws {
         context = renderUIAndAssert(tokens: "vc1", "vc2")
 
         navigateForwardAndAssert(token: "vc3")
         waitForAbsenceOfLabel(token: "vc1")
 
-        context.navigateBack(animated: true)
+        context.parentNavigationContext?.navigateBack(animated: true)
         waitForAbsenceOfLabel(token: "vc3")
         waitForLabel(token: "vc1")
     }
@@ -42,7 +43,7 @@ class TabBarNavigationUITests: MadogKIFTestCase {
         navigateForwardAndAssert(token: "vc4")
         waitForAbsenceOfLabel(token: "vc3")
 
-        context?.navigateBackToRoot(animated: true)
+        context?.parentNavigationContext?.navigateBackToRoot(animated: true)
         waitForAbsenceOfLabel(token: "vc4")
         waitForLabel(token: "vc1")
     }
@@ -59,7 +60,7 @@ class TabBarNavigationUITests: MadogKIFTestCase {
         waitForAbsenceOfLabel(token: "vc2")
         waitForLabel(token: "vc4")
 
-        context.navigateBack(animated: true)
+        context.parentNavigationContext?.navigateBack(animated: true)
         waitForAbsenceOfLabel(token: "vc4")
         waitForLabel(token: "vc2")
     }
@@ -70,8 +71,11 @@ class TabBarNavigationUITests: MadogKIFTestCase {
         XCTAssertNotNil(context)
 
         let modalToken = context!.openModal(
-            identifier: .tabBarNavigation(),
-            tokenData: .multi("vc2", "vc3"),
+            identifier: .tabBar(),
+            tokenData: .multi(
+                TokenIntent.create(identifier: .navigation(), tokenData: .single("vc2")),
+                TokenIntent.create(identifier: .navigation(), tokenData: .single("vc3"))
+            ),
             presentationStyle: .formSheet,
             animated: true
         )
@@ -83,25 +87,25 @@ class TabBarNavigationUITests: MadogKIFTestCase {
         let modalContext = modalToken?.context
         XCTAssertNotNil(modalContext)
 
-        modalContext?.navigateForward(token: "vc4", animated: true)
+        modalContext?.parentNavigationContext?.navigateForward(token: "vc4", animated: true)
         waitForTitle(token: "vc4")
         waitForLabel(token: "vc4")
 
-        modalContext?.navigateForward(token: "vc5", animated: true)
-        modalContext?.navigateForward(token: "vc6", animated: true)
+        modalContext?.parentNavigationContext?.navigateForward(token: "vc5", animated: true)
+        modalContext?.parentNavigationContext?.navigateForward(token: "vc6", animated: true)
         waitForAbsenceOfTitle(token: "vc4") // "Back" no longer shows "vc4"
         waitForTitle(token: "vc5") // "Back" shows "vc5"
         waitForTitle(token: "vc6")
         waitForLabel(token: "vc6")
 
         modalContext?.selectedIndex = 1
-        modalContext?.navigateForward(token: "vc7", animated: true)
+        modalContext?.parentNavigationContext?.navigateForward(token: "vc7", animated: true)
         waitForTitle(token: "vc3") // "Back" shows "vc3"
         waitForTitle(token: "vc7")
         waitForLabel(token: "vc7")
 
-        modalContext?.navigateForward(token: "vc8", animated: true)
-        modalContext?.navigateForward(token: "vc9", animated: true)
+        modalContext?.parentNavigationContext?.navigateForward(token: "vc8", animated: true)
+        modalContext?.parentNavigationContext?.navigateForward(token: "vc9", animated: true)
         waitForAbsenceOfTitle(token: "vc7") // "Back" no longer shows "vc7"
         waitForTitle(token: "vc8") // "Back" shows "vc8"
         waitForTitle(token: "vc9")
@@ -114,15 +118,22 @@ class TabBarNavigationUITests: MadogKIFTestCase {
         waitForLabel(token: "vc6")
     }
 
-    private func renderUIAndAssert(tokens: String ...) -> AnyTabBarNavigationUIContext<String>? {
-        let context = madog.renderUI(identifier: .tabBarNavigation(), tokenData: .multi(tokens), in: window)
+    private func renderUIAndAssert(tokens: String ...) -> AnyTabBarUIContext<String>? {
+        let intents = tokens.map { TokenIntent.create(identifier: .navigation(), tokenData: .single($0)) }
+        let context = madog.renderUI(identifier: .tabBar(), tokenData: .multi(intents), in: window)
         tokens.forEach { waitForTitle(token: $0) }
         waitForLabel(token: tokens.first!)
         return context
     }
 
     private func navigateForwardAndAssert(token: String) {
-        context.navigateForward(token: token, animated: true)
+        context.parentNavigationContext?.navigateForward(token: token, animated: true)
         waitForLabel(token: token)
+    }
+}
+
+extension Context where T == String {
+    var parentNavigationContext: AnyForwardBackNavigationContext<T>? {
+        parentContext as? AnyForwardBackNavigationContext<T>
     }
 }
