@@ -6,13 +6,18 @@
 import MadogCore
 import UIKit
 
-class TabBarContainerUI<T>: ContainerUI<T>, MultiContainer {
+class TabBarContainerUI<T>: ContainerUI<T, MultiUITokenData<T>, UITabBarController>, MultiContainer {
     private let tabBarController = UITabBarController()
 
-    init(registry: AnyRegistry<T>, tokenData: MultiUITokenData<T>) {
-        super.init(registry: registry, viewController: tabBarController)
+    override func populateContainer(
+        contentFactory: AnyContainerUIContentFactory<T>,
+        tokenData: MultiUITokenData<T>
+    ) throws {
+        try super.populateContainer(contentFactory: contentFactory, tokenData: tokenData)
 
-        let viewControllers = tokenData.tokens.compactMap { registry.createViewController(from: $0, container: self) }
+        let viewControllers = try tokenData.tokens.compactMap {
+            try createContentViewController(contentFactory: contentFactory, from: $0)
+        }
 
         tabBarController.viewControllers = viewControllers
     }
@@ -26,9 +31,9 @@ class TabBarContainerUI<T>: ContainerUI<T>, MultiContainer {
 }
 
 extension TabBarContainerUI {
-    struct Factory: MultiContainerUIFactory {
-        func createContainer(registry: AnyRegistry<T>, tokenData: MultiUITokenData<T>) -> ContainerUI<T>? {
-            TabBarContainerUI(registry: registry, tokenData: tokenData)
+    struct Factory: ContainerUIFactory {
+        func createContainer() -> ContainerUI<T, MultiUITokenData<T>, UITabBarController> {
+            TabBarContainerUI(containerViewController: .init())
         }
     }
 }

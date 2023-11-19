@@ -14,7 +14,7 @@ protocol MadogCUT<T>: KIFTestCase {
 
 extension MadogCUT {
     func renderUIAndWait<VC, TD>(
-        identifier: ContainerUI<T>.Identifier<VC, TD>,
+        identifier: ContainerUI<T, TD, VC>.Identifier,
         tokenData: TD,
         customisation: CustomisationBlock<VC>? = nil
     ) -> AnyContainer<T> where VC: ViewController, TD: TokenData {
@@ -37,7 +37,7 @@ extension MadogCUT {
 
     func openModalAndWait<VC, TD>(
         _ modalContainer: AnyModalContainer<T>,
-        identifier: ContainerUI<T>.Identifier<VC, TD>,
+        identifier: ContainerUI<T, TD, VC>.Identifier,
         tokenData: TD,
         completion: CompletionBlock? = nil
     ) -> AnyModalToken<T> where VC: UIViewController, TD: TokenData {

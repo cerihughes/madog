@@ -9,35 +9,63 @@ import UIKit
 /// A class that presents view controllers in a tab bar, and manages the navigation between them.
 ///
 /// At the moment, this is achieved with a UINavigationController that can be pushed / popped to / from.
-class TabBarNavigatingContainerUI<T>: NavigatingContainerUI<T>, MultiContainer {
-    private let tabBarController = UITabBarController()
+class TabBarNavigatingContainerUI<T>: ContainerUI<T, MultiUITokenData<T>, UITabBarController>, ForwardBackContainer, MultiContainer {
+    private var contentFactory: AnyContainerUIContentFactory<T>?
 
-    init(registry: AnyRegistry<T>, tokenData: MultiUITokenData<T>) {
-        super.init(registry: registry, viewController: tabBarController)
+    override func populateContainer(
+        contentFactory: AnyContainerUIContentFactory<T>,
+        tokenData: MultiUITokenData<T>
+    ) throws {
+        try super.populateContainer(contentFactory: contentFactory, tokenData: tokenData)
 
-        let viewControllers = tokenData.tokens
-            .compactMap { registry.createViewController(from: $0, container: self) }
+        self.contentFactory = contentFactory
+
+        let viewControllers = try tokenData.tokens
+            .compactMap { try createContentViewController(contentFactory: contentFactory, from: $0) }
             .map { UINavigationController(rootViewController: $0) }
 
-        tabBarController.viewControllers = viewControllers
+        containerViewController.viewControllers = viewControllers
     }
 
-    override func provideNavigationController() -> UINavigationController? {
-        tabBarController.selectedViewController as? UINavigationController
+    // MARK: - ForwardBackContainer
+
+    func navigateForward(token: Token<T>, animated: Bool) -> Bool {
+        guard
+            let contentFactory,
+            let toViewController = try? createContentViewController(contentFactory: contentFactory, from: token),
+            let navigationController = provideNavigationController()
+        else { return false }
+
+        navigationController.pushViewController(toViewController, animated: animated)
+        return true
+    }
+
+    func navigateBack(animated: Bool) -> Bool {
+        guard let navigationController = provideNavigationController() else { return false }
+        return navigationController.popViewController(animated: animated) != nil
+    }
+
+    func navigateBackToRoot(animated _: Bool) -> Bool {
+        guard let navigationController = provideNavigationController() else { return false }
+        return navigationController.popToRootViewController(animated: true) != nil
+    }
+
+    private func provideNavigationController() -> UINavigationController? {
+        containerViewController.selectedViewController as? UINavigationController
     }
 
     // MARK: - MultiContainer
 
     var selectedIndex: Int {
-        get { tabBarController.selectedIndex }
-        set { tabBarController.selectedIndex = newValue }
+        get { containerViewController.selectedIndex }
+        set { containerViewController.selectedIndex = newValue }
     }
 }
 
 extension TabBarNavigatingContainerUI {
-    struct Factory: MultiContainerUIFactory {
-        func createContainer(registry: AnyRegistry<T>, tokenData: MultiUITokenData<T>) -> ContainerUI<T>? {
-            TabBarNavigatingContainerUI(registry: registry, tokenData: tokenData)
+    struct Factory: ContainerUIFactory {
+        func createContainer() -> ContainerUI<T, MultiUITokenData<T>, UITabBarController> {
+            TabBarNavigatingContainerUI(containerViewController: .init())
         }
     }
 }

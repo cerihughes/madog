@@ -6,37 +6,45 @@
 import MadogCore
 import UIKit
 
-class SplitSingleContainerUI<T>: ContainerUI<T>, SplitSingleContainer {
-    private let splitController = UISplitViewController()
+class SplitSingleContainerUI<T>: ContainerUI<T, SplitSingleUITokenData<T>, UISplitViewController>, SplitSingleContainer {
+    private var contentFactory: AnyContainerUIContentFactory<T>?
 
-    init?(registry: AnyRegistry<T>, tokenData: SplitSingleUITokenData<T>) {
-        super.init(registry: registry, viewController: splitController)
+    override func populateContainer(
+        contentFactory: AnyContainerUIContentFactory<T>,
+        tokenData: SplitSingleUITokenData<T>
+    ) throws {
+        try super.populateContainer(contentFactory: contentFactory, tokenData: tokenData)
 
-        guard let primary = registry.createViewController(from: tokenData.primaryToken, container: self) else {
-            return nil
+        self.contentFactory = contentFactory
+
+        let primary = try createContentViewController(contentFactory: contentFactory, from: tokenData.primaryToken)
+
+        let secondary = try tokenData.secondaryToken.flatMap {
+            try createContentViewController(contentFactory: contentFactory, from: $0)
         }
 
-        let secondary = tokenData.secondaryToken.flatMap { registry.createViewController(from: $0, container: self) }
-
-        splitController.preferredDisplayMode = .oneBesideSecondary
-        splitController.presentsWithGesture = false
-        splitController.viewControllers = [primary, secondary]
+        containerViewController.preferredDisplayMode = .oneBesideSecondary
+        containerViewController.presentsWithGesture = false
+        containerViewController.viewControllers = [primary, secondary]
             .compactMap { $0 }
     }
 
     // MARK: - SplitSingleContainer
 
-    func showDetail(token: T) -> Bool {
-        guard let viewController = registry.createViewController(from: token, container: self) else { return false }
-        splitController.showDetailViewController(viewController, sender: nil)
+    func showDetail(token: Token<T>) -> Bool {
+        guard
+            let contentFactory,
+            let viewController = try? createContentViewController(contentFactory: contentFactory, from: token)
+        else { return false }
+        containerViewController.showDetailViewController(viewController, sender: nil)
         return true
     }
 }
 
 extension SplitSingleContainerUI {
-    struct Factory: SplitSingleContainerUIFactory {
-        func createContainer(registry: AnyRegistry<T>, tokenData: SplitSingleUITokenData<T>) -> ContainerUI<T>? {
-            SplitSingleContainerUI(registry: registry, tokenData: tokenData)
+    struct Factory: ContainerUIFactory {
+        func createContainer() -> ContainerUI<T, SplitSingleUITokenData<T>, UISplitViewController> {
+            SplitSingleContainerUI(containerViewController: .init())
         }
     }
 }

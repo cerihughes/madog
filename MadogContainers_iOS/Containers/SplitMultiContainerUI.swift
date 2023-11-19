@@ -6,40 +6,48 @@
 import MadogCore
 import UIKit
 
-class SplitMultiContainerUI<T>: ContainerUI<T>, SplitMultiContainer {
-    private let splitController = UISplitViewController()
+class SplitMultiContainerUI<T>: ContainerUI<T, SplitMultiUITokenData<T>, UISplitViewController>, SplitMultiContainer {
+    private var contentFactory: AnyContainerUIContentFactory<T>?
 
-    init?(registry: AnyRegistry<T>, tokenData: SplitMultiUITokenData<T>) {
-        super.init(registry: registry, viewController: splitController)
+    override func populateContainer(
+        contentFactory: AnyContainerUIContentFactory<T>,
+        tokenData: SplitMultiUITokenData<T>
+    ) throws {
+        try super.populateContainer(contentFactory: contentFactory, tokenData: tokenData)
 
-        guard let primary = registry.createViewController(from: tokenData.primaryToken, container: self) else {
-            return nil
-        }
+        self.contentFactory = contentFactory
+
+        let primary = try createContentViewController(contentFactory: contentFactory, from: tokenData.primaryToken)
+
+        guard let navigationController = navigationController(for: tokenData.secondaryTokens) else { return }
+
+        containerViewController.preferredDisplayMode = .oneBesideSecondary
+        containerViewController.presentsWithGesture = false
+        containerViewController.viewControllers = [primary, navigationController]
+    }
+
+    private func navigationController(for secondaryTokens: [Token<T>]) -> UINavigationController? {
+        guard let contentFactory else { return nil }
 
         let navigationController = UINavigationController()
-        navigationController.viewControllers = tokenData.secondaryTokens
-            .compactMap { registry.createViewController(from: $0, container: self) }
-
-        splitController.preferredDisplayMode = .oneBesideSecondary
-        splitController.presentsWithGesture = false
-        splitController.viewControllers = [primary, navigationController]
+        navigationController.viewControllers = secondaryTokens
+            .compactMap { try? createContentViewController(contentFactory: contentFactory, from: $0) }
+        return navigationController
     }
 
     // MARK: - SplitMultiContainer
 
-    func showDetail(tokens: [T]) -> Bool {
-        let navigationController = UINavigationController()
-        navigationController.viewControllers = tokens
-            .compactMap { registry.createViewController(from: $0, container: self) }
-        splitController.showDetailViewController(navigationController, sender: nil)
+    func showDetail(tokens: [Token<T>]) -> Bool {
+        guard let navigationController = navigationController(for: tokens) else { return false }
+        containerViewController.showDetailViewController(navigationController, sender: nil)
         return true
     }
 }
 
 extension SplitMultiContainerUI {
-    struct Factory: SplitMultiContainerUIFactory {
-        func createContainer(registry: AnyRegistry<T>, tokenData: SplitMultiUITokenData<T>) -> ContainerUI<T>? {
-            SplitMultiContainerUI(registry: registry, tokenData: tokenData)
+    struct Factory: ContainerUIFactory {
+        func createContainer() -> ContainerUI<T, SplitMultiUITokenData<T>, UISplitViewController> {
+            SplitMultiContainerUI(containerViewController: .init())
         }
     }
 }
