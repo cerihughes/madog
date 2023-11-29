@@ -5,11 +5,10 @@
 
 import KIF
 import MadogCore
+import MadogCoreTestUtilities
 import XCTest
 
-@testable import MadogContainers_iOS
-
-class TabBarUITests: MadogKIFTestCase {
+class TabBarUITests: ContainersKIFTestCase {
     private var container: AnyContainer<String>!
 
     override func afterEach() {
@@ -17,19 +16,19 @@ class TabBarUITests: MadogKIFTestCase {
         super.afterEach()
     }
 
-    func testProtocolConformance() {
-        container = renderUIAndAssert(tokens: "vc1", "vc2")
+    func testProtocolConformance() throws {
+        container = try renderUIAndAssert(tokens: "vc1", "vc2")
         XCTAssertNil(container.forwardBack)
     }
 
-    func testRenderInitialUI() {
-        container = renderUIAndAssert(tokens: "vc1", "vc2")
+    func testRenderInitialUI() throws {
+        container = try renderUIAndAssert(tokens: "vc1", "vc2")
         XCTAssertEqual(container.multi?.selectedIndex, 0)
         XCTAssertNotNil(container)
     }
 
-    private func renderUIAndAssert(tokens: String ...) -> AnyContainer<String>? {
-        let container = renderUIAndWait(identifier: .tabBar(), tokenData: .multi(tokens))
+    private func renderUIAndAssert(tokens: String ...) throws -> AnyContainer<String>? {
+        let container = try renderUIAndWait(identifier: .tabBar(), tokenData: .multi(tokens))
         tokens.forEach { waitForTitle(token: $0) }
         waitForLabel(token: tokens.first!)
         return container

@@ -6,21 +6,14 @@
 import MadogCore
 import UIKit
 
-class SplitSingleContainerUI<T>: ContainerUI<T, SplitSingleUITokenData<T>, UISplitViewController>, SplitSingleContainer {
-    private var contentFactory: AnyContainerUIContentFactory<T>?
+class SplitSingleContainerUI<T>: ContainerUI<T, SplitSingleUITokenData<T>, UISplitViewController> {
+    override func populateContainer(tokenData: SplitSingleUITokenData<T>) throws {
+        try super.populateContainer(tokenData: tokenData)
 
-    override func populateContainer(
-        contentFactory: AnyContainerUIContentFactory<T>,
-        tokenData: SplitSingleUITokenData<T>
-    ) throws {
-        try super.populateContainer(contentFactory: contentFactory, tokenData: tokenData)
-
-        self.contentFactory = contentFactory
-
-        let primary = try createContentViewController(contentFactory: contentFactory, from: tokenData.primaryToken)
+        let primary = try createContentViewController(token: tokenData.primaryToken)
 
         let secondary = try tokenData.secondaryToken.flatMap {
-            try createContentViewController(contentFactory: contentFactory, from: $0)
+            try createContentViewController(token: $0)
         }
 
         containerViewController.preferredDisplayMode = .oneBesideSecondary
@@ -28,16 +21,14 @@ class SplitSingleContainerUI<T>: ContainerUI<T, SplitSingleUITokenData<T>, UISpl
         containerViewController.viewControllers = [primary, secondary]
             .compactMap { $0 }
     }
+}
 
+extension SplitSingleContainerUI: SplitSingleContainer {
     // MARK: - SplitSingleContainer
 
-    func showDetail(token: Token<T>) -> Bool {
-        guard
-            let contentFactory,
-            let viewController = try? createContentViewController(contentFactory: contentFactory, from: token)
-        else { return false }
+    func showDetail(token: Token<T>) throws {
+        let viewController = try createContentViewController(token: token)
         containerViewController.showDetailViewController(viewController, sender: nil)
-        return true
     }
 }
 

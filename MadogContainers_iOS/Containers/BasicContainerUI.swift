@@ -7,13 +7,10 @@ import MadogCore
 import UIKit
 
 class BasicContainerUI<T>: ContainerUI<T, SingleUITokenData<T>, BasicUIContainerViewController> {
-    override func populateContainer(
-        contentFactory: AnyContainerUIContentFactory<T>,
-        tokenData: SingleUITokenData<T>
-    ) throws {
-        try super.populateContainer(contentFactory: contentFactory, tokenData: tokenData)
+    override func populateContainer(tokenData: SingleUITokenData<T>) throws {
+        try super.populateContainer(tokenData: tokenData)
 
-        let viewController = try createContentViewController(contentFactory: contentFactory, from: tokenData.token)
+        let viewController = try createContentViewController(token: tokenData.token)
         containerViewController.contentViewController = viewController
     }
 }

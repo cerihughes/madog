@@ -10,13 +10,10 @@ import UIKit
 ///
 /// At the moment, this is achieved with a UINavigationController that can be pushed / popped to / from.
 class BasicNavigatingContainerUI<T>: NavigatingContainerUI<T> {
-    override func populateContainer(
-        contentFactory: AnyContainerUIContentFactory<T>,
-        tokenData: SingleUITokenData<T>
-    ) throws {
-        try super.populateContainer(contentFactory: contentFactory, tokenData: tokenData)
+    override func populateContainer(tokenData: SingleUITokenData<T>) throws {
+        try super.populateContainer(tokenData: tokenData)
 
-        let viewController = try createContentViewController(contentFactory: contentFactory, from: tokenData.token)
+        let viewController = try createContentViewController(token: tokenData.token)
         containerViewController.setViewControllers([viewController], animated: false)
     }
 }

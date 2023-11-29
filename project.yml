@@ -60,6 +60,8 @@ targets:
       - MadogContainersTests_iOS
     dependencies:
       - package: MadogCore
+      - package: MadogCore
+        product: MadogCoreTestUtilities
       - package: KIF
       - target: MadogContainers_iOS
       - target: TestApp

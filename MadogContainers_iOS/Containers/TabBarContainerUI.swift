@@ -7,26 +7,21 @@ import MadogCore
 import UIKit
 
 class TabBarContainerUI<T>: ContainerUI<T, MultiUITokenData<T>, UITabBarController>, MultiContainer {
-    private let tabBarController = UITabBarController()
+    override func populateContainer(tokenData: MultiUITokenData<T>) throws {
+        try super.populateContainer(tokenData: tokenData)
 
-    override func populateContainer(
-        contentFactory: AnyContainerUIContentFactory<T>,
-        tokenData: MultiUITokenData<T>
-    ) throws {
-        try super.populateContainer(contentFactory: contentFactory, tokenData: tokenData)
-
-        let viewControllers = try tokenData.tokens.compactMap {
-            try createContentViewController(contentFactory: contentFactory, from: $0)
+        let viewControllers = try tokenData.tokens.map {
+            try createContentViewController(token: $0)
         }
 
-        tabBarController.viewControllers = viewControllers
+        containerViewController.viewControllers = viewControllers
     }
 
     // MARK: - MultiContainer
 
     var selectedIndex: Int {
-        get { tabBarController.selectedIndex }
-        set { tabBarController.selectedIndex = newValue }
+        get { containerViewController.selectedIndex }
+        set { containerViewController.selectedIndex = newValue }
     }
 }
 

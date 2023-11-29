@@ -7,40 +7,30 @@ import MadogCore
 import UIKit
 
 class SplitMultiContainerUI<T>: ContainerUI<T, SplitMultiUITokenData<T>, UISplitViewController>, SplitMultiContainer {
-    private var contentFactory: AnyContainerUIContentFactory<T>?
+    override func populateContainer(tokenData: SplitMultiUITokenData<T>) throws {
+        try super.populateContainer(tokenData: tokenData)
 
-    override func populateContainer(
-        contentFactory: AnyContainerUIContentFactory<T>,
-        tokenData: SplitMultiUITokenData<T>
-    ) throws {
-        try super.populateContainer(contentFactory: contentFactory, tokenData: tokenData)
+        let primary = try createContentViewController(token: tokenData.primaryToken)
 
-        self.contentFactory = contentFactory
-
-        let primary = try createContentViewController(contentFactory: contentFactory, from: tokenData.primaryToken)
-
-        guard let navigationController = navigationController(for: tokenData.secondaryTokens) else { return }
+        let navigationController = try navigationController(for: tokenData.secondaryTokens)
 
         containerViewController.preferredDisplayMode = .oneBesideSecondary
         containerViewController.presentsWithGesture = false
         containerViewController.viewControllers = [primary, navigationController]
     }
 
-    private func navigationController(for secondaryTokens: [Token<T>]) -> UINavigationController? {
-        guard let contentFactory else { return nil }
-
+    private func navigationController(for secondaryTokens: [Token<T>]) throws -> UINavigationController {
         let navigationController = UINavigationController()
-        navigationController.viewControllers = secondaryTokens
-            .compactMap { try? createContentViewController(contentFactory: contentFactory, from: $0) }
+        navigationController.viewControllers = try secondaryTokens
+            .map { try createContentViewController(token: $0) }
         return navigationController
     }
 
     // MARK: - SplitMultiContainer
 
-    func showDetail(tokens: [Token<T>]) -> Bool {
-        guard let navigationController = navigationController(for: tokens) else { return false }
+    func showDetail(tokens: [Token<T>]) throws {
+        let navigationController = try navigationController(for: tokens)
         containerViewController.showDetailViewController(navigationController, sender: nil)
-        return true
     }
 }
 

@@ -4,11 +4,11 @@
 //
 
 import KIF
+import MadogCore
+import MadogCoreTestUtilities
 import XCTest
 
-@testable import MadogCore
-
-class SplitMultiUITests: MadogKIFTestCase {
+class SplitMultiUITests: ContainersKIFTestCase {
     private var container: AnyContainer<String>!
 
     override func afterEach() {
@@ -16,14 +16,14 @@ class SplitMultiUITests: MadogKIFTestCase {
         super.afterEach()
     }
 
-    func testProtocolConformance() {
-        container = renderUIAndAssert("vc1", ["vc2", "vc3"])
+    func testProtocolConformance() throws {
+        container = try renderUIAndAssert("vc1", ["vc2", "vc3"])
         XCTAssertNil(container.forwardBack)
         XCTAssertNil(container.multi)
     }
 
-    func testRenderInitialUI() {
-        container = renderUIAndAssert("vc1", ["vc2", "vc3"])
+    func testRenderInitialUI() throws {
+        container = try renderUIAndAssert("vc1", ["vc2", "vc3"])
         XCTAssertNotNil(container)
         if isRunningOnIphone {
             assertRenderInitialUI_iPhone()
@@ -44,17 +44,17 @@ class SplitMultiUITests: MadogKIFTestCase {
         waitForLabel(token: "vc3")
     }
 
-    func testShowDetail() {
-        container = renderUIAndAssert("vc1", [])
+    func testShowDetail() throws {
+        container = try renderUIAndAssert("vc1", [])
         XCTAssertNotNil(container)
         waitForLabel(token: "vc1")
 
-        container.splitMulti?.showDetail(tokens: ["vc2", "vc3"])
+        try container.splitMulti?.showDetail(tokens: ["vc2", "vc3"])
         waitForLabel(token: "vc3")
     }
 
-    private func renderUIAndAssert(_ token: String, _ tokens: [String]) -> AnyContainer<String>? {
-        let container = renderUIAndWait(identifier: .splitMulti(), tokenData: .splitMulti(token, tokens))
+    private func renderUIAndAssert(_ token: String, _ tokens: [String]) throws -> AnyContainer<String> {
+        let container = try renderUIAndWait(identifier: .splitMulti(), tokenData: .splitMulti(token, tokens))
         waitForAbsenceOfTitle(token: token) // There should be no "Back" titles
         waitForLabel(token: token)
         return container

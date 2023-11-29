@@ -9,51 +9,50 @@ import UIKit
 /// A class that presents view controllers in a tab bar, and manages the navigation between them.
 ///
 /// At the moment, this is achieved with a UINavigationController that can be pushed / popped to / from.
-class TabBarNavigatingContainerUI<T>: ContainerUI<T, MultiUITokenData<T>, UITabBarController>, ForwardBackContainer, MultiContainer {
-    private var contentFactory: AnyContainerUIContentFactory<T>?
-
-    override func populateContainer(
-        contentFactory: AnyContainerUIContentFactory<T>,
-        tokenData: MultiUITokenData<T>
-    ) throws {
-        try super.populateContainer(contentFactory: contentFactory, tokenData: tokenData)
-
-        self.contentFactory = contentFactory
+class TabBarNavigatingContainerUI<T>: ContainerUI<T, MultiUITokenData<T>, UITabBarController> {
+    override func populateContainer(tokenData: MultiUITokenData<T>) throws {
+        try super.populateContainer(tokenData: tokenData)
 
         let viewControllers = try tokenData.tokens
-            .compactMap { try createContentViewController(contentFactory: contentFactory, from: $0) }
+            .map { try createContentViewController(token: $0) }
             .map { UINavigationController(rootViewController: $0) }
 
         containerViewController.viewControllers = viewControllers
     }
+}
 
+extension TabBarNavigatingContainerUI: ForwardBackContainer {
     // MARK: - ForwardBackContainer
 
-    func navigateForward(token: Token<T>, animated: Bool) -> Bool {
-        guard
-            let contentFactory,
-            let toViewController = try? createContentViewController(contentFactory: contentFactory, from: token),
-            let navigationController = provideNavigationController()
-        else { return false }
-
+    func navigateForward(token: Token<T>, animated: Bool) throws {
+        let toViewController = try createContentViewController(token: token)
+        let navigationController = try provideNavigationController()
         navigationController.pushViewController(toViewController, animated: animated)
-        return true
     }
 
-    func navigateBack(animated: Bool) -> Bool {
-        guard let navigationController = provideNavigationController() else { return false }
-        return navigationController.popViewController(animated: animated) != nil
+    func navigateBack(animated: Bool) throws {
+        let popped = try provideNavigationController().popViewController(animated: animated)
+        if popped == nil {
+            throw MadogError<T>.cannotNavigateBack
+        }
     }
 
-    func navigateBackToRoot(animated _: Bool) -> Bool {
-        guard let navigationController = provideNavigationController() else { return false }
-        return navigationController.popToRootViewController(animated: true) != nil
+    func navigateBackToRoot(animated _: Bool) throws {
+        let popped = try provideNavigationController().popToRootViewController(animated: true)
+        if popped == nil {
+            throw MadogError<T>.cannotNavigateBack
+        }
     }
 
-    private func provideNavigationController() -> UINavigationController? {
-        containerViewController.selectedViewController as? UINavigationController
+    private func provideNavigationController() throws -> UINavigationController {
+        guard let nc = containerViewController.selectedViewController as? UINavigationController else {
+            throw MadogError<T>.internalError("selectedViewController is not UINavigationController")
+        }
+        return nc
     }
+}
 
+extension TabBarNavigatingContainerUI: MultiContainer {
     // MARK: - MultiContainer
 
     var selectedIndex: Int {
