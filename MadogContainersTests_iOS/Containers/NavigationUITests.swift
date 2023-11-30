@@ -87,5 +87,6 @@ class NavigationUITests: ContainersKIFTestCase {
         try container?.forwardBack?.navigateForward(token: token, animated: true)
         waitForTitle(token: token)
         waitForLabel(token: token)
+        waitForAnimationsToFinish()
     }
 }

@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/cerihughes/madog-core",
       "state" : {
-        "branch" : "nested-ui",
-        "revision" : "5bda9f428ba34588e8ee7e69da8e701237fd1838"
+        "branch" : "master",
+        "revision" : "a1440b20267ec950c3d2e03ed65d742d8c39c6b4"
       }
     },
     {

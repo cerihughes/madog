@@ -19,7 +19,7 @@ options:
 packages:
   MadogCore:
     url: https://github.com/cerihughes/madog-core
-    branch: nested-ui
+    branch: master
   KIF:
     url: https://github.com/kif-framework/KIF
     majorVersion: 3.8.0
@@ -33,6 +33,7 @@ targets:
       - Madog
     dependencies:
       - package: MadogCore
+        product: MadogCoreDynamic
       - target: MadogContainers_iOS
     postCompileScripts:
       - script: export PATH="/opt/homebrew/bin:$PATH";swiftlint
@@ -47,6 +48,7 @@ targets:
       - MadogContainers_iOS
     dependencies:
       - package: MadogCore
+        product: MadogCoreDynamic
     postCompileScripts:
       - script: export PATH="/opt/homebrew/bin:$PATH";swiftlint
         name: Swift Lint
@@ -60,6 +62,7 @@ targets:
       - MadogContainersTests_iOS
     dependencies:
       - package: MadogCore
+        product: MadogCoreDynamic
       - package: MadogCore
         product: MadogCoreTestUtilities
       - package: KIF
