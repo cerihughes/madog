@@ -3,7 +3,8 @@
 //  Copyright © 2023 Ceri Hughes. All rights reserved.
 //
 
-import Madog
+import MadogContainers_iOS
+import MadogCore
 import MadogCoreTestUtilities
 
 class ContainersKIFTestCase: MadogKIFTestCase {
