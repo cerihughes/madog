@@ -8,8 +8,6 @@ import MadogCore
 import MadogCoreTestUtilities
 import XCTest
 
-@testable import MadogContainers_iOS
-
 class BasicUITests: ContainersKIFTestCase {
     private var container: AnyContainer<String>!
 
