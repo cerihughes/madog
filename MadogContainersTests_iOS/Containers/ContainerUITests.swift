@@ -9,7 +9,7 @@ import MadogCore
 import MadogCoreTestUtilities
 import XCTest
 
-class MadogUIContainerTests: ContainersKIFTestCase {
+class ContainerUITests: ContainersKIFTestCase {
     func testChangeSingleToMulti() throws {
         let container1 = try renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
         waitForLabel(token: "vc1")
