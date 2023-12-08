@@ -10,7 +10,7 @@ import XCTest
 
 @testable import MadogContainers_iOS
 
-class TabBarUITests: ContainerKIFTestCase {
+class TabBarUITests: ContainersKIFTestCase {
     private var container: AnyContainer<String>!
 
     override func afterEach() {

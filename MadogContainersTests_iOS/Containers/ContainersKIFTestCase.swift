@@ -5,7 +5,7 @@
 
 import MadogCoreTestUtilities
 
-class ContainerKIFTestCase: MadogKIFTestCase {
+class ContainersKIFTestCase: MadogKIFTestCase {
     override func beforeEach() {
         super.beforeEach()
 
