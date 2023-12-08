@@ -32,7 +32,7 @@ class ViewController2: UIViewController {
 
     override func viewDidAppear(_: Bool) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            self.container.forwardBack?.navigateBack(animated: true)
+            try? self.container.forwardBack?.navigateBack(animated: true)
         }
     }
 
