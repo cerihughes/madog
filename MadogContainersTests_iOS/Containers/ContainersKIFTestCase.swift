@@ -6,10 +6,8 @@
 import MadogContainers_iOS
 import MadogCore
 import MadogCoreTestUtilities
-import XCTest
 
 class ContainersKIFTestCase: MadogKIFTestCase {
-
     override func beforeEach() {
         super.beforeEach()
 
