@@ -3,7 +3,7 @@
 //  Copyright © 2019 Ceri Hughes. All rights reserved.
 //
 
-import MadogCore
+import Madog
 import UIKit
 
 class LogoutViewController: UIViewController {

@@ -9,8 +9,9 @@ schemes:
     test:
       gatherCoverageData: true
       coverageTargets:
+        - Madog
         - MadogContainers_iOS
-      targets: 
+      targets:
         - MadogContainersTests_iOS
 options:
   bundleIdPrefix: uk.co.cerihughes
