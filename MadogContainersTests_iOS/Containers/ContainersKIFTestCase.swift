@@ -3,9 +3,11 @@
 //  Copyright © 2023 Ceri Hughes. All rights reserved.
 //
 
+import MadogContainers_iOS
+import MadogCore
 import MadogCoreTestUtilities
 
-class ContainerKIFTestCase: MadogKIFTestCase {
+class ContainersKIFTestCase: MadogKIFTestCase {
     override func beforeEach() {
         super.beforeEach()
 

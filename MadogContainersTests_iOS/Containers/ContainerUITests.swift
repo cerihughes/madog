@@ -8,9 +8,7 @@ import MadogCore
 import MadogCoreTestUtilities
 import XCTest
 
-@testable import MadogContainers_iOS
-
-class MadogUIContainerTests: ContainerKIFTestCase {
+class ContainerUITests: ContainersKIFTestCase {
     func testChangeSingleToMulti() {
         let container1 = renderUIAndWait(identifier: .basic(), tokenData: .single("vc1"))
         waitForLabel(token: "vc1")
@@ -41,7 +39,7 @@ class MadogUIContainerTests: ContainerKIFTestCase {
         waitForLabel(token: "vc1")
         XCTAssertNotNil(container.castValue)
 
-        let modalContainer = createModalContainer(container: container, tokens: ["vc2", "vc3"])
+        let modalContainer = createModal(container: container, tokens: ["vc2", "vc3"]).container
         waitForTitle(token: "vc2") // Titles should appear in the tab bar
         waitForTitle(token: "vc3")
         XCTAssertNotNil(modalContainer)
@@ -64,23 +62,6 @@ class MadogUIContainerTests: ContainerKIFTestCase {
 
     private func createModal(
         container: AnyContainer<String>,
-        token: String
-    ) -> AnyModalToken<String> {
-        let openExpectation = expectation(description: "Modal \(token) opened")
-        let modalToken = openModalAndWait(container.modal!, identifier: .basic(), tokenData: .single(token)) {
-            openExpectation.fulfill()
-        }
-        wait(for: [openExpectation], timeout: 10)
-        waitForLabel(token: token)
-        return modalToken
-    }
-
-    private func createModalContainer(container: AnyContainer<String>, token: String) -> AnyContainer<String> {
-        createModal(container: container, token: token).container
-    }
-
-    private func createModal(
-        container: AnyContainer<String>,
         tokens: [String]
     ) -> AnyModalToken<String> {
         let openExpectation = expectation(description: "Modal \(tokens) opened")
@@ -90,9 +71,5 @@ class MadogUIContainerTests: ContainerKIFTestCase {
         wait(for: [openExpectation], timeout: 10)
         tokens.forEach { waitForTitle(token: $0) }
         return modalToken
-    }
-
-    private func createModalContainer(container: AnyContainer<String>, tokens: [String]) -> AnyContainer<String> {
-        createModal(container: container, tokens: tokens).container
     }
 }
