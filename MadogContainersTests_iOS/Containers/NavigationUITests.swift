@@ -16,44 +16,44 @@ class NavigationUITests: ContainersKIFTestCase {
         super.afterEach()
     }
 
-    func testProtocolConformance() {
-        container = renderUIAndAssert(token: "vc1")
+    func testProtocolConformance() throws {
+        container = try renderUIAndAssert(token: "vc1")
         XCTAssertNil(container.multi)
     }
 
-    func testRenderInitialUI() {
-        container = renderUIAndAssert(token: "vc1")
+    func testRenderInitialUI() throws {
+        container = try renderUIAndAssert(token: "vc1")
         XCTAssertNotNil(container)
     }
 
-    func testNavigateForwardAndBack() {
-        container = renderUIAndAssert(token: "vc1")
-        navigateForwardAndAssert(token: "vc2")
+    func testNavigateForwardAndBack() throws {
+        container = try renderUIAndAssert(token: "vc1")
+        try navigateForwardAndAssert(token: "vc2")
 
-        container.forwardBack?.navigateBack(animated: true)
+        try container.forwardBack?.navigateBack(animated: true)
         waitForLabel(token: "vc1")
         waitForAbsenceOfTitle(token: "vc2")
     }
 
-    func testBackToRoot() {
-        container = renderUIAndAssert(token: "vc1")
+    func testBackToRoot() throws {
+        container = try renderUIAndAssert(token: "vc1")
 
-        navigateForwardAndAssert(token: "vc2")
+        try navigateForwardAndAssert(token: "vc2")
         waitForAbsenceOfLabel(token: "vc1")
 
-        navigateForwardAndAssert(token: "vc3")
+        try navigateForwardAndAssert(token: "vc3")
         waitForAbsenceOfLabel(token: "vc2")
         waitForAbsenceOfTitle(token: "vc1") // "Back" no longer shows "vc1"
 
-        container.forwardBack?.navigateBackToRoot(animated: true)
+        try container.forwardBack?.navigateBackToRoot(animated: true)
         waitForTitle(token: "vc1")
         waitForLabel(token: "vc1")
     }
 
-    func testOpenNavigationModal() {
-        container = renderUIAndAssert(token: "vc1")
+    func testOpenNavigationModal() throws {
+        container = try renderUIAndAssert(token: "vc1")
 
-        let modalToken = container.modal?.openModal(
+        let modalToken = try container.modal?.openModal(
             identifier: .navigation(),
             tokenData: .single("vc2"),
             presentationStyle: .formSheet,
@@ -65,27 +65,28 @@ class NavigationUITests: ContainersKIFTestCase {
         let modalContainer = modalToken?.container
         let forwardBack = modalContainer?.forwardBack
 
-        forwardBack?.navigateForward(token: "vc3", animated: true)
+        try forwardBack?.navigateForward(token: "vc3", animated: true)
         waitForTitle(token: "vc3")
         waitForLabel(token: "vc3")
         waitForAbsenceOfLabel(token: "vc2")
 
-        forwardBack?.navigateForward(token: "vc4", animated: true)
+        try forwardBack?.navigateForward(token: "vc4", animated: true)
         waitForTitle(token: "vc4")
         waitForLabel(token: "vc4")
         waitForAbsenceOfTitle(token: "vc2") // "Back" no longer shows "vc2"
     }
 
-    private func renderUIAndAssert(token: String) -> AnyContainer<String>? {
-        let container = renderUIAndWait(identifier: .navigation(), tokenData: .single(token))
+    private func renderUIAndAssert(token: String) throws -> AnyContainer<String> {
+        let container = try renderUIAndWait(identifier: .navigation(), tokenData: .single(token))
         waitForTitle(token: token)
         waitForLabel(token: token)
         return container
     }
 
-    private func navigateForwardAndAssert(token: String) {
-        container?.forwardBack?.navigateForward(token: token, animated: true)
+    private func navigateForwardAndAssert(token: String) throws {
+        try container?.forwardBack?.navigateForward(token: token, animated: true)
         waitForTitle(token: token)
         waitForLabel(token: token)
+        waitForAnimationsToFinish()
     }
 }

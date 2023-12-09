@@ -16,19 +16,19 @@ class BasicUITests: ContainersKIFTestCase {
         super.afterEach()
     }
 
-    func testProtocolConformance() {
-        container = renderUIAndAssert(token: "vc1")
+    func testProtocolConformance() throws {
+        container = try renderUIAndAssert(token: "vc1")
         XCTAssertNil(container.forwardBack)
         XCTAssertNil(container.multi)
     }
 
-    func testRenderInitialUI() {
-        container = renderUIAndAssert(token: "vc1")
+    func testRenderInitialUI() throws {
+        container = try renderUIAndAssert(token: "vc1")
         XCTAssertNotNil(container)
     }
 
-    private func renderUIAndAssert(token: String) -> AnyContainer<String>? {
-        let container = renderUIAndWait(identifier: .basic(), tokenData: .single(token))
+    private func renderUIAndAssert(token: String) throws -> AnyContainer<String> {
+        let container = try renderUIAndWait(identifier: .basic(), tokenData: .single(token))
         waitForAbsenceOfTitle(token: token) // There should be no "Back" titles
         waitForLabel(token: token)
         return container

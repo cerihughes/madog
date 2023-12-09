@@ -6,29 +6,29 @@
 import MadogCore
 import UIKit
 
-class TabBarContainerUI<T>: ContainerUI<T>, MultiContainer {
-    private let tabBarController = UITabBarController()
+class TabBarContainerUI<T>: ContainerUI<T, MultiUITokenData<T>, UITabBarController>, MultiContainer {
+    override func populateContainer(tokenData: MultiUITokenData<T>) throws {
+        try super.populateContainer(tokenData: tokenData)
 
-    init(registry: AnyRegistry<T>, tokenData: MultiUITokenData<T>) {
-        super.init(registry: registry, viewController: tabBarController)
+        let viewControllers = try tokenData.tokens.map {
+            try createContentViewController(token: $0)
+        }
 
-        let viewControllers = tokenData.tokens.compactMap { registry.createViewController(from: $0, container: self) }
-
-        tabBarController.viewControllers = viewControllers
+        containerViewController.viewControllers = viewControllers
     }
 
     // MARK: - MultiContainer
 
     var selectedIndex: Int {
-        get { tabBarController.selectedIndex }
-        set { tabBarController.selectedIndex = newValue }
+        get { containerViewController.selectedIndex }
+        set { containerViewController.selectedIndex = newValue }
     }
 }
 
 extension TabBarContainerUI {
-    struct Factory: MultiContainerUIFactory {
-        func createContainer(registry: AnyRegistry<T>, tokenData: MultiUITokenData<T>) -> ContainerUI<T>? {
-            TabBarContainerUI(registry: registry, tokenData: tokenData)
+    struct Factory: ContainerUIFactory {
+        func createContainer() -> ContainerUI<T, MultiUITokenData<T>, UITabBarController> {
+            TabBarContainerUI(containerViewController: .init())
         }
     }
 }

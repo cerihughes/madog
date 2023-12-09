@@ -39,7 +39,7 @@ extension LogoutViewController {
     @objc
     private func buttonTapGesture(sender _: UIButton) {
         authenticator.logout { _ in
-            self.container.change(
+            try? self.container.change(
                 to: .basic(),
                 tokenData: .single(.login),
                 transition: .init(duration: 1, options: .transitionFlipFromLeft)

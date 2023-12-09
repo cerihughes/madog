@@ -6,23 +6,19 @@
 import MadogCore
 import UIKit
 
-class BasicContainerUI<T>: ContainerUI<T> {
-    private let containerController = BasicUIContainerViewController()
+class BasicContainerUI<T>: ContainerUI<T, SingleUITokenData<T>, BasicUIContainerViewController> {
+    override func populateContainer(tokenData: SingleUITokenData<T>) throws {
+        try super.populateContainer(tokenData: tokenData)
 
-    init?(registry: AnyRegistry<T>, tokenData: SingleUITokenData<T>) {
-        super.init(registry: registry, viewController: containerController)
-
-        guard let viewController = registry.createViewController(from: tokenData.token, container: self) else {
-            return nil
-        }
-        containerController.contentViewController = viewController
+        let viewController = try createContentViewController(token: tokenData.token)
+        containerViewController.contentViewController = viewController
     }
 }
 
 extension BasicContainerUI {
-    struct Factory: SingleContainerUIFactory {
-        func createContainer(registry: AnyRegistry<T>, tokenData: SingleUITokenData<T>) -> ContainerUI<T>? {
-            BasicContainerUI(registry: registry, tokenData: tokenData)
+    struct Factory: ContainerUIFactory {
+        func createContainer() -> ContainerUI<T, SingleUITokenData<T>, BasicUIContainerViewController> {
+            BasicContainerUI(containerViewController: .init())
         }
     }
 }
