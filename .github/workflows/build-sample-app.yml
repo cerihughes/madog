@@ -6,20 +6,20 @@ jobs:
   build:
     strategy:
       matrix:
-        xcode: [14.3.1, 15.4, 16.0]
+        xcode: ["14.3.1", "15.4", "16.0"]
         include:
-          - ios: 16.4
-            xcode: 14.3.1
+          - ios: "16.4"
+            xcode: "14.3.1"
           - iphone: "iPhone 14"
-            xcode: 14.3.1
-          - ios: 17.5
-            xcode: 15.4
+            xcode: "14.3.1"
+          - ios: "17.5"
+            xcode: "15.4"
           - iphone: "iPhone 15"
-            xcode: 15.4
-          - ios: 18.0
-            xcode: 16.0
+            xcode: "15.4"
+          - ios: "18.0"
+            xcode: "16.0"
           - iphone: "iPhone 16"
-            xcode: 16.0
+            xcode: "16.0"
 
     runs-on: macos-14
 
