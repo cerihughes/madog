@@ -6,7 +6,7 @@ jobs:
   build:
     strategy:
       matrix:
-        xcode: ["15.4", "16.0"]
+        xcode: ["15.4"]
         include:
           - ios: "17.5"
             xcode: "15.4"
@@ -14,12 +14,6 @@ jobs:
             xcode: "15.4"
           - ipad: "iPad (10th generation)"
             xcode: "15.4"
-          - ios: "18.0"
-            xcode: "16.0"
-          - iphone: "iPhone 15"
-            xcode: "16.0"
-          - ipad: "iPad (10th generation)"
-            xcode: "16.0"
 
     runs-on: macos-14
 
