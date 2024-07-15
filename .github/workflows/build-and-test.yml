@@ -6,19 +6,20 @@ jobs:
   build:
     strategy:
       matrix:
-        xcode: [14.3.1, 15.4]
+        xcode: [15.0.1, 15.4]
         include:
           - ios: 16.4
-            xcode: 14.3.1
+            xcode: 15.0.1
           - iphone: "iPhone 14"
-            xcode: 14.3.1
+            xcode: 15.0.1
           - ipad: "iPad (9th generation)"
-            xcode: 14.3.1
+            xcode: 15.0.1
           - ios: 17.5
             xcode: 15.4
           - iphone: "iPhone 15"
             xcode: 15.4
           - ipad: "iPad (10th generation)"
+            xcode: 15.4
 
     runs-on: macos-14
 
