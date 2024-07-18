@@ -17,7 +17,6 @@ public extension ContainerUI.Identifier where VC == UINavigationController, TD =
 
 public extension ContainerUI.Identifier where VC == UITabBarController, TD == MultiUITokenData<T> {
     static func tabBar() -> Self { .init("tabBarIdentifier") }
-    static func tabBarNavigation() -> Self { .init("tabBarNavigationIdentifier") }
 }
 
 public extension ContainerUI.Identifier where VC == UISplitViewController, TD == SplitSingleUITokenData<T> {
@@ -33,7 +32,6 @@ public extension Madog {
         _ = addContainerUIFactory(identifier: .basic(), factory: BasicContainerUI.Factory())
         _ = addContainerUIFactory(identifier: .navigation(), factory: BasicNavigatingContainerUI.Factory())
         _ = addContainerUIFactory(identifier: .tabBar(), factory: TabBarContainerUI.Factory())
-        _ = addContainerUIFactory(identifier: .tabBarNavigation(), factory: TabBarNavigatingContainerUI.Factory())
         _ = addContainerUIFactory(identifier: .splitSingle(), factory: SplitSingleContainerUI.Factory())
         _ = addContainerUIFactory(identifier: .splitMulti(), factory: SplitMultiContainerUI.Factory())
     }
